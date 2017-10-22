@@ -33,12 +33,11 @@
 
     @include('entity::header')
 
-    @verbatim
     <div class="container">
 
         <!-- Project -->
         <div v-show="tab=='project'">
-            <h3>{{project.name}}
+            <h3>@brace('project.name')
                 <button v-on:click="saveProject" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -52,7 +51,7 @@
 
         <!-- Migration -->
         <div v-if="entity" v-show="tab=='table'">
-            <h3>{{entity.table.name}}
+            <h3>@brace('entity.table.name')
                 <button v-on:click="saveMigration" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -69,7 +68,7 @@
 
         <!-- Model -->
         <div v-if="entity" v-show="tab=='model'">
-            <h3>{{entity.model.name}}
+            <h3>@brace('entity.model.name')
                 <button v-on:click="saveModel" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -86,7 +85,7 @@
 
         <!-- Controller -->
         <div v-if="entity" v-show="tab=='controller'">
-            <h3>{{entity.controller.name}}
+            <h3>@brace('entity.controller.name')
                 <button v-on:click="saveController" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -100,7 +99,7 @@
 
         <!-- Form -->
         <div v-if="entity" v-show="tab=='form'">
-            <h3>{{entity.name}}
+            <h3>@brace('entity.name')
                 <button v-on:click="saveForm" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -109,7 +108,6 @@
         </div>
 
     </div>
-    @endverbatim
 
 
             <!-- Choose -->
@@ -164,44 +162,49 @@
     };
 
     vm.saveProject = function () {
-        let json = toJSON(this.project);
-        let data = {project: json};
+        let data = {
+            project: toJSON(this.project)
+        };
         save('/entity', data);
     };
 
     vm.saveMigration = function () {
-        let json = toJSON(this.entity);
-        let data = {entity: json};
+        let data = {
+            entity: toJSON(this.entity)
+        };
         save('/entity/table', data);
     };
 
     vm.saveModel = function () {
-        let json = toJSON(this.entity);
-        let data = {entity: json};
+        let data = {
+            entity: toJSON(this.entity)
+        };
         save('/entity/model', data);
     };
 
     vm.saveController = function () {
-        let json = toJSON(this.entity);
-        let data = {entity: json};
+        let data = {
+            entity: toJSON(this.entity)
+        };
         save('/entity/controller', data);
     };
 
     vm.saveForm = function () {
-        let json = toJSON(this.entity);
-        let data = {entity: json};
+        let data = {
+            entity: toJSON(this.entity)
+        };
         save('/entity/form', data);
     };
 
 
     function Load(data) {
-        let project = new Project('Project');
-        project.load(data);
-
         vd.tab = 'project';
         vd.choose = choose;
         vd.entity = null;
+
+        let project = new Project('Project');
         vd.project = project;
+        project.load(data);
     }
 
     Load(@echo($project));

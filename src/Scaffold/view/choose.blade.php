@@ -1,13 +1,12 @@
-@verbatim
 <script type="text/x-template" id="tttChoose">
 
     <div class="choose">
         <div class="layer"></div>
         <div class="panel">
-            <div class="margin"><span>{{data.message}}</span></div>
+            <div class="margin"><span>@brace('data.message')</span></div>
             <div class="margin">
                 <select v-model="data.item" class="form-control">
-                    <option v-for="item in data.array" v-bind:value="item">{{display(item)}}</option>
+                    <option v-for="item in data.array" v-bind:value="item">@brace('display(item)')</option>
                 </select>
             </div>
             <div class="margin">
@@ -18,7 +17,6 @@
     </div>
 
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

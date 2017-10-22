@@ -8,6 +8,13 @@ laravel scaffold generator
 - Manage model relations
 - Configure controller middlewares
 
+# Requirement
+
+- Laravel 5
+- Vue 2
+- Axios
+- Bootstrap 3
+
 # Installation
 
 1. Via composer
@@ -22,7 +29,7 @@ composer require googee/entity:dev-master --dev
 GooGee\Entity\EntityServiceProvider::class,
 ```
 
-3. Run artisan
+3. Publish asset
 
 ```bash
 php artisan vendor:publish --provider="GooGee\Entity\EntityServiceProvider"

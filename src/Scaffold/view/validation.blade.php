@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttValidation">
     <table class="table table-striped table-bordered">
         <caption><h3>Validation</h3></caption>
@@ -23,7 +22,7 @@
             <td>
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
-            <td>{{field.name}}</td>
+            <td><input v-model="field.name" class="form-control" type="text"></td>
             <td><input v-model="field.fillable" class="form-control" type="checkbox"></td>
             <td><input v-model="field.hidden" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.integer" class="form-control" type="checkbox"></td>
@@ -58,7 +57,6 @@
         </tfoot>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

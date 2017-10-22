@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttEntity">
     <table class="table table-striped table-bordered">
         <caption><h3>Entity</h3></caption>
@@ -40,7 +39,6 @@
         </tfoot>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

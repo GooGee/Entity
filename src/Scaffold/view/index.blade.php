@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttIndex">
     <table class="table table-striped table-bordered">
         <caption><h3>Index</h3></caption>
@@ -25,7 +24,7 @@
             </td>
             <td>
                 <span v-for="field in index.field.list" class="border margin pull-left">
-                    <div class="text-center">{{field.name}}</div>
+                    <div class="text-center">@brace('field.name')</div>
                     <div class="btn-group">
                         <span v-on:click="index.field.moveUp(field)" class="btn btn-primary btn-xs">←</span>
                         <span v-on:click="index.field.moveDown(field)" class="btn btn-primary btn-xs">→</span>
@@ -49,7 +48,6 @@
         </tfoot>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

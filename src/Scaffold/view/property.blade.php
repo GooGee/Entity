@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttProperty">
     <table class="table table-striped table-bordered">
         <caption>
@@ -12,13 +11,12 @@
         </thead>
         <tbody>
         <tr v-for="(value, key) in object" v-if="typeof(value) == 'string'">
-            <td>{{key}}</td>
+            <td>@brace('key')</td>
             <td><input v-model="object[key]" class="form-control" type="text"></td>
         </tr>
         </tbody>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

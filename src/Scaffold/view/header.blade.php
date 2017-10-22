@@ -6,7 +6,7 @@
                 <span class="sr-only">Toggle</span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/entity">Entity</a>
+            <span class="navbar-brand">Entity</span>
         </div>
         <div class="collapse navbar-collapse">
             <div>

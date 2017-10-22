@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttField">
     <table class="table table-striped table-bordered">
         <caption>
@@ -79,7 +78,6 @@
         </tfoot>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

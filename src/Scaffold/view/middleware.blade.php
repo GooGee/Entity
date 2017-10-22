@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttMiddleware">
     <table class="table table-striped table-bordered">
         <caption><h3>Middleware</h3></caption>
@@ -29,7 +28,7 @@
             </td>
             <td>
                 <button v-for="method in middleware.method.list" v-on:click="removeMethod(method, middleware)" class="pull-left btn btn-default margin" type="button">
-                    {{method.name}}
+                    @brace('method.name')
                 </button>
 
                 <button v-on:click="addMethod(middleware)" class="btn btn-info" type="button">+</button>
@@ -48,7 +47,6 @@
         </tfoot>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

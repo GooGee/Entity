@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttRelation">
     <table class="table table-striped table-bordered">
         <caption>
@@ -28,16 +27,16 @@
                     <option value="hasMany">hasMany</option>
                 </select></td>
             <td>
-                <button v-on:click="selectModel(relation)" class="btn btn-default" type="button">{{plus(relation.model)}}</button>
+                <button v-on:click="selectModel(relation)" class="btn btn-default" type="button">@brace('plus(relation.model)')</button>
             </td>
             <td>
-                <button v-on:click="selectPivot(relation)" class="btn btn-default" type="button">{{plus(relation.pivotTable)}}</button>
+                <button v-on:click="selectPivot(relation)" class="btn btn-default" type="button">@brace('plus(relation.pivotTable)')</button>
             </td>
             <td>
-                <button v-on:click="selectForeign(relation)" class="btn btn-default" type="button">{{plus(relation.foreignKey)}}</button>
+                <button v-on:click="selectForeign(relation)" class="btn btn-default" type="button">@brace('plus(relation.foreignKey)')</button>
             </td>
             <td>
-                <button v-on:click="selectOther(relation)" class="btn btn-default" type="button">{{plus(relation.otherKey)}}</button>
+                <button v-on:click="selectOther(relation)" class="btn btn-default" type="button">@brace('plus(relation.otherKey)')</button>
             </td>
         </tr>
         </tbody>
@@ -56,7 +55,6 @@
         </tfoot>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">

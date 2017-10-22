@@ -1,4 +1,3 @@
-@verbatim
 <script type="text/x-template" id="tttForm">
     <table class="table table-striped table-bordered">
         <caption>
@@ -24,7 +23,7 @@
                 </div>
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
-            <td>{{field.name}}</td>
+            <td><input v-model="field.name" class="form-control" type="text"></td>
             <td><select v-model="field.type" class="form-control">
                     <option value="text">text</option>
                     <option value="password">password</option>
@@ -67,7 +66,6 @@
         </tfoot>
     </table>
 </script>
-@endverbatim
 
 
 <script type="text/javascript">
