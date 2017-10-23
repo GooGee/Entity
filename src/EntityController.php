@@ -54,7 +54,7 @@ class EntityController extends Controller
         copy($publicFolder . '/entity.css', public_path('css/entity.css'));
         copy($publicFolder . '/entity.js', public_path('js/entity.js'));
 
-        return redirect()->back();
+        return redirect('entity');
     }
 
 

@@ -96,7 +96,7 @@ class Project extends Item {
         return data
     }
 
-    load(data){
+    load(data) {
         if (isEmpty(data)) {
             data = this.create();
         }
@@ -355,6 +355,11 @@ class Form extends Item {
         }
     }
 
+    setInstance(name) {
+        this.instance = name;
+        this.field.setInstance(name);
+    }
+
     load(data) {
         super.load(data);
         this.field.load(data.field.list);
@@ -374,4 +379,12 @@ class FormFieldList extends List {
         this.list.push(field);
         return field;
     }
+
+    setInstance(name) {
+        for (let index = 0; index < this.list.length; index++) {
+            let field = this.list[index];
+            field.vModel = this.form.instance + '.' + field.name;
+        }
+    }
+
 }

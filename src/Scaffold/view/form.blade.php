@@ -18,8 +18,8 @@
         <tr v-for="field in form.field.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="moveUp(field)" class="btn btn-info" type="button">↑</button>
-                    <button v-on:click="moveDown(field)" class="btn btn-info" type="button">↓</button>
+                    <button v-on:click="form.field.moveUp(field)" class="btn btn-info" type="button">↑</button>
+                    <button v-on:click="form.field.moveDown(field)" class="btn btn-info" type="button">↓</button>
                 </div>
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
@@ -59,7 +59,7 @@
                 </div>
             </td>
             <td>
-                <input v-model="form.instance" class="form-control" type="text">
+                <button v-on:click="setInstance()" class="btn btn-info" type="button">@brace('form.instance')</button>
             </td>
             <td></td>
         </tr>
@@ -120,11 +120,12 @@
                     del.value = 'delete';
                 }
             },
-            moveUp: function (field) {
-                this.form.field.moveUp(field);
-            },
-            moveDown: function (field) {
-                this.form.field.moveDown(field);
+            setInstance: function () {
+                let name = input('Please enter the Instance name');
+                if (isEmpty(name)) {
+                    return;
+                }
+                this.form.setInstance(name);
             }
         }
     });
