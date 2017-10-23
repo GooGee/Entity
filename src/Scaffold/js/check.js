@@ -7,6 +7,7 @@ function log(text) {
  * true undefined
  * true null
  * true ''
+ * true ' '
  * true []
  * true {}
  *
@@ -20,7 +21,8 @@ function isEmpty(object) {
 
     let type = typeof (object);
     if ("string" == type) {
-        if (object.length > 0) {
+        let string = object.trim();
+        if (string.length > 0) {
             return false;
         }
         return true;

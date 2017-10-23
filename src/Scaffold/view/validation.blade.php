@@ -22,7 +22,7 @@
             <td>
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
-            <td><input v-model="field.name" class="form-control" type="text"></td>
+            <td>@brace('field.name')</td>
             <td><input v-model="field.fillable" class="form-control" type="checkbox"></td>
             <td><input v-model="field.hidden" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.integer" class="form-control" type="checkbox"></td>

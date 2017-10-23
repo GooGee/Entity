@@ -6,7 +6,7 @@
         <thead>
         <tr>
             <th width="150px"></th>
-            <th>Name</th>
+            <th width="180px">Name</th>
             <th>Type</th>
             <th>Length</th>
             <th>Default</th>
@@ -24,8 +24,11 @@
                 </div>
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
-            <td><input v-model="field.name" class="form-control" type="text"></td>
-            <td><select v-model="field.type" class="form-control">
+            <td>
+                <button v-on:click="rename(field)" class="btn btn-default" type="button">@brace('field.name')</button>
+            </td>
+            <td>
+                <select v-model="field.type" class="form-control">
                     <option value="bigIncrements">bigIncrements</option>
                     <option value="bigInteger">bigInteger</option>
                     <option value="binary">binary</option>
@@ -52,7 +55,8 @@
                     <option value="tinyInteger">tinyInteger</option>
                     <option value="timestamp">timestamp</option>
                     <option value="uuid">uuid</option>
-                </select></td>
+                </select>
+            </td>
             <td><input v-model="field.length" class="form-control" type="text"></td>
             <td><input v-model="field.default" class="form-control" type="text"></td>
             <td><input v-model="field.comment" class="form-control" type="text"></td>
@@ -66,7 +70,7 @@
                 <button v-on:click="add" class="btn btn-primary" type="button">+</button>
             </td>
             <td>
-                <select v-model="selectedField" class="form-control pull-left" style="width: auto; margin-right: 3px">
+                <select v-model="selectedField" class="form-control pull-left" style="width: auto; margin-right: 9px">
                     <option v-for="field in fieldList" v-bind:value="field">@brace('field.name')</option>
                 </select>
                 <button v-on:click="addField" class="btn btn-info" type="button"> + </button>
@@ -116,6 +120,13 @@
                 if (sure('Are you sure?')) {
                     this.table.field.remove(field);
                 }
+            },
+            rename: function (field) {
+                let name = input('Please enter the Field name');
+                if (isEmpty(name)) {
+                    return;
+                }
+                this.table.changeFieldName(field, name);
             },
             addField: function () {
                 let one = this.table.field.create(this.selectedField.name, this.selectedField.type);

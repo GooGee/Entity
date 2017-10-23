@@ -212,6 +212,22 @@ class Table extends Item {
         this.field.load(data.field.list);
         this.index.load(data.index.list);
     }
+
+    changeFieldName(field, name) {
+        this.onFieldChange(field, name);
+
+        let array = this.index.list;
+        for (let iii = 0; iii < array.length; iii++) {
+            let index = array[iii];
+            let fff = index.field.get(field.name);
+            if (fff) {
+                fff.name = name;
+            }
+        }
+        field.name = name;
+    }
+
+    onFieldChange(field, name) { }
 }
 
 class FieldList extends List {
@@ -262,6 +278,14 @@ class Model extends Item {
         //this.variable = new VariableList();
         this.relation = new RelationList();
         this.validation = new ValidationList();
+
+        let validation = this.validation;
+        table.onFieldChange = function (field, name) {
+            let item = validation.get(field.name);
+            if (item) {
+                item.name = name;
+            }
+        }
     }
 
     update() {
