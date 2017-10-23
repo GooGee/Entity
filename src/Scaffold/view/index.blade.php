@@ -26,8 +26,8 @@
                 <span v-for="field in index.field.list" class="border margin pull-left">
                     <div class="text-center">@brace('field.name')</div>
                     <div class="btn-group">
-                        <span v-on:click="index.field.moveUp(field)" class="btn btn-primary btn-xs">←</span>
-                        <span v-on:click="index.field.moveDown(field)" class="btn btn-primary btn-xs">→</span>
+                        <span v-on:click="index.field.moveUp(field)" class="btn btn-info btn-xs">←</span>
+                        <span v-on:click="index.field.moveDown(field)" class="btn btn-info btn-xs">→</span>
                         <span v-on:click="index.field.remove(field)" class="btn btn-danger btn-xs">X</span>
                     </div>
                 </span>

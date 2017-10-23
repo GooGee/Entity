@@ -13,8 +13,8 @@
         <tr v-for="middleware in controller.middleware.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="controller.middleware.moveUp(middleware)" class="btn btn-primary" type="button">↑</button>
-                    <button v-on:click="controller.middleware.moveDown(middleware)" class="btn btn-primary" type="button">↓</button>
+                    <button v-on:click="controller.middleware.moveUp(middleware)" class="btn btn-info" type="button">↑</button>
+                    <button v-on:click="controller.middleware.moveDown(middleware)" class="btn btn-info" type="button">↓</button>
                 </div>
                 <button v-on:click="remove(middleware)" class="btn btn-danger" type="button">X</button>
             </td>

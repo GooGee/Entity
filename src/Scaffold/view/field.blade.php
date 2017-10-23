@@ -19,8 +19,8 @@
         <tr v-for="field in table.field.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="table.field.moveUp(field)" class="btn btn-primary" type="button">↑</button>
-                    <button v-on:click="table.field.moveDown(field)" class="btn btn-primary" type="button">↓</button>
+                    <button v-on:click="table.field.moveUp(field)" class="btn btn-info" type="button">↑</button>
+                    <button v-on:click="table.field.moveDown(field)" class="btn btn-info" type="button">↓</button>
                 </div>
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
@@ -66,7 +66,10 @@
                 <button v-on:click="add" class="btn btn-primary" type="button">+</button>
             </td>
             <td>
-                <button v-on:click="addTimestamp" class="btn btn-info" type="button"> + TimeStamp</button>
+                <select v-model="selectedField" class="form-control pull-left" style="width: auto; margin-right: 3px">
+                    <option v-for="field in fieldList" v-bind:value="field">@brace('field.name')</option>
+                </select>
+                <button v-on:click="addField" class="btn btn-info" type="button"> + </button>
             </td>
             <td></td>
             <td></td>
@@ -82,9 +85,25 @@
 
 <script type="text/javascript">
 
+    const fieldList = [
+        new Field('id', 'increments'),
+        new Field('user_id', 'integer'),
+        new Field('name', 'string'),
+        new Field('status', 'integer'),
+        new Field('created_at', 'timestamp'),
+        new Field('updated_at', 'timestamp'),
+        new Field('deleted_at', 'timestamp')
+    ];
+
     Vue.component('ccc-field', {
         template: '#tttField',
         props: ['table'],
+        data: function () {
+            return {
+                fieldList: fieldList,
+                selectedField: fieldList[0]
+            }
+        },
         methods: {
             add: function () {
                 let name = input('Please enter the Field name');
@@ -98,11 +117,16 @@
                     this.table.field.remove(field);
                 }
             },
-            addTimestamp: function () {
-                let one = this.table.field.create('created_at', 'timestamp');
-                one.nullable = true;
-                let two = this.table.field.create('updated_at', 'timestamp');
-                two.nullable = true;
+            addField: function () {
+                let one = this.table.field.create(this.selectedField.name, this.selectedField.type);
+
+                let nullList = ['deleted_at', 'created_at', 'updated_at'];
+                for (let index in nullList) {
+                    if (nullList[index] == one.name) {
+                        one.nullable = true;
+                        return;
+                    }
+                }
             }
         }
     });

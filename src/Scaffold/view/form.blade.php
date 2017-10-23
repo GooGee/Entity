@@ -18,8 +18,8 @@
         <tr v-for="field in form.field.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="moveUp(field)" class="btn btn-primary" type="button">↑</button>
-                    <button v-on:click="moveDown(field)" class="btn btn-primary" type="button">↓</button>
+                    <button v-on:click="moveUp(field)" class="btn btn-info" type="button">↑</button>
+                    <button v-on:click="moveDown(field)" class="btn btn-info" type="button">↓</button>
                 </div>
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
