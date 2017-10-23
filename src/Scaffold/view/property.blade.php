@@ -12,7 +12,14 @@
         <tbody>
         <tr v-for="(value, key) in object" v-if="typeof(value) == 'string'">
             <td>@brace('key')</td>
-            <td><input v-model="object[key]" class="form-control" type="text"></td>
+            <td>
+                <span v-if="button">
+                    <button v-on:click="change(key)" class="btn btn-default" type="button">@brace('object[key]')</button>
+                </span>
+                <span v-else>
+                    <input v-model="object[key]" class="form-control" type="text">
+                </span>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -23,7 +30,22 @@
 
     Vue.component('ccc-property', {
         template: '#tttProperty',
-        props: ['object']
+        props: {
+            object: Object,
+            button: {
+                type: Boolean,
+                default: false
+            }
+        },
+        methods: {
+            change: function (key) {
+                let name = input('Please enter the ' + key);
+                if (isEmpty(name)) {
+                    return;
+                }
+                this.object.change(key, name);
+            }
+        }
     });
 
 </script>

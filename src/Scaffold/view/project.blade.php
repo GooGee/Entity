@@ -42,7 +42,7 @@
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="project"></ccc-property>
+            <ccc-property :object="project" :button="true"></ccc-property>
 
             <!-- Entity -->
             <ccc-entity :project="project" v-on:show="showEntity"></ccc-entity>

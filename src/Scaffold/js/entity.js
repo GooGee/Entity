@@ -104,6 +104,36 @@ class Project extends Item {
 
         this.entity.load(data.entity.list);
     }
+
+    change(key, value) {
+        if ('nameSpace' == key) {
+            this.changeNameSpace(value);
+        }
+        this[key] = value;
+
+        let array = this.entity.list;
+        for (let index = 0; index < array.length; index++) {
+            let entity = array[index];
+            entity.set(this);
+        }
+    }
+
+    changeNameSpace(nameSpace) {
+        let ons = this.nameSpace;
+        for (let key in this) {
+            if (this.hasOwnProperty(key)) {
+                let item = this[key];
+                if ("object" != typeof (item)) {
+                    if (this[key] == ons) {
+                        this[key] = nameSpace;
+                        continue;
+                    }
+                    let re = new RegExp('^' + ons + '\\\\');
+                    this[key] = item.replace(re, nameSpace + '\\');
+                }
+            }
+        }
+    }
 }
 
 class VariableList extends List {
