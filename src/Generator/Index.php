@@ -13,7 +13,7 @@ class Index
         $type = $index->type;
         $array = $this->array2string($index->field->list);
 
-        $this->text = "\$table->{$type}([{$array}], '{$name}');";
+        $this->text = "\$table->{$type}([{$array}]);";
     }
 
     function array2string($array)

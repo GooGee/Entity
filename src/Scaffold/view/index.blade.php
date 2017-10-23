@@ -4,7 +4,6 @@
         <thead>
         <tr>
             <th width="50px"></th>
-            <th style="width: 22%;">Name</th>
             <th style="width: 120px;">Type</th>
             <th>Field</th>
         </tr>
@@ -14,7 +13,6 @@
             <td>
                 <button v-on:click="remove(index)" class="btn btn-danger" type="button">X</button>
             </td>
-            <td><input v-model="index.name" class="form-control" type="text"></td>
             <td>
                 <select v-model="index.type" class="form-control">
                     <option value="primary">primary</option>
@@ -43,7 +41,6 @@
             </td>
             <td></td>
             <td></td>
-            <td></td>
         </tr>
         </tfoot>
     </table>
@@ -60,7 +57,7 @@
                 let table = this.table;
                 this.choose(function (yes, field) {
                     if (yes) {
-                        let index = table.index.create(field.name, 'index');
+                        let index = table.index.create(table.name + '_' + field.name, 'index');
                         index.field.create(field.name);
                     }
                 });
