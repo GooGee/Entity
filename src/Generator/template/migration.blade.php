@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class @echo($data->className) extends Migration
+class @echo($migration->className) extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class @echo($data->className) extends Migration
      */
     public function up()
     {
-        Schema::create('@echo($data->tableName)', function (Blueprint $table) {
-@foreach($data->fieldList as $field)
+        Schema::create('@echo($migration->tableName)', function (Blueprint $table) {
+@foreach($migration->fieldList as $field)
             @echo($field->text)
 
 @endforeach
 
-@foreach($data->indexList as $index)
+@foreach($migration->indexList as $index)
             @echo($index->text)
 
 @endforeach
@@ -32,6 +32,6 @@ class @echo($data->className) extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('@echo($data->tableName)');
+        Schema::dropIfExists('@echo($migration->tableName)');
     }
 }

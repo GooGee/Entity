@@ -27,9 +27,13 @@
                 </select>
             </td>
             <td>
-                <button v-for="method in middleware.method.list" v-on:click="removeMethod(method, middleware)" class="pull-left btn btn-default margin" type="button">
+                <span class="pull-left">
+                <button v-for="method in middleware.method.list"
+                        v-on:click="removeMethod(method, middleware)"
+                        class="btn btn-default mr" type="button">
                     @brace('method.name')
                 </button>
+                </span>
 
                 <button v-on:click="addMethod(middleware)" class="btn btn-info" type="button">+</button>
             </td>

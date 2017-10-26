@@ -51,7 +51,7 @@
 
         <!-- Migration -->
         <div v-if="entity" v-show="tab=='table'">
-            <h3>@brace('entity.table.name')
+            <h3>@brace('entity.table.name') Table
                 <button v-on:click="saveMigration" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -68,7 +68,7 @@
 
         <!-- Model -->
         <div v-if="entity" v-show="tab=='model'">
-            <h3>@brace('entity.model.name')
+            <h3>@brace('entity.model.name') Model
                 <button v-on:click="saveModel" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -80,6 +80,20 @@
 
             <!-- Validation -->
             <ccc-validation :model="entity.model"></ccc-validation>
+        </div>
+
+
+        <!-- Seed -->
+        <div v-if="entity" v-show="tab=='seed'">
+            <h3>@brace('entity.factory.name')
+                <button v-on:click="saveFactory" class="btn btn-success" type="button">Save</button>
+            </h3>
+
+            <!-- Property -->
+            <ccc-property :object="entity.factory"></ccc-property>
+
+            <!-- Factory -->
+            <ccc-factory :factory="entity.factory"></ccc-factory>
         </div>
 
 
@@ -99,7 +113,7 @@
 
         <!-- Form -->
         <div v-if="entity" v-show="tab=='form'">
-            <h3>@brace('entity.name')
+            <h3>@brace('entity.name') Form
                 <button v-on:click="saveForm" class="btn btn-success" type="button">Save</button>
             </h3>
 
@@ -126,6 +140,7 @@
 @include('entity::index')
 @include('entity::relation')
 @include('entity::validation')
+@include('entity::factory')
 @include('entity::middleware')
 @include('entity::form')
 
@@ -180,6 +195,13 @@
             entity: toJSON(this.entity)
         };
         save('/entity/model', data);
+    };
+
+    vm.saveFactory = function () {
+        let data = {
+            entity: toJSON(this.entity)
+        };
+        save('/entity/factory', data);
     };
 
     vm.saveController = function () {

@@ -63,25 +63,26 @@ class Project extends Item {
     constructor(name) {
         super(name);
 
+        this.nameSpace = 'App';
+        this.migrationPath = 'database\\migrations';
+        this.modelNameSpace = 'App\\Model';
+        this.modelPath = 'app\\Model';
+        this.seedlPath = 'database\\factories';
+        this.controllerNameSpace = 'App\\Http\\Controllers';
+        this.controllerPath = 'app\\Http\\Controllers';
+        this.formPath = 'resources\\views';
+
         this.entity = new EntityList(this);
     }
 
     create() {
         let data = {
-            nameSpace: 'App',
-            migrationPath: 'database\\migrations',
-            modelNameSpace: 'App\\Model',
-            modelPath: 'app\\Model',
-            controllerNameSpace: 'App\\Http\\Controllers',
-            controllerPath: 'app\\Http\\Controllers',
-            formPath: 'resources\\views',
             entity: {
                 list: []
             }
         };
 
         let user = new Entity('User');
-        user.set(data);
         user.table.field.create('id', 'increments');
         user.table.field.create('name', 'string');
         user.table.field.create('email', 'string');
@@ -175,6 +176,7 @@ class Entity extends Item {
 
         this.table = new Table(name);
         this.model = new Model(name, this.table);
+        this.factory = new Factory(name, this.model);
         this.controller = new Controller(name);
         this.form = new Form(name, this.model);
     }
@@ -183,6 +185,7 @@ class Entity extends Item {
         this.table.path = project.migrationPath;
         this.model.nameSpace = project.modelNameSpace;
         this.model.path = project.modelPath;
+        this.factory.path = project.seedlPath;
         this.controller.nameSpace = project.controllerNameSpace;
         this.controller.path = project.controllerPath;
         this.form.path = project.formPath;
@@ -348,6 +351,41 @@ class Validation extends Item {
 
 class Rule extends Item {
 
+}
+
+class Factory extends Item {
+    constructor(name, model) {
+        super(name);
+        this.name = name + 'Factory';
+        this.model = model;
+
+        this.field = new FactoryFieldList();
+    }
+
+    update() {
+        let array = this.model.validation.list;
+        for (let index = 0; index < array.length; index++) {
+            let field = array[index];
+            if (this.field.get(field.name)) {
+                continue;
+            }
+            this.field.create(field.name);
+        }
+    }
+
+    load(data) {
+        super.load(data);
+        this.field.load(data.field.list);
+    }
+}
+
+class FactoryFieldList extends List {
+    create(name, type) {
+        let field = new Field(name, type);
+        field.type = 'method';
+        this.list.push(field);
+        return field;
+    }
 }
 
 class Controller extends Item {

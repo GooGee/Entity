@@ -21,7 +21,7 @@
                 </select>
             </td>
             <td>
-                <span v-for="field in index.field.list" class="border margin pull-left">
+                <span v-for="field in index.field.list" class="border mr pull-left">
                     <div class="text-center">@brace('field.name')</div>
                     <div class="btn-group">
                         <span v-on:click="index.field.moveUp(field)" class="btn btn-info btn-xs">←</span>

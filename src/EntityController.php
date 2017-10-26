@@ -78,6 +78,16 @@ class EntityController extends Controller
         return response()->json($this->json);
     }
 
+    function factory(Request $request)
+    {
+        $json = $request['entity'];
+        $entity = json_decode($json);
+        $factory = new Generator\Factory($entity);
+        $factory->save();
+
+        return response()->json($this->json);
+    }
+
     function controller(Request $request)
     {
         $json = $request['entity'];

@@ -4,8 +4,10 @@ laravel scaffold generator
 
 # Feature
 
-- Design tables
+- Design table fields and indexes
 - Manage model relations
+- Make field validations
+- Define model factories
 - Configure controller middlewares
 
 # Requirement

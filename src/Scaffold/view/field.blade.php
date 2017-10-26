@@ -5,7 +5,7 @@
         </caption>
         <thead>
         <tr>
-            <th width="150px"></th>
+            <th width="130px"></th>
             <th width="180px">Name</th>
             <th>Type</th>
             <th>Length</th>
@@ -70,7 +70,7 @@
                 <button v-on:click="add" class="btn btn-primary" type="button">+</button>
             </td>
             <td>
-                <select v-model="selectedField" class="form-control pull-left" style="width: auto; margin-right: 9px">
+                <select v-model="selectedField" class="form-control mr pull-left" style="width: auto;">
                     <option v-for="field in fieldList" v-bind:value="field">@brace('field.name')</option>
                 </select>
                 <button v-on:click="addField" class="btn btn-info" type="button"> + </button>

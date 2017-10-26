@@ -37,12 +37,8 @@
         </tbody>
         <tfoot>
         <tr>
-            <td>
-                <button v-on:click="add" class="btn btn-primary" type="button">+</button>
-            </td>
-            <td>
-                <button v-on:click="all" class="btn btn-primary" type="button">All</button>
-            </td>
+            <td></td>
+            <td><button v-on:click="all" class="btn btn-primary" type="button">All</button></td>
             <td></td>
             <td></td>
             <td></td>
@@ -65,20 +61,6 @@
         template: '#tttValidation',
         props: ['model'],
         methods: {
-            add: function () {
-                let model = this.model;
-                let data = {
-                    message: 'Select a field',
-                    display: 'name',
-                    array: vd.entity.table.field.list,
-                    callback: function (yes, field) {
-                        if (yes) {
-                            model.validation.create(field.name);
-                        }
-                    }
-                };
-                showChoose(data);
-            },
             all: function () {
                 this.model.update();
             },

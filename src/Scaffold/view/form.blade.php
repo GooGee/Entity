@@ -1,12 +1,11 @@
 <script type="text/x-template" id="tttForm">
     <table class="table table-striped table-bordered">
         <caption>
-            <h3>Form
-            </h3>
+            <h3>Form</h3>
         </caption>
         <thead>
         <tr>
-            <th width="150px"></th>
+            <th width="130px"></th>
             <th>Field</th>
             <th>Type</th>
             <th>Value</th>
@@ -24,7 +23,8 @@
                 <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
             </td>
             <td><input v-model="field.name" class="form-control" type="text"></td>
-            <td><select v-model="field.type" class="form-control">
+            <td>
+                <select v-model="field.type" class="form-control">
                     <option value="text">text</option>
                     <option value="password">password</option>
                     <option value="hidden">hidden</option>
@@ -32,7 +32,8 @@
                     <option value="checkbox">checkbox</option>
                     <option value="radio">radio</option>
                     <option value="select">select</option>
-                </select></td>
+                </select>
+            </td>
             <td><input v-model="field.value" class="form-control" type="text"></td>
             <td><input v-model="field.vModel" class="form-control" type="text"></td>
             <td><input v-model="field.label" class="form-control" type="text"></td>

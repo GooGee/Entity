@@ -18,7 +18,7 @@ class EntityServiceProvider extends ServiceProvider
          * use this directive to avoid conflict with Vue
          */
         \Blade::directive('echo', function ($expression) {
-            return "<?php echo {$expression}; ?>";
+            return "<?php echo isset({$expression}) ? {$expression} : ''; ?>";
         });
         /**
          * @brace('vue.data') -> {{vue.data}}

@@ -34,8 +34,8 @@ class Migration
 
     public function save()
     {
-        $data = $this;
-        $view = view('template::migration', compact('data'));
+        $migration = $this;
+        $view = view('template::migration', compact('migration'));
 
         $file = new File($this->filePath);
         $file->save("<?php \n" . $view->render());

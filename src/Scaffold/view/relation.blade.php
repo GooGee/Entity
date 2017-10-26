@@ -5,7 +5,7 @@
         </caption>
         <thead>
         <tr>
-            <th width="60px"></th>
+            <th width="50px"></th>
             <th>Function Name</th>
             <th>Type</th>
             <th>Model</th>
