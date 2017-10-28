@@ -10,7 +10,7 @@ class Factory
     public $filePath;
     public $table;
     public $modelName;
-    public $fieldList;
+    public $fieldList = [];
 
     function __construct($entity)
     {
@@ -19,7 +19,7 @@ class Factory
         $this->filePath = base_path($factory->path . DIRECTORY_SEPARATOR) . $this->fileName;
 
         $this->table = $entity->table;
-        $this->modelName = $entity->model->name;
+        $this->modelName = $entity->model->nameSpace . '\\' . $entity->model->name;
         $this->loadField($factory->field->list);
     }
 
@@ -28,8 +28,10 @@ class Factory
         foreach ($list as $field) {
             if ('property' == $field->type) {
                 $this->setProperty($field);
-            } else {
+            } else if ('method' == $field->type) {
                 $this->setMethod($field);
+            } else {
+                $this->setRaw($field);
             }
         }
     }
@@ -53,6 +55,14 @@ class Factory
             $parameters = $field->parameters;
         }
         $this->fieldList[] = "'$field->name' => \$faker->$field->method($parameters),";
+    }
+
+    function setRaw($field)
+    {
+        if (empty($field->raw)) {
+            return;
+        }
+        $this->fieldList[] = "'$field->name' => $field->raw,";
     }
 
     public function save()

@@ -205,8 +205,10 @@ class Table extends Item {
     constructor(name) {
         super(name);
         this.name = camel2snake(lowerCapital(name));
+
         this.field = new FieldList();
         this.index = new IndexList();
+        this.callbackList = [];
     }
 
     load(data) {
@@ -214,6 +216,10 @@ class Table extends Item {
 
         this.field.load(data.field.list);
         this.index.load(data.index.list);
+    }
+
+    register(callback) {
+        this.callbackList.push(callback);
     }
 
     changeFieldName(field, name) {
@@ -230,7 +236,13 @@ class Table extends Item {
         field.name = name;
     }
 
-    onFieldChange(field, name) { }
+    onFieldChange(field, name) {
+        let array = this.callbackList;
+        for (let index = 0; index < array.length; index++) {
+            let callback = array[index];
+            callback(field, name);
+        }
+    }
 }
 
 class FieldList extends List {
@@ -279,6 +291,14 @@ class Factory extends Item {
         this.table = table;
 
         this.field = new FactoryFieldList();
+
+        let list = this.field;
+        table.register(function(field, name) {
+            let item = list.get(field.name);
+            if (item) {
+                item.name = name;
+            }
+        });
     }
 
     update() {
@@ -301,7 +321,7 @@ class Factory extends Item {
 class FactoryFieldList extends List {
     create(name, type) {
         let field = new Field(name, type);
-        field.type = 'method';
+        field.type = 'raw';
         this.list.push(field);
         return field;
     }
@@ -313,17 +333,18 @@ class Model extends Item {
         this.name = upperCapital(name);
         this.table = table;
         this.primaryKey = 'id';
+
         //this.variable = new VariableList();
         this.relation = new RelationList();
         this.validation = new ValidationList();
 
         let validation = this.validation;
-        table.onFieldChange = function (field, name) {
+        table.register(function(field, name) {
             let item = validation.get(field.name);
             if (item) {
                 item.name = name;
             }
-        }
+        });
     }
 
     update() {

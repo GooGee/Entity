@@ -18,6 +18,7 @@
             <td>@brace('field.name')</td>
             <td>
                 <select v-model="field.type" class="form-control">
+                    <option value="raw">Raw</option>
                     <option value="property">Property</option>
                     <option value="method">Method</option>
                 </select>
@@ -25,7 +26,6 @@
             <td>
                 <div v-show="'method' == field.type">
                     <select v-model="field.method" class="form-control">
-                        <option value="">none</option>
                         <option value="name">name</option>
                         <option value="firstName">firstName</option>
                         <option value="title">title</option>
@@ -87,7 +87,6 @@
                 </div>
                 <div v-show="'property' == field.type">
                     <select v-model="field.property" class="form-control">
-                        <option value="">none</option>
                         <option value="name">name</option>
                         <option value="firstName">firstName</option>
                         <option value="firstNameMale">firstNameMale</option>
@@ -198,6 +197,9 @@
                         <option value="safeColorName">safeColorName</option>
                         <option value="colorName">colorName</option>
                     </select>
+                </div>
+                <div v-show="'raw' == field.type">
+                    <input v-model="field.raw" class="form-control" type="text">
                 </div>
             </td>
             <td><input v-model="field.parameters" class="form-control" type="text"></td>
