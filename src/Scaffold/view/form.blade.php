@@ -60,7 +60,7 @@
                 </div>
             </td>
             <td>
-                <button v-on:click="setInstance()" class="btn btn-info" type="button">@brace('form.instance')</button>
+                <button v-on:click="setInstance()" class="btn btn-default" type="button">@brace('form.instance')</button>
             </td>
             <td></td>
         </tr>

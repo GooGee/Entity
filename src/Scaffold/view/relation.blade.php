@@ -103,16 +103,21 @@
                     callback: function (yes, entity) {
                         if (yes) {
                             relation.pivotTable = entity.table.name;
+                            relation.pivot = entity;
                         }
                     }
                 };
                 showChoose(data);
             },
             selectForeign: function (relation) {
+                if (null == relation.pivot) {
+                    look('Please select a Pivot table first!');
+                    return;
+                }
                 let data = {
                     message: 'Select the Foreign Key',
                     display: 'name',
-                    array: this.model.table.field.list,
+                    array: relation.pivot.table.field.list,
                     callback: function (yes, field) {
                         if (yes) {
                             relation.foreignKey = field.name;
@@ -122,10 +127,14 @@
                 showChoose(data);
             },
             selectOther: function (relation) {
+                if (null == relation.pivot) {
+                    look('Please select a Pivot table first!');
+                    return;
+                }
                 let data = {
                     message: 'Select the Other Key',
                     display: 'name',
-                    array: this.model.table.field.list,
+                    array: relation.pivot.table.field.list,
                     callback: function (yes, field) {
                         if (yes) {
                             relation.otherKey = field.name;

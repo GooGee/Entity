@@ -16,7 +16,7 @@ class Factory
     {
         $factory = $entity->factory;
         $this->fileName = $factory->name . '.php';
-        $this->filePath = base_path($factory->path . DIRECTORY_SEPARATOR) . $this->fileName;
+        $this->filePath = $factory->path;
 
         $this->table = $entity->table;
         $this->modelName = $entity->model->nameSpace . '\\' . $entity->model->name;
@@ -70,7 +70,7 @@ class Factory
         $factory = $this;
         $view = view('template::factory', compact('factory'));
 
-        $file = new File($this->filePath);
+        $file = new File($this->fileName, $this->filePath);
         $file->save("<?php \n" . $view->render());
     }
 

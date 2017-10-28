@@ -150,23 +150,6 @@
     //
     //};
 
-    function toJSON(object) {
-        let array = [];
-
-        return JSON.stringify(object, function (key, value) {
-            if (typeof(value) === 'object') {
-                if (value !== null) {
-                    if (array.indexOf(value) >= 0) {
-                        return;
-                    }
-                    array.push(value);
-                }
-            }
-
-            return value;
-        });
-    }
-
     vm.show = function (tab) {
         vd.tab = tab;
     };
@@ -178,42 +161,42 @@
 
     vm.saveProject = function () {
         let data = {
-            project: toJSON(this.project)
+            project: JSON.stringify(this.project)
         };
         save('/entity', data);
     };
 
     vm.saveMigration = function () {
         let data = {
-            entity: toJSON(this.entity)
+            entity: JSON.stringify(this.entity)
         };
         save('/entity/table', data);
     };
 
     vm.saveModel = function () {
         let data = {
-            entity: toJSON(this.entity)
+            entity: JSON.stringify(this.entity)
         };
         save('/entity/model', data);
     };
 
     vm.saveFactory = function () {
         let data = {
-            entity: toJSON(this.entity)
+            entity: JSON.stringify(this.entity)
         };
         save('/entity/factory', data);
     };
 
     vm.saveController = function () {
         let data = {
-            entity: toJSON(this.entity)
+            entity: JSON.stringify(this.entity)
         };
         save('/entity/controller', data);
     };
 
     vm.saveForm = function () {
         let data = {
-            entity: toJSON(this.entity)
+            entity: JSON.stringify(this.entity)
         };
         save('/entity/form', data);
     };

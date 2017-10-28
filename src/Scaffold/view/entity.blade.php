@@ -4,8 +4,8 @@
         <thead>
         <tr>
             <th width="200px"></th>
-            <th>Name</th>
             <th>Table</th>
+            <th>Factory</th>
             <th>Model</th>
             <th>Controller</th>
         </tr>
@@ -20,8 +20,8 @@
                 <button v-on:click="show(entity)" class="btn btn-primary" type="button">Show</button>
                 <button v-on:click="remove(entity)" class="btn btn-danger" type="button">X</button>
             </td>
-            <td><input v-model="entity.name" class="form-control" type="text"></td>
             <td><input v-model="entity.table.name" class="form-control" type="text"></td>
+            <td><input v-model="entity.factory.name" class="form-control" type="text"></td>
             <td><input v-model="entity.model.name" class="form-control" type="text"></td>
             <td><input v-model="entity.controller.name" class="form-control" type="text"></td>
         </tr>

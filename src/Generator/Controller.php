@@ -16,7 +16,7 @@ class Controller
         $controller = $entity->controller;
         $this->name = $controller->name;
         $this->fileName = $this->name . '.php';
-        $this->filePath = base_path($controller->path . DIRECTORY_SEPARATOR) . $this->fileName;
+        $this->filePath = $controller->path;
         $this->nameSpace = $controller->nameSpace;
         $this->getMiddleware($controller->middleware->list);
     }
@@ -34,7 +34,7 @@ class Controller
         $controller = $this;
         $view = view('template::controller', compact('controller'));
 
-        $file = new File($this->filePath);
+        $file = new File($this->fileName, $this->filePath);
         $file->save("<?php \n" . $view->render());
     }
 

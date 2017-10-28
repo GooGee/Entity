@@ -15,7 +15,7 @@ class Form
     {
         $form = $entity->form;
         $this->fileName = $form->name . '.html';
-        $this->filePath = base_path($form->path . DIRECTORY_SEPARATOR) . $this->fileName;
+        $this->filePath = $form->path;
 
         $this->method = $form->method;
         $this->instance = $form->instance;
@@ -27,7 +27,7 @@ class Form
         $form = $this;
         $view = view('template::form', compact('form'));
 
-        $file = new File($this->filePath);
+        $file = new File($this->fileName, $this->filePath);
         $file->save($view->render());
     }
 

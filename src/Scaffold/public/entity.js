@@ -131,8 +131,32 @@ class Choose {
 }
 
 
-class Item {
+class JSONItem {
+    constructor() {
+        this.ignoreList = ['ignoreList'];
+    }
+
+    ignore(name) {
+        this.ignoreList.push(name);
+    }
+
+    toJSON() {
+        let object = {};
+        for (let key in this) {
+            if (this.ignoreList.indexOf(key) >= 0) {
+                continue;
+            }
+            if (this.hasOwnProperty(key)) {
+                object[key] = this[key];
+            }
+        }
+        return object;
+    }
+}
+
+class Item extends JSONItem {
     constructor(name) {
+        super();
         this.name = name;
     }
 
@@ -148,8 +172,9 @@ class Item {
     }
 }
 
-class List {
+class List extends JSONItem {
     constructor() {
+        super();
         this.list = [];
     }
 
@@ -199,7 +224,7 @@ class Project extends Item {
         this.migrationPath = 'database\\migrations';
         this.modelNameSpace = 'App\\Model';
         this.modelPath = 'app\\Model';
-        this.seedlPath = 'database\\factories';
+        this.factoryPath = 'database\\factories';
         this.controllerNameSpace = 'App\\Http\\Controllers';
         this.controllerPath = 'app\\Http\\Controllers';
         this.formPath = 'resources\\views';
@@ -283,7 +308,6 @@ class Variable extends Item {
         this.name = name;
         this.value = value;
         this.type = 'string';
-        this.ignore = true;
     }
 }
 
@@ -291,6 +315,7 @@ class EntityList extends List {
     constructor(project) {
         super();
         this.project = project;
+        this.ignore('project');
     }
 
     create(name) {
@@ -317,7 +342,7 @@ class Entity extends Item {
         this.table.path = project.migrationPath;
         this.model.nameSpace = project.modelNameSpace;
         this.model.path = project.modelPath;
-        this.factory.path = project.seedlPath;
+        this.factory.path = project.factoryPath;
         this.controller.nameSpace = project.controllerNameSpace;
         this.controller.path = project.controllerPath;
         this.form.path = project.formPath;
@@ -341,6 +366,7 @@ class Table extends Item {
         this.field = new FieldList();
         this.index = new IndexList();
         this.callbackList = [];
+        this.ignore('callbackList');
     }
 
     load(data) {
@@ -421,11 +447,12 @@ class Factory extends Item {
         super(name);
         this.name = name + 'Factory';
         this.table = table;
+        this.ignore('table');
 
         this.field = new FactoryFieldList();
 
         let list = this.field;
-        table.register(function(field, name) {
+        table.register(function (field, name) {
             let item = list.get(field.name);
             if (item) {
                 item.name = name;
@@ -465,13 +492,14 @@ class Model extends Item {
         this.name = upperCapital(name);
         this.table = table;
         this.primaryKey = 'id';
+        this.ignore('table');
 
         //this.variable = new VariableList();
         this.relation = new RelationList();
         this.validation = new ValidationList();
 
         let validation = this.validation;
-        table.register(function(field, name) {
+        table.register(function (field, name) {
             let item = validation.get(field.name);
             if (item) {
                 item.name = name;
@@ -513,6 +541,7 @@ class Relation extends Item {
         this.name = lowerCapital(name);
         this.type = type;
         this.model = name;
+        this.ignore('pivot');
     }
 }
 
@@ -585,6 +614,7 @@ class Form extends Item {
         this.model = model;
         this.method = 'POST';
         this.instance = this.name;
+        this.ignore('model');
 
         this.field = new FormFieldList(this);
     }
@@ -615,6 +645,7 @@ class FormFieldList extends List {
     constructor(form) {
         super();
         this.form = form;
+        this.ignore('form');
     }
 
     create(name, type) {

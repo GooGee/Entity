@@ -19,7 +19,7 @@ class Migration
         $this->tableName = $table->name;
         $this->className = "Create{$entity->model->name}Table";
         $this->fileName = date('Y_m_d') . '_000000_create_' . $table->name . '_table.php';
-        $this->filePath = base_path($table->path . DIRECTORY_SEPARATOR) . $this->fileName;
+        $this->filePath = $table->path;
 
         $this->fieldList = [];
         foreach ($table->field->list as $field) {
@@ -37,7 +37,7 @@ class Migration
         $migration = $this;
         $view = view('template::migration', compact('migration'));
 
-        $file = new File($this->filePath);
+        $file = new File($this->fileName, $this->filePath);
         $file->save("<?php \n" . $view->render());
     }
 

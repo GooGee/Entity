@@ -23,7 +23,7 @@ class Model
         $model = $entity->model;
         $this->name = $model->name;
         $this->fileName = $this->name . '.php';
-        $this->filePath = base_path($model->path . DIRECTORY_SEPARATOR) . $this->fileName;
+        $this->filePath = $model->path;
         $this->nameSpace = $model->nameSpace;
         $this->table = $entity->table->name;
         $this->primaryKey = $model->primaryKey;
@@ -134,7 +134,7 @@ class Model
         $model = $this;
         $view = view('template::model', compact('model'));
 
-        $file = new File($this->filePath);
+        $file = new File($this->fileName, $this->filePath);
         $file->save("<?php \n" . $view->render());
     }
 
