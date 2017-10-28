@@ -12,14 +12,11 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(@echo($factory->model->name)::class, function (Faker $faker) {
+$factory->define(@echo($factory->modelName)::class, function (Faker $faker) {
     return [
 @foreach($factory->fieldList as $field)
-@if('property' == $field->type)
-        '@echo($field->name)' => $faker->@echo($field->property),
-@else
-        '@echo($field->name)' => $faker->@echo($field->method)(@echo($field->parameters)),
-@endif
+        @echo($field)
+
 @endforeach
     ];
 });

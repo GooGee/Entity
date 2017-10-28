@@ -175,8 +175,8 @@ class Entity extends Item {
         this.name = upperCapital(name);
 
         this.table = new Table(name);
+        this.factory = new Factory(name, this.table);
         this.model = new Model(name, this.table);
-        this.factory = new Factory(name, this.model);
         this.controller = new Controller(name);
         this.form = new Form(name, this.model);
     }
@@ -272,6 +272,41 @@ class Index extends Item {
     }
 }
 
+class Factory extends Item {
+    constructor(name, table) {
+        super(name);
+        this.name = name + 'Factory';
+        this.table = table;
+
+        this.field = new FactoryFieldList();
+    }
+
+    update() {
+        let array = this.table.field.list;
+        for (let index = 0; index < array.length; index++) {
+            let field = array[index];
+            if (this.field.get(field.name)) {
+                continue;
+            }
+            this.field.create(field.name);
+        }
+    }
+
+    load(data) {
+        super.load(data);
+        this.field.load(data.field.list);
+    }
+}
+
+class FactoryFieldList extends List {
+    create(name, type) {
+        let field = new Field(name, type);
+        field.type = 'method';
+        this.list.push(field);
+        return field;
+    }
+}
+
 class Model extends Item {
     constructor(name, table) {
         super(name);
@@ -351,41 +386,6 @@ class Validation extends Item {
 
 class Rule extends Item {
 
-}
-
-class Factory extends Item {
-    constructor(name, model) {
-        super(name);
-        this.name = name + 'Factory';
-        this.model = model;
-
-        this.field = new FactoryFieldList();
-    }
-
-    update() {
-        let array = this.model.validation.list;
-        for (let index = 0; index < array.length; index++) {
-            let field = array[index];
-            if (this.field.get(field.name)) {
-                continue;
-            }
-            this.field.create(field.name);
-        }
-    }
-
-    load(data) {
-        super.load(data);
-        this.field.load(data.field.list);
-    }
-}
-
-class FactoryFieldList extends List {
-    create(name, type) {
-        let field = new Field(name, type);
-        field.type = 'method';
-        this.list.push(field);
-        return field;
-    }
 }
 
 class Controller extends Item {

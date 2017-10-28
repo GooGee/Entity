@@ -17,10 +17,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li v-bind:class="{active: 'table' == tab}">
                         <a v-on:click="show('table')" href="javascript:void(0);">Table</a></li>
-                    <li v-bind:class="{active: 'model' == tab}">
-                        <a v-on:click="show('model')" href="javascript:void(0);">Model</a></li>
                     <li v-bind:class="{active: 'seed' == tab}">
                         <a v-on:click="show('seed')" href="javascript:void(0);">Seed</a></li>
+                    <li v-bind:class="{active: 'model' == tab}">
+                        <a v-on:click="show('model')" href="javascript:void(0);">Model</a></li>
                     <li v-bind:class="{active: 'controller' == tab}">
                         <a v-on:click="show('controller')" href="javascript:void(0);">Controller</a></li>
                     <li v-bind:class="{active: 'form' == tab}">
