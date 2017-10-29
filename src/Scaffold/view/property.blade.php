@@ -14,7 +14,7 @@
             <td>@brace('key')</td>
             <td>
                 <span v-if="button">
-                    <button v-on:click="change(key)" class="btn btn-default" type="button">@brace('object[key]')</button>
+                    <button v-on:click="change(key, value)" class="btn btn-default" type="button">@brace('object[key]')</button>
                 </span>
                 <span v-else>
                     <input v-model="object[key]" class="form-control" type="text">
@@ -38,8 +38,8 @@
             }
         },
         methods: {
-            change: function (key) {
-                let name = input('Please enter the ' + key);
+            change: function (key, value) {
+                let name = input('Please enter the ' + key, value);
                 if (isEmpty(name)) {
                     return;
                 }

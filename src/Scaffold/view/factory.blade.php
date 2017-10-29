@@ -208,7 +208,7 @@
         <tfoot>
         <tr>
             <td></td>
-            <td><button v-on:click="all" class="btn btn-primary" type="button">All</button></td>
+            <td><button v-on:click="factory.update()" class="btn btn-primary" type="button">All</button></td>
             <td></td>
             <td></td>
             <td></td>
@@ -224,9 +224,6 @@
         template: '#tttFactory',
         props: ['factory'],
         methods: {
-            all: function () {
-                this.factory.update();
-            },
             remove: function (field) {
                 if (sure('Are you sure?')) {
                     this.factory.field.remove(field);

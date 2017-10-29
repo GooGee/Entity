@@ -16,7 +16,7 @@ class File
 
     public function save($content)
     {
-        $file = base_path($this->path . DIRECTORY_SEPARATOR) . $this->name;
+        $file = base_path($this->path) . DIRECTORY_SEPARATOR . $this->name;
         if (file_exists($file)) {
             $old = $file . '.txt';
             if (file_exists($old)) {

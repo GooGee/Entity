@@ -38,7 +38,7 @@
         <tfoot>
         <tr>
             <td></td>
-            <td><button v-on:click="all" class="btn btn-primary" type="button">All</button></td>
+            <td><button v-on:click="model.update()" class="btn btn-primary" type="button">All</button></td>
             <td></td>
             <td></td>
             <td></td>
@@ -61,9 +61,6 @@
         template: '#tttValidation',
         props: ['model'],
         methods: {
-            all: function () {
-                this.model.update();
-            },
             remove: function (field) {
                 if(sure('Are you sure?')){
                     this.model.validation.remove(field);

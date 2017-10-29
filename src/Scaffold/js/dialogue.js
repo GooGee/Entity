@@ -9,11 +9,11 @@ function sure(message, callback) {
     return confirm(message);
 }
 
-function input(message, callback) {
+function input(message, value, callback) {
     if (callback) {
-        return callback(prompt(message));
+        return callback(prompt(message, value));
     }
-    return prompt(message);
+    return prompt(message, value);
 }
 
 class Choose {

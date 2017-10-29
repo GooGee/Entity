@@ -203,15 +203,13 @@
 
 
     function Load(data) {
-        vd.tab = 'project';
-        vd.choose = choose;
-        vd.entity = null;
-
-        let project = new Project('Project');
-        vd.project = project;
-        project.load(data);
+        vd.project.load(data);
     }
 
+    vd.tab = 'project';
+    vd.choose = choose;
+    vd.entity = null;
+    vd.project = new Project('Project');
     Load(@echo($project));
 
     const vvv = new Vue({

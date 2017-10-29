@@ -45,7 +45,7 @@
                 <button v-on:click="add" class="btn btn-primary" type="button">+</button>
             </td>
             <td>
-                <button v-on:click="all" class="btn btn-primary" type="button">All</button>
+                <button v-on:click="form.update()" class="btn btn-primary" type="button">All</button>
             </td>
             <td>
                 <div class="btn-group">
@@ -95,9 +95,6 @@
                     return;
                 }
                 this.form.field.create(name, 'text');
-            },
-            all: function () {
-                this.form.update();
             },
             remove: function (field) {
                 if (sure('Are you sure?')) {

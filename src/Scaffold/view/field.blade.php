@@ -73,7 +73,7 @@
                 <select v-model="selectedField" class="form-control mr pull-left" style="width: auto;">
                     <option v-for="field in fieldList" v-bind:value="field">@brace('field.name')</option>
                 </select>
-                <button v-on:click="addField" class="btn btn-info" type="button"> + </button>
+                <button v-on:click="addField" class="btn btn-info" type="button">+</button>
             </td>
             <td></td>
             <td></td>
@@ -122,21 +122,19 @@
                 }
             },
             rename: function (field) {
-                let name = input('Please enter the Field name');
+                let name = input('Please enter the Field name', field.name);
                 if (isEmpty(name)) {
                     return;
                 }
                 this.table.changeFieldName(field, name);
             },
             addField: function () {
-                let one = this.table.field.create(this.selectedField.name, this.selectedField.type);
+                let field = this.table.field.create(this.selectedField.name, this.selectedField.type);
 
                 let nullList = ['deleted_at', 'created_at', 'updated_at'];
-                for (let index in nullList) {
-                    if (nullList[index] == one.name) {
-                        one.nullable = true;
-                        return;
-                    }
+                let index = nullList.indexOf(field.name);
+                if (index >= 0) {
+                    field.nullable = true;
                 }
             }
         }
