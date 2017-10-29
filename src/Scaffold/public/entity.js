@@ -132,27 +132,20 @@ class Choose {
 
 
 class JSONItem {
-    constructor() {
-        this.ignoreList = ['ignoreList'];
-    }
-
-    ignore(name) {
-        this.ignoreList.push(name);
-    }
-
     toJSON() {
         let object = {};
         for (let key in this) {
-            if (this.ignoreList.indexOf(key) >= 0) {
-                continue;
-            }
             if (this.hasOwnProperty(key)) {
+                if (this.ignoreList.indexOf(key) >= 0) {
+                    continue;
+                }
                 object[key] = this[key];
             }
         }
         return object;
     }
 }
+JSONItem.prototype.ignoreList = [];
 
 class Item extends JSONItem {
     constructor(name) {
@@ -163,10 +156,20 @@ class Item extends JSONItem {
     load(data) {
         for (let key in data) {
             if (data.hasOwnProperty(key)) {
-                let item = data[key];
-                if ("object" != typeof (item)) {
-                    this[key] = item;
+                if (this.ignoreList.indexOf(key) >= 0) {
+                    continue;
                 }
+
+                let item = data[key];
+                if (item.list) {
+                    this[key].load(item.list);
+                    continue;
+                }
+                if ("object" == typeof item) {
+                    this[key].load(item);
+                    continue;
+                }
+                this[key] = item;
             }
         }
     }
@@ -259,8 +262,6 @@ class Project extends Item {
             data = this.create();
         }
         super.load(data);
-
-        this.entity.load(data.entity.list);
     }
 
     change(key, value) {
@@ -315,7 +316,6 @@ class EntityList extends List {
     constructor(project) {
         super();
         this.project = project;
-        this.ignore('project');
     }
 
     create(name) {
@@ -325,6 +325,7 @@ class EntityList extends List {
         return entity;
     }
 }
+EntityList.prototype.ignoreList = ['project'];
 
 class Entity extends Item {
     constructor(name) {
@@ -347,15 +348,6 @@ class Entity extends Item {
         this.controller.path = project.controllerPath;
         this.form.path = project.formPath;
     }
-
-    load(data) {
-        super.load(data);
-
-        this.table.load(data.table);
-        this.model.load(data.model);
-        this.controller.load(data.controller);
-        this.form.load(data.form);
-    }
 }
 
 class Table extends Item {
@@ -366,14 +358,6 @@ class Table extends Item {
         this.field = new FieldList();
         this.index = new IndexList();
         this.callbackList = [];
-        this.ignore('callbackList');
-    }
-
-    load(data) {
-        super.load(data);
-
-        this.field.load(data.field.list);
-        this.index.load(data.index.list);
     }
 
     register(callback) {
@@ -402,6 +386,7 @@ class Table extends Item {
         }
     }
 }
+Table.prototype.ignoreList = ['callbackList'];
 
 class FieldList extends List {
     create(name, type) {
@@ -435,19 +420,13 @@ class Index extends Item {
 
         this.field = new List();
     }
-
-    load(data) {
-        super.load(data);
-        this.field.load(data.field.list);
-    }
 }
 
 class Factory extends Item {
     constructor(name, table) {
         super(name);
-        this.name = name + 'Factory';
+        this.name = upperCapital(name) + 'Factory';
         this.table = table;
-        this.ignore('table');
 
         this.field = new FactoryFieldList();
 
@@ -470,12 +449,8 @@ class Factory extends Item {
             this.field.create(field.name);
         }
     }
-
-    load(data) {
-        super.load(data);
-        this.field.load(data.field.list);
-    }
 }
+Factory.prototype.ignoreList = ['table'];
 
 class FactoryFieldList extends List {
     create(name, type) {
@@ -492,7 +467,6 @@ class Model extends Item {
         this.name = upperCapital(name);
         this.table = table;
         this.primaryKey = 'id';
-        this.ignore('table');
 
         //this.variable = new VariableList();
         this.relation = new RelationList();
@@ -517,15 +491,8 @@ class Model extends Item {
             this.validation.create(field.name);
         }
     }
-
-    load(data) {
-        super.load(data);
-
-        //this.variable.load(data.variable.list);
-        this.relation.load(data.relation.list);
-        this.validation.load(data.validation.list);
-    }
 }
+Model.prototype.ignoreList = ['table'];
 
 class RelationList extends List {
     create(name, type) {
@@ -541,9 +508,9 @@ class Relation extends Item {
         this.name = lowerCapital(name);
         this.type = type;
         this.model = name;
-        this.ignore('pivot');
     }
 }
+Relation.prototype.ignoreList = ['pivot'];
 
 class ValidationList extends List {
     create(name) {
@@ -559,11 +526,6 @@ class Validation extends Item {
         this.name = name;
         this.rule = new Rule;
     }
-
-    load(data) {
-        super.load(data);
-        this.rule.load(data.rule);
-    }
 }
 
 class Rule extends Item {
@@ -576,11 +538,6 @@ class Controller extends Item {
         this.name = upperCapital(name) + 'Controller';
 
         this.middleware = new MiddlewareList();
-    }
-
-    load(data) {
-        super.load(data);
-        this.middleware.load(data.middleware.list);
     }
 }
 
@@ -600,11 +557,6 @@ class Middleware extends Item {
 
         this.method = new List();
     }
-
-    load(data) {
-        super.load(data);
-        this.method.load(data.method.list);
-    }
 }
 
 class Form extends Item {
@@ -614,7 +566,6 @@ class Form extends Item {
         this.model = model;
         this.method = 'POST';
         this.instance = this.name;
-        this.ignore('model');
 
         this.field = new FormFieldList(this);
     }
@@ -634,18 +585,13 @@ class Form extends Item {
         this.instance = name;
         this.field.setInstance(name);
     }
-
-    load(data) {
-        super.load(data);
-        this.field.load(data.field.list);
-    }
 }
+Form.prototype.ignoreList = ['model'];
 
 class FormFieldList extends List {
     constructor(form) {
         super();
         this.form = form;
-        this.ignore('form');
     }
 
     create(name, type) {
@@ -662,8 +608,8 @@ class FormFieldList extends List {
             field.vModel = this.form.instance + '.' + field.name;
         }
     }
-
 }
+FormFieldList.prototype.ignoreList = ['form'];
 
 function get(url, callback) {
     if (null == callback) {
