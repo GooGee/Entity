@@ -28,14 +28,10 @@
             </td>
             <td>
                 <span class="pull-left">
-                <button v-for="method in middleware.method.list"
-                        v-on:click="removeMethod(method, middleware)"
-                        class="btn btn-default mr" type="button">
-                    @brace('method.name')
-                </button>
+                    <label v-for="method in methodArray" class="mr">
+                    <input v-model="middleware.method[method]" type="checkbox">@brace('method')
+                    </label>
                 </span>
-
-                <button v-on:click="addMethod(middleware)" class="btn btn-info" type="button">+</button>
             </td>
         </tr>
         </tbody>
@@ -60,6 +56,11 @@
     Vue.component('ccc-middleware', {
         template: '#tttMiddleware',
         props: ['controller'],
+        data: function () {
+            return {
+                methodArray: methodArray
+            };
+        },
         methods: {
             add: function () {
                 let name = input('Please enter the Middleware name');
@@ -71,23 +72,6 @@
             remove: function (middleware) {
                 if (sure('Are you sure?')) {
                     this.controller.middleware.remove(middleware);
-                }
-            },
-            addMethod: function (middleware) {
-                let data = {
-                    message: 'Select a Method',
-                    array: methodArray,
-                    callback: function (yes, method) {
-                        if (yes) {
-                            middleware.method.create(method);
-                        }
-                    }
-                };
-                showChoose(data);
-            },
-            removeMethod: function (method, middleware) {
-                if (sure('Are you sure you want remove this method?')) {
-                    middleware.method.remove(method);
                 }
             }
         }

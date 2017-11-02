@@ -1,12 +1,13 @@
 
 namespace @echo($controller->nameSpace);
 
+use @echo($model->nameSpace)\@echo($model->name);
 use Illuminate\Http\Request;
 
 class @echo($controller->name) extends Controller
 {
 
-    function __construct($entity)
+    function __construct()
     {
 @foreach($controller->middlewareList as $middleware)
         @echo($middleware->text)
@@ -21,7 +22,8 @@ class @echo($controller->name) extends Controller
      */
     public function index()
     {
-        //
+        $@echo($model->instance)List = @echo($model->name)::all();
+        return view('@echo($controller->blade).index', compact('@echo($model->instance)List'));
     }
 
     /**
@@ -31,7 +33,8 @@ class @echo($controller->name) extends Controller
      */
     public function create()
     {
-        //
+        $@echo($model->instance) = new @echo($model->name);
+        return view('@echo($controller->blade).form', compact('@echo($model->instance)'));
     }
 
     /**
@@ -42,7 +45,11 @@ class @echo($controller->name) extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $array = $this->validate($request, @echo($model->name)::$ruleArray);
+        $@echo($model->instance) = new @echo($model->name);
+        $@echo($model->instance)->fill($array);
+        $@echo($model->instance)->save();
+        return ;
     }
 
     /**
@@ -53,7 +60,8 @@ class @echo($controller->name) extends Controller
      */
     public function show($id)
     {
-        //
+        $@echo($model->instance) = @echo($model->name)::findOrFail($id);
+        return view('@echo($controller->blade).show', compact('@echo($model->instance)'));
     }
 
     /**
@@ -64,7 +72,8 @@ class @echo($controller->name) extends Controller
      */
     public function edit($id)
     {
-        //
+        $@echo($model->instance) = @echo($model->name)::findOrFail($id);
+        return view('@echo($controller->blade).form', compact('@echo($model->instance)'));
     }
 
     /**
@@ -76,7 +85,10 @@ class @echo($controller->name) extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $array = $this->validate($request, @echo($model->name)::$ruleArray);
+        $@echo($model->instance) = @echo($model->name)::findOrFail($id);
+        $@echo($model->instance)->update($array);
+        return ;
     }
 
     /**
@@ -87,6 +99,8 @@ class @echo($controller->name) extends Controller
      */
     public function destroy($id)
     {
-        //
+        $@echo($model->instance) = @echo($model->name)::findOrFail($id);
+        $@echo($model->instance)->delete();
+        return ;
     }
 }

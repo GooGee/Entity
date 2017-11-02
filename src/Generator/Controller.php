@@ -9,6 +9,8 @@ class Controller
     public $fileName;
     public $filePath;
     public $nameSpace;
+    public $model;
+    public $blade;
     public $middlewareList;
 
     function __construct($entity)
@@ -18,6 +20,8 @@ class Controller
         $this->fileName = $this->name . '.php';
         $this->filePath = $controller->path;
         $this->nameSpace = $controller->nameSpace;
+        $this->model = $entity->model;
+        $this->blade = $controller->blade;
         $this->getMiddleware($controller->middleware->list);
     }
 
@@ -32,7 +36,8 @@ class Controller
     public function save()
     {
         $controller = $this;
-        $view = view('template::controller', compact('controller'));
+        $model = $this->model;
+        $view = view('template::controller', compact('controller', 'model'));
 
         $file = new File($this->fileName, $this->filePath);
         $file->save("<?php \n" . $view->render());

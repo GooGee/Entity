@@ -162,12 +162,16 @@ class Item extends JSONItem {
 
                 let item = data[key];
                 if (item.list) {
-                    this[key].load(item.list);
-                    continue;
+                    if (this[key].load) {
+                        this[key].load(item.list);
+                        continue;
+                    }
                 }
                 if ("object" == typeof item) {
-                    this[key].load(item);
-                    continue;
+                    if (this[key].load) {
+                        this[key].load(item);
+                        continue;
+                    }
                 }
                 this[key] = item;
             }
@@ -467,6 +471,7 @@ class Model extends Item {
         this.name = upperCapital(name);
         this.table = table;
         this.primaryKey = 'id';
+        this.instance = lowerCapital(name);
 
         //this.variable = new VariableList();
         this.relation = new RelationList();
@@ -524,18 +529,15 @@ class Validation extends Item {
     constructor(name) {
         super(name);
         this.name = name;
-        this.rule = new Rule;
+        this.rule = new Item;
     }
-}
-
-class Rule extends Item {
-
 }
 
 class Controller extends Item {
     constructor(name) {
         super(name);
         this.name = upperCapital(name) + 'Controller';
+        this.blade = lowerCapital(name);
 
         this.middleware = new MiddlewareList();
     }
@@ -555,7 +557,7 @@ class Middleware extends Item {
         this.name = name;
         this.type = 'all';
 
-        this.method = new List();
+        this.method = {};
     }
 }
 

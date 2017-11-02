@@ -14,10 +14,14 @@ class Rule
         foreach ($field->rule as $key => $value) {
             switch ($key) {
                 case 'between':
-                    $array[] = 'between:' . $value;
+                    if ($value) {
+                        $array[] = 'between:' . $value;
+                    }
                     break;
                 case 'regex':
-                    $array[] = 'regex:' . $value;
+                    if ($value) {
+                        $array[] = 'regex:' . $value;
+                    }
                     break;
                 default :
                     if ($value) {

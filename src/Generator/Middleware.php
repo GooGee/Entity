@@ -10,24 +10,31 @@ class Middleware
     function __construct($middleware)
     {
         $name = $middleware->name;
-        if (empty($middleware->method->list)) {
-            $middleware->type = 'all';
+        $type = $middleware->type;
+
+        $array = [];
+        foreach ($middleware->method as $key => $value) {
+            if ($value) {
+                $array[] = $key;
+            }
         }
-        if ('all' == $middleware->type) {
+        if (empty($array)) {
+            $type = 'all';
+        }
+        if ('all' == $type) {
             $this->text = "\$this->middleware('{$name}');";
             return;
         }
 
-        $type = $middleware->type;
-        $array = $this->array2string($middleware->method->list);
-        $this->text = "\$this->middleware('{$name}')->{$type}([$array]);";
+        $string = $this->array2string($array);
+        $this->text = "\$this->middleware('{$name}')->{$type}([$string]);";
     }
 
     function array2string($array)
     {
         $arr = [];
         foreach ($array as $value) {
-            $arr[] = $value->name;
+            $arr[] = $value;
         }
         $string = implode("', '", $arr);
         return "'{$string}'";

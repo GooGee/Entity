@@ -1,5 +1,5 @@
 
-<form method="@echo($form->method)" class="form-horizontal panel-body">
+<form method="@echo($form->method)" class="form-horizontal">
 
 @foreach($form->fieldList as $field)
 @if($field->type == 'hidden')
@@ -18,7 +18,7 @@
                 <input v-model="@echo($field->vModel)" v-bind:value="item.value" type="checkbox">@{{item.name}}</label>
         @elseif($field->type == 'radio')
             <label v-for="item in itemArray" class="radio-inline">
-                <input v-model="@echo($field->vModel)" v-bind:value="item.value" type="radio">@{{item.name}}</label>
+                <input v-model="@echo($field->vModel)" v-bind:value="item.value" name="@echo($field->name)" type="radio">@{{item.name}}</label>
         @elseif($field->type == 'select')
             <select v-model="@echo($field->vModel)" class="form-control">
                 <option v-for="item in itemArray" v-bind:value="item.value">@{{item.name}}</option>
