@@ -9,6 +9,7 @@ laravel scaffold generator
 - Make field validations
 - Define model factories
 - Configure controller middlewares
+- Create Bootstrap forms
 
 # Requirement
 

@@ -14,8 +14,10 @@ class Middleware
 
         $array = [];
         foreach ($middleware->method as $key => $value) {
-            if ($value) {
-                $array[] = $key;
+            if (is_bool($value)) {
+                if ($value) {
+                    $array[] = $key;
+                }
             }
         }
         if (empty($array)) {

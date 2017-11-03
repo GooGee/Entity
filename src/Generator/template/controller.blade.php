@@ -34,6 +34,7 @@ class @echo($controller->name) extends Controller
     public function create()
     {
         $@echo($model->instance) = new @echo($model->name);
+        $@echo($model->instance)->_token = csrf_token();
         return view('@echo($controller->blade).form', compact('@echo($model->instance)'));
     }
 
@@ -73,6 +74,8 @@ class @echo($controller->name) extends Controller
     public function edit($id)
     {
         $@echo($model->instance) = @echo($model->name)::findOrFail($id);
+        $@echo($model->instance)->_token = csrf_token();
+        $@echo($model->instance)->_method = 'PATCH';
         return view('@echo($controller->blade).form', compact('@echo($model->instance)'));
     }
 

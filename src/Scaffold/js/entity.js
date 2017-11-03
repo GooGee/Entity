@@ -29,17 +29,17 @@ class Item extends JSONItem {
                 }
 
                 let item = data[key];
-                if (item.list) {
-                    if (this[key].load) {
-                        this[key].load(item.list);
-                        continue;
-                    }
-                }
                 if ("object" == typeof item) {
                     if (this[key].load) {
+                        if (item.list) { // class List
+                            this[key].load(item.list);
+                            continue;
+                        }
+                        // class Item
                         this[key].load(item);
                         continue;
                     }
+                    // normal Object
                 }
                 this[key] = item;
             }
@@ -435,7 +435,7 @@ class Form extends Item {
         this.name = lowerCapital(name);
         this.model = model;
         this.method = 'POST';
-        this.instance = this.name;
+        this.instance = model.instance;
 
         this.field = new FormFieldList(this);
     }
