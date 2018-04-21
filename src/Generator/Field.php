@@ -24,7 +24,15 @@ class Field
             $nullable = '->nullable()';
         }
 
-        $default = $this->getDefault($field);
+        $default = '';
+        if (isset($field->default)) {
+            if (is_numeric($field->default)) {
+                $default = "->default({$field->default})";
+            } else if ($field->default) {
+                $value = trim($field->default, '\'"');
+                $default = "->default('{$value}')";
+            }
+        }
 
         if (empty($field->comment)) {
             $comment = '';
@@ -33,32 +41,6 @@ class Field
         }
 
         $this->text = "\$table->{$type}('{$name}'{$length}){$nullable}{$default}{$comment};";
-    }
-
-    function getDefault($field)
-    {
-        if (empty($field->default)) {
-
-        } else {
-            return "->default('{$field->default}')";
-        }
-
-//        $list = ['decimal', 'double', 'float'];
-//        if (in_array($field->type, $list)) {
-//            return "->default(0)";
-//        }
-//        if (preg_match('/integer$/i', $field->type)) {
-//            return "->default(0)";
-//        }
-//
-//        if ('string' == $field->type) {
-//            return "->default('')";
-//        }
-//        if (preg_match('/text/i', $field->type)) {
-//            return "->default('')";
-//        }
-
-        return '';
     }
 
 }

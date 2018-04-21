@@ -27,16 +27,16 @@
                     <option value="hasMany">hasMany</option>
                 </select></td>
             <td>
-                <button v-on:click="selectModel(relation)" class="btn btn-default" type="button">@brace('plus(relation.model)')</button>
+                <button v-on:click="selectModel(relation)" class="btn btn-default">@brace('relation.model')</button>
             </td>
             <td>
-                <button v-on:click="selectPivot(relation)" class="btn btn-default" type="button">@brace('plus(relation.pivotTable)')</button>
+                <span v-on:click="selectPivot(relation)" class="btn btn-default">@brace('relation.pivotTable ? relation.pivotTable : "+"')</span>
             </td>
             <td>
-                <button v-on:click="selectForeign(relation)" class="btn btn-default" type="button">@brace('plus(relation.foreignKey)')</button>
+                <span v-on:click="selectForeign(relation)" class="btn btn-default">@brace('relation.foreignKey ? relation.foreignKey : "+"')</span>
             </td>
             <td>
-                <button v-on:click="selectOther(relation)" class="btn btn-default" type="button">@brace('plus(relation.otherKey)')</button>
+                <span v-on:click="selectOther(relation)" class="btn btn-default">@brace('relation.otherKey ? relation.otherKey : "+"')</span>
             </td>
         </tr>
         </tbody>
@@ -110,14 +110,14 @@
                 showChoose(data);
             },
             selectForeign: function (relation) {
-                if (null == relation.pivot) {
-                    look('Please select a Pivot table first!');
-                    return;
+                let list = this.model.table.field.list;
+                if (relation.pivot) {
+                    list = relation.pivot.table.field.list;
                 }
                 let data = {
                     message: 'Select the Foreign Key',
                     display: 'name',
-                    array: relation.pivot.table.field.list,
+                    array: list,
                     callback: function (yes, field) {
                         if (yes) {
                             relation.foreignKey = field.name;
@@ -142,12 +142,6 @@
                     }
                 };
                 showChoose(data);
-            },
-            plus: function (text) {
-                if (text) {
-                    return text;
-                }
-                return '+';
             }
         }
     });

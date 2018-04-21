@@ -12,21 +12,12 @@ class Rule
     {
         $array = [];
         foreach ($field->rule as $key => $value) {
-            switch ($key) {
-                case 'between':
-                    if ($value) {
-                        $array[] = 'between:' . $value;
-                    }
-                    break;
-                case 'regex':
-                    if ($value) {
-                        $array[] = 'regex:' . $value;
-                    }
-                    break;
-                default :
-                    if ($value) {
-                        $array[] = $key;
-                    }
+            if (is_bool($value)) {
+                if ($value) {
+                    $array[] = $key;
+                }
+            } else {
+                $array[] = $key . ':' . $value;
             }
         }
 
