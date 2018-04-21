@@ -269,10 +269,11 @@ class FieldList extends List {
 }
 
 class Field extends Item {
-    constructor(name, type) {
+    constructor(name, type, value) {
         super(name);
         this.name = name;
         this.type = type;
+        this.default = value;
     }
 }
 

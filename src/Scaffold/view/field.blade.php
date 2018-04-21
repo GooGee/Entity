@@ -92,8 +92,8 @@
     const fieldList = [
         new Field('id', 'increments'),
         new Field('user_id', 'integer'),
-        new Field('name', 'string'),
-        new Field('status', 'integer'),
+        new Field('name', 'string', ''),
+        new Field('status', 'integer', 0),
         new Field('created_at', 'timestamp'),
         new Field('updated_at', 'timestamp'),
         new Field('deleted_at', 'timestamp')
