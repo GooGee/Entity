@@ -24,8 +24,12 @@
                 </select>
             </td>
             <td>
-                <div v-show="'method' == field.type">
-                    <select v-model="field.method" class="form-control">
+                <div v-if="'raw' == field.type">
+                    <input v-model="field.raw" class="form-control" type="text">
+                </div>
+                <div v-else class="form-inline">
+                    <label><input v-model="field.unique" type="checkbox"> Unique</label>
+                    <select v-show="'method' == field.type" v-model="field.method" class="form-control">
                         <option value="name">name</option>
                         <option value="firstName">firstName</option>
                         <option value="title">title</option>
@@ -84,9 +88,7 @@
                         <option value="image">image</option>
                         <option value="randomHtml">randomHtml</option>
                     </select>
-                </div>
-                <div v-show="'property' == field.type">
-                    <select v-model="field.property" class="form-control">
+                    <select v-show="'property' == field.type" v-model="field.property" class="form-control">
                         <option value="name">name</option>
                         <option value="firstName">firstName</option>
                         <option value="firstNameMale">firstNameMale</option>
@@ -198,9 +200,6 @@
                         <option value="colorName">colorName</option>
                     </select>
                 </div>
-                <div v-show="'raw' == field.type">
-                    <input v-model="field.raw" class="form-control" type="text">
-                </div>
             </td>
             <td><input v-model="field.parameters" class="form-control" type="text"></td>
         </tr>
@@ -209,6 +208,7 @@
         <tr>
             <td></td>
             <td><button v-on:click="factory.update()" class="btn btn-primary" type="button">All</button></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

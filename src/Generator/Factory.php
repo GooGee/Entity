@@ -41,7 +41,12 @@ class Factory
         if (empty($field->property)) {
             return;
         }
-        $this->fieldList[] = "'$field->name' => \$faker->$field->property,";
+
+        $unique = '';
+        if (isset($field->unique) && $field->unique) {
+            $unique = '->unique()';
+        }
+        $this->fieldList[] = "'$field->name' => \$faker{$unique}->$field->property,";
     }
 
     function setMethod($field)
@@ -50,11 +55,15 @@ class Factory
             return;
         }
 
+        $unique = '';
+        if (isset($field->unique) && $field->unique) {
+            $unique = '->unique()';
+        }
         $parameters = '';
         if (isset($field->parameters)) {
             $parameters = $field->parameters;
         }
-        $this->fieldList[] = "'$field->name' => \$faker->$field->method($parameters),";
+        $this->fieldList[] = "'$field->name' => \$faker{$unique}->$field->method($parameters),";
     }
 
     function setRaw($field)
