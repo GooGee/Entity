@@ -27,16 +27,16 @@
                     <option value="hasMany">hasMany</option>
                 </select></td>
             <td>
-                <button v-on:click="selectModel(relation)" class="btn btn-default">@brace('relation.model')</button>
+                <button v-on:click="selectModel(relation)" class="btn btn-default" v-text="relation.model"></button>
             </td>
             <td>
-                <span v-on:click="selectPivot(relation)" class="btn btn-default">@brace('relation.pivotTable ? relation.pivotTable : "+"')</span>
+                <span v-on:click="selectPivot(relation)" class="btn btn-default" v-text="plus(relation.pivotTable)"></span>
             </td>
             <td>
-                <span v-on:click="selectForeign(relation)" class="btn btn-default">@brace('relation.foreignKey ? relation.foreignKey : "+"')</span>
+                <span v-on:click="selectForeign(relation)" class="btn btn-default" v-text="plus(relation.foreignKey)"></span>
             </td>
             <td>
-                <span v-on:click="selectOther(relation)" class="btn btn-default">@brace('relation.otherKey ? relation.otherKey : "+"')</span>
+                <span v-on:click="selectOther(relation)" class="btn btn-default" v-text="plus(relation.otherKey)"></span>
             </td>
         </tr>
         </tbody>
@@ -63,6 +63,12 @@
         template: '#tttRelation',
         props: ['model'],
         methods: {
+            plus: function (key) {
+                if (key) {
+                    return key;
+                }
+                return '+';
+            },
             add: function () {
                 let relation = this.model.relation;
                 let data = {
@@ -78,7 +84,7 @@
                 showChoose(data);
             },
             remove: function (relation) {
-                if (sure('Are you sure?')) {
+                if (confirm('Are you sure?')) {
                     this.model.relation.remove(relation);
                 }
             },
@@ -128,7 +134,7 @@
             },
             selectOther: function (relation) {
                 if (null == relation.pivot) {
-                    look('Please select a Pivot table first!');
+                    alert('Please select a Pivot table first!');
                     return;
                 }
                 let data = {

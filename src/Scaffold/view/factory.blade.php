@@ -225,7 +225,7 @@
         props: ['factory'],
         methods: {
             remove: function (field) {
-                if (sure('Are you sure?')) {
+                if (confirm('Are you sure?')) {
                     this.factory.field.remove(field);
                 }
             }

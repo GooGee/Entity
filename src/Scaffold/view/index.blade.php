@@ -70,12 +70,12 @@
                 });
             },
             remove: function (index) {
-                if(sure('Are you sure?')){
+                if(confirm('Are you sure?')){
                     this.table.index.remove(index);
                 }
             },
             removeField: function (field, index) {
-                if(sure('Are you sure?')){
+                if(confirm('Are you sure?')){
                     index.field.remove(field);
                 }
             },

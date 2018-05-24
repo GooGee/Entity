@@ -60,14 +60,14 @@
         props: ['variable'],
         methods: {
             add: function () {
-                let name = input('Please enter the Variable name');
+                let name = prompt('Please enter the Variable name');
                 if (isEmpty(name)) {
                     return;
                 }
                 this.variable.create(name, '');
             },
             remove: function (name) {
-                if (sure('Are you sure?')) {
+                if (confirm('Are you sure?')) {
                     this.variable.remove(name);
                 }
             }

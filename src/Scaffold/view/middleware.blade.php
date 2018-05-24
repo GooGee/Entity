@@ -63,14 +63,14 @@
         },
         methods: {
             add: function () {
-                let name = input('Please enter the Middleware name');
+                let name = prompt('Please enter the Middleware name');
                 if (isEmpty(name)) {
                     return;
                 }
                 this.controller.middleware.create(name);
             },
             remove: function (middleware) {
-                if (sure('Are you sure?')) {
+                if (confirm('Are you sure?')) {
                     this.controller.middleware.remove(middleware);
                 }
             }

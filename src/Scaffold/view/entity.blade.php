@@ -48,7 +48,7 @@
         props: ['project'],
         methods: {
             add: function () {
-                let name = input('Please enter the Entity name');
+                let name = prompt('Please enter the Entity name');
                 if (isEmpty(name)) {
                     return;
                 }
@@ -58,7 +58,7 @@
                 this.$emit('show', entity);
             },
             remove: function (entity) {
-                if(sure('Are you sure?')){
+                if(confirm('Are you sure?')){
                     this.project.entity.remove(entity);
                 }
             }

@@ -39,7 +39,7 @@
         },
         methods: {
             change: function (key, value) {
-                let name = input('Please enter the ' + key, value);
+                let name = prompt('Please enter the ' + key, value);
                 if (isEmpty(name)) {
                     return;
                 }

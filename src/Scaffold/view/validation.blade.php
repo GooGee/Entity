@@ -62,7 +62,7 @@
         props: ['model'],
         methods: {
             remove: function (field) {
-                if(sure('Are you sure?')){
+                if(confirm('Are you sure?')){
                     this.model.validation.remove(field);
                 }
             }
