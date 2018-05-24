@@ -132,6 +132,7 @@
 </div>
 <br>
 
+@include('entity::dialogue')
 @include('entity::choose')
 
 @include('entity::property')
@@ -145,10 +146,6 @@
 @include('entity::form')
 
 <script type="text/javascript">
-
-    //window.onload = function () {
-    //
-    //};
 
     vm.show = function (tab) {
         vd.tab = tab;

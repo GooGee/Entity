@@ -1,20 +1,17 @@
 <script type="text/x-template" id="tttChoose">
 
-    <div class="choose">
-        <div class="layer"></div>
-        <div class="panel">
-            <div class="margin"><span>@brace('data.message')</span></div>
-            <div class="margin">
-                <select v-model="data.item" class="form-control">
-                    <option v-for="item in data.array" v-bind:value="item">@brace('display(item)')</option>
-                </select>
-            </div>
-            <div class="margin">
-                <button v-on:click="yes" class="btn btn-success" type="button">V</button>
-                <button v-on:click="no" class="btn btn-danger" type="button">X</button>
-            </div>
-        </div>
-    </div>
+    <ccc-dialogue :dialogue="dialogue" v-on:hide="no">
+        <template slot="title"><span v-text="data.message"></span></template>
+        <template slot="body">
+            <select v-model="data.item" class="form-control">
+                <option v-for="item in data.array" v-bind:value="item" v-text="display(item)"></option>
+            </select>
+        </template>
+        <template slot="footer">
+            <button v-on:click="yes" class="btn btn-success" type="button">V</button>
+            <button v-on:click="no" class="btn btn-danger" type="button">X</button>
+        </template>
+    </ccc-dialogue>
 
 </script>
 
@@ -34,6 +31,14 @@
     Vue.component('ccc-choose', {
         template: '#tttChoose',
         props: ['data'],
+        data: function () {
+            return {
+                dialogue: {
+                    canClose: true,
+                    footer: true
+                }
+            };
+        },
         methods: {
             display: function (item) {
                 if (this.data.display) {
