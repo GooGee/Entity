@@ -19,13 +19,13 @@
         <tr v-for="field in table.field.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="table.field.moveUp(field)" class="btn btn-info" type="button">↑</button>
-                    <button v-on:click="table.field.moveDown(field)" class="btn btn-info" type="button">↓</button>
+                    <span v-on:click="table.field.moveUp(field)" class="btn btn-info">↑</span>
+                    <span v-on:click="table.field.moveDown(field)" class="btn btn-info">↓</span>
                 </div>
-                <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="remove(field)" class="btn btn-danger">X</span>
             </td>
             <td>
-                <button v-on:click="rename(field)" class="btn btn-default" type="button">@brace('field.name')</button>
+                <span v-on:click="rename(field)" class="btn btn-default" v-text="field.name"></span>
             </td>
             <td>
                 <select v-model="field.type" class="form-control">
@@ -67,13 +67,13 @@
         <tfoot>
         <tr>
             <td>
-                <button v-on:click="add" class="btn btn-primary" type="button">+</button>
+                <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td>
                 <select v-model="selectedField" class="form-control mr pull-left" style="width: auto;">
-                    <option v-for="field in fieldList" v-bind:value="field">@brace('field.name')</option>
+                    <option v-for="field in fieldList" v-bind:value="field" v-text="field.name"></option>
                 </select>
-                <button v-on:click="addField" class="btn btn-info" type="button">+</button>
+                <span v-on:click="addField" class="btn btn-info">+</span>
             </td>
             <td></td>
             <td></td>

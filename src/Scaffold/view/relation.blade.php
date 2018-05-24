@@ -17,7 +17,7 @@
         <tbody>
         <tr v-for="relation in model.relation.list">
             <td>
-                <button v-on:click="remove(relation)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="remove(relation)" class="btn btn-danger">X</span>
             </td>
             <td><input v-model="relation.name" class="form-control" type="text"></td>
             <td><select v-model="relation.type" class="form-control">
@@ -27,7 +27,7 @@
                     <option value="hasMany">hasMany</option>
                 </select></td>
             <td>
-                <button v-on:click="selectModel(relation)" class="btn btn-default" v-text="relation.model"></button>
+                <span v-on:click="selectModel(relation)" class="btn btn-default" v-text="relation.model"></span>
             </td>
             <td>
                 <span v-on:click="selectPivot(relation)" class="btn btn-default" v-text="plus(relation.pivotTable)"></span>
@@ -43,7 +43,7 @@
         <tfoot>
         <tr>
             <td>
-                <button v-on:click="add" class="btn btn-primary" type="button">+</button>
+                <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td></td>
             <td></td>

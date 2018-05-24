@@ -18,7 +18,7 @@
         <tbody>
         <tr v-for="variable in variable.list">
             <td>
-                <button v-on:click="remove(variable)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="remove(variable)" class="btn btn-danger">X</span>
             </td>
             <td><input v-model="variable.name" class="form-control" type="text"></td>
             <td><input v-model="variable.value" class="form-control" type="text"></td>
@@ -38,7 +38,7 @@
         <tfoot>
         <tr>
             <td>
-                <button v-on:click="add" class="btn btn-primary" type="button">+</button>
+                <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td></td>
             <td></td>

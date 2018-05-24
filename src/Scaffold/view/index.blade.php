@@ -11,7 +11,7 @@
         <tbody>
         <tr v-for="index in table.index.list">
             <td>
-                <button v-on:click="remove(index)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="remove(index)" class="btn btn-danger">X</span>
             </td>
             <td>
                 <select v-model="index.type" class="form-control">
@@ -22,7 +22,7 @@
             </td>
             <td>
                 <span v-for="field in index.field.list" class="border mr pull-left">
-                    <div class="text-center">@brace('field.name')</div>
+                    <div class="text-center" v-text="field.name"></div>
                     <div class="btn-group">
                         <span v-on:click="index.field.moveUp(field)" class="btn btn-info btn-xs">←</span>
                         <span v-on:click="index.field.moveDown(field)" class="btn btn-info btn-xs">→</span>
@@ -30,14 +30,14 @@
                     </div>
                 </span>
 
-                <button v-on:click="addField(index)" class="btn btn-info" type="button">+</button>
+                <span v-on:click="addField(index)" class="btn btn-info">+</span>
             </td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
             <td>
-                <button v-on:click="createIndex" class="btn btn-primary" type="button">+</button>
+                <span v-on:click="createIndex" class="btn btn-primary">+</span>
             </td>
             <td></td>
             <td></td>

@@ -2,10 +2,10 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle</span>
                 <span class="icon-bar"></span>
-            </button>
+            </span>
             <span class="navbar-brand">Entity</span>
         </div>
         <div class="collapse navbar-collapse">

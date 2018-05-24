@@ -37,8 +37,9 @@
 
         <!-- Project -->
         <div v-show="tab=='project'">
-            <h3>@brace('project.name')
-                <button v-on:click="saveProject" class="btn btn-success" type="button">Save</button>
+            <h3>
+                <span v-text="project.name"></span>
+                <span v-on:click="saveProject" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
@@ -51,8 +52,9 @@
 
         <!-- Migration -->
         <div v-if="entity" v-show="tab=='table'">
-            <h3>@brace('entity.table.name') Table
-                <button v-on:click="saveMigration" class="btn btn-success" type="button">Save</button>
+            <h3>
+                <span v-text="entity.table.name"></span> Table
+                <span v-on:click="saveMigration" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
@@ -68,8 +70,9 @@
 
         <!-- Model -->
         <div v-if="entity" v-show="tab=='model'">
-            <h3>@brace('entity.model.name') Model
-                <button v-on:click="saveModel" class="btn btn-success" type="button">Save</button>
+            <h3>
+                <span v-text="entity.model.name"></span> Model
+                <span v-on:click="saveModel" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
@@ -85,8 +88,9 @@
 
         <!-- Seed -->
         <div v-if="entity" v-show="tab=='seed'">
-            <h3>@brace('entity.factory.name')
-                <button v-on:click="saveFactory" class="btn btn-success" type="button">Save</button>
+            <h3>
+                <span v-text="entity.factory.name"></span>
+                <span v-on:click="saveFactory" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
@@ -99,8 +103,9 @@
 
         <!-- Controller -->
         <div v-if="entity" v-show="tab=='controller'">
-            <h3>@brace('entity.controller.name')
-                <button v-on:click="saveController" class="btn btn-success" type="button">Save</button>
+            <h3>
+                <span v-text="entity.controller.name"></span>
+                <span v-on:click="saveController" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
@@ -113,8 +118,9 @@
 
         <!-- Form -->
         <div v-if="entity" v-show="tab=='form'">
-            <h3>@brace('entity.name') Form
-                <button v-on:click="saveForm" class="btn btn-success" type="button">Save</button>
+            <h3>
+                <span v-text="entity.name"></span> Form
+                <span v-on:click="saveForm" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Form -->

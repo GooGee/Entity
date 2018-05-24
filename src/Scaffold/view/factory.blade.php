@@ -14,8 +14,8 @@
         </thead>
         <tbody>
         <tr v-for="field in factory.field.list">
-            <td><button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button></td>
-            <td>@brace('field.name')</td>
+            <td><span v-on:click="remove(field)" class="btn btn-danger">X</span></td>
+            <td v-text="field.name"></td>
             <td>
                 <select v-model="field.type" class="form-control">
                     <option value="raw">Raw</option>
@@ -207,7 +207,7 @@
         <tfoot>
         <tr>
             <td></td>
-            <td><button v-on:click="factory.update()" class="btn btn-primary" type="button">All</button></td>
+            <td><span v-on:click="factory.update()" class="btn btn-primary">All</span></td>
             <td></td>
             <td></td>
             <td></td>

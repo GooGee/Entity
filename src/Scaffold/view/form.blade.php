@@ -17,10 +17,10 @@
         <tr v-for="field in form.field.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="form.field.moveUp(field)" class="btn btn-info" type="button">↑</button>
-                    <button v-on:click="form.field.moveDown(field)" class="btn btn-info" type="button">↓</button>
+                    <span v-on:click="form.field.moveUp(field)" class="btn btn-info">↑</span>
+                    <span v-on:click="form.field.moveDown(field)" class="btn btn-info">↓</span>
                 </div>
-                <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="remove(field)" class="btn btn-danger">X</span>
             </td>
             <td><input v-model="field.name" class="form-control" type="text"></td>
             <td>
@@ -42,25 +42,25 @@
         <tfoot>
         <tr>
             <td>
-                <button v-on:click="add" class="btn btn-primary" type="button">+</button>
+                <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td>
-                <button v-on:click="form.update()" class="btn btn-primary" type="button">All</button>
+                <span v-on:click="form.update()" class="btn btn-primary">All</span>
             </td>
             <td>
                 <div class="btn-group">
-                    <button v-on:click="method('GET')" v-bind:class="methodGet" type="button">GET</button>
-                    <button v-on:click="method('POST')" v-bind:class="methodPost" type="button">POST</button>
+                    <span v-on:click="method('GET')" v-bind:class="methodGet">GET</span>
+                    <span v-on:click="method('POST')" v-bind:class="methodPost">POST</span>
                 </div>
             </td>
             <td>
                 <div class="btn-group">
-                    <button v-on:click="method('PATCH')" class="btn btn-info" type="button">PATCH</button>
-                    <button v-on:click="method('DELETE')" class="btn btn-info" type="button">DELETE</button>
+                    <span v-on:click="method('PATCH')" class="btn btn-info">PATCH</span>
+                    <span v-on:click="method('DELETE')" class="btn btn-info">DELETE</span>
                 </div>
             </td>
             <td>
-                <button v-on:click="setInstance()" class="btn btn-default" type="button">@brace('form.instance')</button>
+                <span v-on:click="setInstance()" class="btn btn-default" v-text="form.instance"></span>
             </td>
             <td></td>
         </tr>

@@ -14,11 +14,11 @@
         <tr v-for="entity in project.entity.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="project.entity.moveUp(entity)" class="btn btn-info" type="button">↑</button>
-                    <button v-on:click="project.entity.moveDown(entity)" class="btn btn-info" type="button">↓</button>
+                    <span v-on:click="project.entity.moveUp(entity)" class="btn btn-info">↑</span>
+                    <span v-on:click="project.entity.moveDown(entity)" class="btn btn-info">↓</span>
                 </div>
-                <button v-on:click="show(entity)" class="btn btn-primary" type="button">Show</button>
-                <button v-on:click="remove(entity)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="show(entity)" class="btn btn-primary">Show</span>
+                <span v-on:click="remove(entity)" class="btn btn-danger">X</span>
             </td>
             <td><input v-model="entity.table.name" class="form-control" type="text"></td>
             <td><input v-model="entity.factory.name" class="form-control" type="text"></td>
@@ -29,7 +29,7 @@
         <tfoot>
         <tr>
             <td>
-                <button v-on:click="add" class="btn btn-primary" type="button">+</button>
+                <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td></td>
             <td></td>

@@ -11,10 +11,10 @@
         </thead>
         <tbody>
         <tr v-for="(value, key) in object" v-if="typeof(value) == 'string'">
-            <td>@brace('key')</td>
+            <td v-text="key"></td>
             <td>
                 <span v-if="button">
-                    <button v-on:click="change(key, value)" class="btn btn-default" type="button">@brace('object[key]')</button>
+                    <span v-on:click="change(key, value)" class="btn btn-default" v-text="object[key]"></span>
                 </span>
                 <span v-else>
                     <input v-model="object[key]" class="form-control" type="text">

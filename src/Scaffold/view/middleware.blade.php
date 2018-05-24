@@ -13,10 +13,10 @@
         <tr v-for="middleware in controller.middleware.list">
             <td>
                 <div class="btn-group">
-                    <button v-on:click="controller.middleware.moveUp(middleware)" class="btn btn-info" type="button">↑</button>
-                    <button v-on:click="controller.middleware.moveDown(middleware)" class="btn btn-info" type="button">↓</button>
+                    <span v-on:click="controller.middleware.moveUp(middleware)" class="btn btn-info">↑</span>
+                    <span v-on:click="controller.middleware.moveDown(middleware)" class="btn btn-info">↓</span>
                 </div>
-                <button v-on:click="remove(middleware)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="remove(middleware)" class="btn btn-danger">X</span>
             </td>
             <td><input v-model="middleware.name" class="form-control" type="text"></td>
             <td>
@@ -29,7 +29,7 @@
             <td>
                 <span class="pull-left">
                     <label v-for="method in methodArray" class="mr">
-                    <input v-model="middleware.method[method]" type="checkbox">@brace('method')
+                    <input v-model="middleware.method[method]" type="checkbox" v-text="method">
                     </label>
                 </span>
             </td>
@@ -38,7 +38,7 @@
         <tfoot>
         <tr>
             <td>
-                <button v-on:click="add" class="btn btn-primary" type="button">+</button>
+                <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td></td>
             <td></td>

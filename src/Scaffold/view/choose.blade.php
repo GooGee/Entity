@@ -8,8 +8,8 @@
             </select>
         </template>
         <template slot="footer">
-            <button v-on:click="yes" class="btn btn-success" type="button">V</button>
-            <button v-on:click="no" class="btn btn-danger" type="button">X</button>
+            <span v-on:click="yes" class="btn btn-success">V</span>
+            <span v-on:click="no" class="btn btn-danger">X</span>
         </template>
     </ccc-dialogue>
 

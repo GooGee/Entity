@@ -20,9 +20,9 @@
         <tbody>
         <tr v-for="field in model.validation.list">
             <td>
-                <button v-on:click="remove(field)" class="btn btn-danger" type="button">X</button>
+                <span v-on:click="remove(field)" class="btn btn-danger">X</span>
             </td>
-            <td>@brace('field.name')</td>
+            <td v-text="field.name"></td>
             <td><input v-model="field.fillable" class="form-control" type="checkbox"></td>
             <td><input v-model="field.hidden" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.integer" class="form-control" type="checkbox"></td>
@@ -38,7 +38,7 @@
         <tfoot>
         <tr>
             <td></td>
-            <td><button v-on:click="model.update()" class="btn btn-primary" type="button">All</button></td>
+            <td><span v-on:click="model.update()" class="btn btn-primary">All</span></td>
             <td></td>
             <td></td>
             <td></td>
