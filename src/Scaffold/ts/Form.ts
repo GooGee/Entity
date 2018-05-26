@@ -2,6 +2,7 @@
 class Form extends Entity.UniqueItem {
     _instance: string
     method = 'POST'
+    path: string
     model: Model
     field = new Entity.UniqueList<FormField>(FormField)
 

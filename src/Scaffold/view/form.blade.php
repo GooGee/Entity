@@ -108,14 +108,19 @@
                 }
 
                 this.form.method = 'POST';
-                if (method == 'PATCH') {
-                    let patch = this.form.field.create('_method', 'hidden');
-                    patch.value = 'patch';
+                let field = this.form.field.find('_method');
+                if (field) {
+                    //
+                } else {
+                    field = this.form.field.create('_method', 'hidden');
+                    this.form.field.add(field);
                 }
 
+                if (method == 'PATCH') {
+                    field.value = 'patch';
+                }
                 if (method == 'DELETE') {
-                    let del = this.form.field.create('_method', 'hidden');
-                    del.value = 'delete';
+                    field.value = 'delete';
                 }
             },
             setInstance: function () {
