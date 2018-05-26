@@ -1,5 +1,5 @@
 <script type="text/x-template" id="tttProperty">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption>
             <h3>Property</h3>
         </caption>
@@ -11,7 +11,7 @@
         </thead>
         <tbody>
         <tr v-for="(value, key) in object" v-if="typeof(value) == 'string'">
-            <td v-text="key"></td>
+            <td v-text="key=='_name'?'name':key"></td>
             <td>
                 <span v-if="button">
                     <span v-on:click="change(key, value)" class="btn btn-default" v-text="object[key]"></span>
@@ -30,13 +30,7 @@
 
     Vue.component('ccc-property', {
         template: '#tttProperty',
-        props: {
-            object: Object,
-            button: {
-                type: Boolean,
-                default: false
-            }
-        },
+        props: ['object', 'button'],
         methods: {
             change: function (key, value) {
                 let name = prompt('Please enter the ' + key, value);

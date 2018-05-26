@@ -1,5 +1,5 @@
 <script type="text/x-template" id="tttIndex">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption><h3>Index</h3></caption>
         <thead>
         <tr>
@@ -52,41 +52,39 @@
     Vue.component('ccc-index', {
         template: '#tttIndex',
         props: ['table'],
+        data: function () {
+            return {
+                index: 0
+            };
+        },
         methods: {
             createIndex: function () {
-                let table = this.table;
-                this.choose(function (yes, field) {
-                    if (yes) {
-                        let index = table.index.create(table.name + '_' + field.name, 'index');
-                        index.field.create(field.name);
-                    }
-                });
+                this.index += 1;
+                let index = this.table.index.create('index' + this.index, 'index');
+                this.table.index.add(index);
             },
             addField: function (index) {
-                this.choose(function (yes, field) {
-                    if (yes) {
-                        index.field.create(field.name);
-                    }
-                });
-            },
-            remove: function (index) {
-                if(confirm('Are you sure?')){
-                    this.table.index.remove(index);
-                }
-            },
-            removeField: function (field, index) {
-                if(confirm('Are you sure?')){
-                    index.field.remove(field);
-                }
-            },
-            choose: function (callback) {
                 let data = {
                     message: 'Select a field',
                     display: 'name',
                     array: this.table.field.list,
-                    callback: callback
+                    callback: function (yes, field) {
+                        if (yes) {
+                            let fff = index.field.create(field.name);
+                            try {
+                                index.field.add(fff);
+                            } catch (exc) {
+                                alert(exc);
+                            }
+                        }
+                    }
                 };
-                showChoose(data);
+                choose(data);
+            },
+            remove: function (index) {
+                if (confirm('Are you sure?')) {
+                    this.table.index.remove(index);
+                }
             }
         }
     });

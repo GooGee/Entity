@@ -18,18 +18,18 @@ class Model
     public $relationList;
     public $ruleList;
 
-    function __construct($entity)
+    function __construct($entry)
     {
-        $model = $entity->model;
+        $model = $entry->model;
         $this->name = $model->name;
         $this->fileName = $this->name . '.php';
         $this->filePath = $model->path;
         $this->nameSpace = $model->nameSpace;
-        $this->table = $entity->table->name;
+        $this->table = $entry->table->name;
         $this->primaryKey = $model->primaryKey;
 
-        $this->setTimeStamps($entity->table);
-        $this->setDates($entity->table);
+        $this->setTimeStamps($entry->table);
+        $this->setDates($entry->table);
 
         $validation = $model->validation;
         $this->setFillable($validation);
@@ -64,6 +64,9 @@ class Model
         $array = [];
         foreach ($table->field->list as $field) {
             if ($field->type == 'timestamp') {
+                if (in_array($field->name, ['created_at', 'updated_at', 'deleted_at'])) {
+                    continue;
+                }
                 $array[] = $field->name;
             }
         }

@@ -1,5 +1,5 @@
 <script type="text/x-template" id="tttForm">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption>
             <h3>Form</h3>
         </caption>
@@ -60,7 +60,7 @@
                 </div>
             </td>
             <td>
-                <span v-on:click="setInstance()" class="btn btn-default" v-text="form.instance"></span>
+                <span v-on:click="setInstance()" class="btn btn-default">Set</span>
             </td>
             <td></td>
         </tr>
@@ -92,7 +92,8 @@
             add: function () {
                 let name = prompt('Please enter the Field name');
                 if (name) {
-                    this.form.field.create(name, 'text');
+                    let field = this.form.field.create(name, 'text');
+                    this.form.field.add(field);
                 }
             },
             remove: function (field) {
@@ -120,7 +121,7 @@
             setInstance: function () {
                 let name = prompt('Please enter the Instance name');
                 if (name) {
-                    this.form.setInstance(name);
+                    this.form.instance = name;
                 }
             }
         }

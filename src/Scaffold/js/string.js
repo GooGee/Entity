@@ -3,28 +3,44 @@ function log(text) {
     console.log(text);
 }
 
-function upperCapital(str) {
-    if (str.match(/^[a-z]/)) {
-        return str[0].toUpperCase() + str.substring(1);
+function upperCapital(string) {
+    if (!string) {
+        return string;
     }
-    return str;
+
+    if (string.match(/^[a-z]/)) {
+        return string[0].toUpperCase() + string.substring(1);
+    }
+    return string;
 }
 
-function lowerCapital(str) {
-    if (str.match(/^[A-Z]/)) {
-        return str[0].toLowerCase() + str.substring(1);
+function lowerCapital(string) {
+    if (!string) {
+        return string;
     }
-    return str;
+
+    if (string.match(/^[A-Z]/)) {
+        return string[0].toLowerCase() + string.substring(1);
+    }
+    return string;
 }
 
-function camel2snake(str) {
-    return str.replace(/([A-Z])/g, function (match) {
+function camel2snake(string) {
+    if (!string) {
+        return string;
+    }
+
+    return string.replace(/([A-Z])/g, function (match) {
         return '_' + match.toLowerCase();
     });
 }
 
-function snake2camel(str) {
-    return str.replace(/(_[a-z])/g, function (match) {
+function snake2camel(string) {
+    if (!string) {
+        return string;
+    }
+
+    return string.replace(/(_[a-z])/g, function (match) {
         return match[1].toUpperCase();
     });
 }

@@ -29,7 +29,3 @@ function remove(item, array) {
     let index = array.indexOf(item);
     array.splice(index, 1);
 }
-
-function unique(array) {
-    return [...new Set(array)];
-}

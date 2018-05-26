@@ -11,9 +11,9 @@ class Form
     public $instance;
     public $fieldList;
 
-    function __construct($entity)
+    function __construct($entry)
     {
-        $form = $entity->form;
+        $form = $entry->form;
         $this->fileName = $form->name . '.html';
         $this->filePath = $form->path;
 

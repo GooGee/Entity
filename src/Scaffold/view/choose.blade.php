@@ -18,40 +18,6 @@
 
 <script type="text/javascript">
 
-    class Choose {
-        constructor() {
-            this.data = {
-                message: '',
-                display: null,
-                array: [],
-                callback: null
-            };
-
-            this.hide();
-        }
-
-        show(data) {
-            if (data) {
-                this.data = data;
-            }
-            this.visible = true;
-        }
-
-        hide() {
-            this.visible = false;
-        }
-    }
-
-    const choose = new Choose();
-
-    function showChoose(data) {
-        choose.show(data);
-    }
-
-    function hideChoose() {
-        choose.hide();
-    }
-
     Vue.component('ccc-choose', {
         template: '#tttChoose',
         props: ['data'],
@@ -75,14 +41,14 @@
                     if (this.data.callback) {
                         this.data.callback(true, this.data.item);
                     }
-                    hideChoose();
+                    this.$emit('close');
                 }
             },
             no: function () {
                 if (this.data.callback) {
                     this.data.callback(false);
                 }
-                hideChoose();
+                this.$emit('close');
             }
         }
     });

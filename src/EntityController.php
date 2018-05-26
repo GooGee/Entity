@@ -31,38 +31,12 @@ class EntityController extends Controller
         return response()->json($this->json);
     }
 
-    function publish()
-    {
-        $cssFolder = __DIR__ . '/Scaffold/css';
-        $jsFolder = __DIR__ . '/Scaffold/js';
-        $publicFolder = __DIR__ . '/Scaffold/public';
-        copy($cssFolder . '/entity.css', $publicFolder . '/entity.css');
-
-        //$fileArray=['array.js', 'check.js', 'dialogue.js', 'entity.js', 'net.js', 'string.js'];
-        $fileArray = scandir($jsFolder);
-        $stringArray = [];
-        foreach ($fileArray as $file) {
-            if ('.' == $file or '..' == $file) {
-                continue;
-            }
-            echo $file . '<br>';
-            $stringArray[] = file_get_contents($jsFolder . DIRECTORY_SEPARATOR . $file);
-        }
-        $content = implode("\n", $stringArray);
-        file_put_contents($publicFolder . '/entity.js', $content);
-
-        copy($publicFolder . '/entity.css', public_path('css/entity.css'));
-        copy($publicFolder . '/entity.js', public_path('js/entity.js'));
-
-        return redirect('entity');
-    }
-
 
     function table(Request $request)
     {
-        $json = $request['entity'];
-        $entity = json_decode($json);
-        $mmm = new Generator\Migration($entity);
+        $json = $request['entry'];
+        $entry = json_decode($json);
+        $mmm = new Generator\Migration($entry);
         $mmm->save();
 
         return response()->json($this->json);
@@ -70,9 +44,9 @@ class EntityController extends Controller
 
     function model(Request $request)
     {
-        $json = $request['entity'];
-        $entity = json_decode($json);
-        $model = new Generator\Model($entity);
+        $json = $request['entry'];
+        $entry = json_decode($json);
+        $model = new Generator\Model($entry);
         $model->save();
 
         return response()->json($this->json);
@@ -80,9 +54,9 @@ class EntityController extends Controller
 
     function factory(Request $request)
     {
-        $json = $request['entity'];
-        $entity = json_decode($json);
-        $factory = new Generator\Factory($entity);
+        $json = $request['entry'];
+        $entry = json_decode($json);
+        $factory = new Generator\Factory($entry);
         $factory->save();
 
         return response()->json($this->json);
@@ -90,9 +64,9 @@ class EntityController extends Controller
 
     function controller(Request $request)
     {
-        $json = $request['entity'];
-        $entity = json_decode($json);
-        $ccc = new Generator\Controller($entity);
+        $json = $request['entry'];
+        $entry = json_decode($json);
+        $ccc = new Generator\Controller($entry);
         $ccc->save();
 
         return response()->json($this->json);
@@ -100,9 +74,9 @@ class EntityController extends Controller
 
     function form(Request $request)
     {
-        $json = $request['entity'];
-        $entity = json_decode($json);
-        $form = new Generator\Form($entity);
+        $json = $request['entry'];
+        $entry = json_decode($json);
+        $form = new Generator\Form($entry);
         $form->save();
 
         return response()->json($this->json);

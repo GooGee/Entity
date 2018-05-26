@@ -1,5 +1,5 @@
 <script type="text/x-template" id="tttVariable">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption>
             <h3>Variable</h3>
         </caption>

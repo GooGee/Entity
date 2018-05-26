@@ -1,5 +1,5 @@
 <script type="text/x-template" id="tttFactory">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption>
             <h3>Factory</h3>
         </caption>
@@ -9,7 +9,6 @@
             <th>Field</th>
             <th>Type</th>
             <th>Method</th>
-            <th>Parameters</th>
         </tr>
         </thead>
         <tbody>
@@ -88,6 +87,7 @@
                         <option value="image">image</option>
                         <option value="randomHtml">randomHtml</option>
                     </select>
+                    <input v-show="'method' == field.type" v-model="field.parameters" class="form-control" type="text">
                     <select v-show="'property' == field.type" v-model="field.property" class="form-control">
                         <option value="name">name</option>
                         <option value="firstName">firstName</option>
@@ -201,14 +201,12 @@
                     </select>
                 </div>
             </td>
-            <td><input v-model="field.parameters" class="form-control" type="text"></td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
             <td></td>
             <td><span v-on:click="factory.update()" class="btn btn-primary">All</span></td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>

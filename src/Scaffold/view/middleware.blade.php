@@ -1,5 +1,5 @@
 <script type="text/x-template" id="tttMiddleware">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption><h3>Middleware</h3></caption>
         <thead>
         <tr>
@@ -52,21 +52,20 @@
 
 <script type="text/javascript">
 
-    const methodArray = ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy'];
-
     Vue.component('ccc-middleware', {
         template: '#tttMiddleware',
         props: ['controller'],
         data: function () {
             return {
-                methodArray: methodArray
+                methodArray: ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']
             };
         },
         methods: {
             add: function () {
                 let name = prompt('Please enter the Middleware name');
                 if (name) {
-                    this.controller.middleware.create(name);
+                    let middleware = this.controller.middleware.create(name);
+                    this.controller.middleware.add(middleware);
                 }
             },
             remove: function (middleware) {

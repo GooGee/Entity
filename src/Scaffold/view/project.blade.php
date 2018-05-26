@@ -14,17 +14,13 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/entity.css">
 
-    <script type="text/javascript">
-        const vd = {};
-        const vm = {};
-    </script>
     <script type="text/javascript" src="/js/es6-promise.auto.min.js"></script>
     <script type="text/javascript" src="/js/axios.min.js"></script>
     <script type="text/javascript" src="/js/vue.js"></script>
     <script type="text/javascript" src="/js/entity.js"></script>
 </head>
 <body>
-<!--[if lt IE 9]>
+<!--[if lt IE 11]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please
     <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -45,95 +41,89 @@
             <!-- Property -->
             <ccc-property :object="project" :button="true"></ccc-property>
 
-            <!-- Entity -->
-            <ccc-entity :project="project" v-on:show="showEntity"></ccc-entity>
+            <!-- Entry -->
+            <ccc-entry :project="project" v-on:show="showEntry"></ccc-entry>
         </div>
 
-
         <!-- Migration -->
-        <div v-if="entity" v-show="tab=='table'">
+        <div v-if="entry" v-show="tab=='table'">
             <h3>
-                <span v-text="entity.table.name"></span> Table
+                <span v-text="entry.table.name"></span> Table
                 <span v-on:click="saveMigration" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="entity.table"></ccc-property>
+            <ccc-property :object="entry.table"></ccc-property>
 
             <!-- Field -->
-            <ccc-field :table="entity.table"></ccc-field>
+            <ccc-field :table="entry.table"></ccc-field>
 
             <!-- Index -->
-            <ccc-index :table="entity.table"></ccc-index>
+            <ccc-index :table="entry.table"></ccc-index>
         </div>
-
-
-        <!-- Model -->
-        <div v-if="entity" v-show="tab=='model'">
-            <h3>
-                <span v-text="entity.model.name"></span> Model
-                <span v-on:click="saveModel" class="btn btn-success">Save</span>
-            </h3>
-
-            <!-- Property -->
-            <ccc-property :object="entity.model"></ccc-property>
-
-            <!-- Relation -->
-            <ccc-relation :model="entity.model"></ccc-relation>
-
-            <!-- Validation -->
-            <ccc-validation :model="entity.model"></ccc-validation>
-        </div>
-
 
         <!-- Seed -->
-        <div v-if="entity" v-show="tab=='seed'">
+        <div v-if="entry" v-show="tab=='seed'">
             <h3>
-                <span v-text="entity.factory.name"></span>
+                <span v-text="entry.factory.name"></span>
                 <span v-on:click="saveFactory" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="entity.factory"></ccc-property>
+            <ccc-property :object="entry.factory"></ccc-property>
 
             <!-- Factory -->
-            <ccc-factory :factory="entity.factory"></ccc-factory>
+            <ccc-factory :factory="entry.factory"></ccc-factory>
         </div>
 
+        <!-- Model -->
+        <div v-if="entry" v-show="tab=='model'">
+            <h3>
+                <span v-text="entry.model.name"></span> Model
+                <span v-on:click="saveModel" class="btn btn-success">Save</span>
+            </h3>
+
+            <!-- Property -->
+            <ccc-property :object="entry.model"></ccc-property>
+
+            <!-- Relation -->
+            <ccc-relation :model="entry.model" :project="project"></ccc-relation>
+
+            <!-- Validation -->
+            <ccc-validation :model="entry.model"></ccc-validation>
+        </div>
 
         <!-- Controller -->
-        <div v-if="entity" v-show="tab=='controller'">
+        <div v-if="entry" v-show="tab=='controller'">
             <h3>
-                <span v-text="entity.controller.name"></span>
+                <span v-text="entry.controller.name"></span>
                 <span v-on:click="saveController" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="entity.controller"></ccc-property>
+            <ccc-property :object="entry.controller"></ccc-property>
 
             <!-- Middleware -->
-            <ccc-middleware :controller="entity.controller"></ccc-middleware>
+            <ccc-middleware :controller="entry.controller"></ccc-middleware>
         </div>
 
 
         <!-- Form -->
-        <div v-if="entity" v-show="tab=='form'">
+        <div v-if="entry" v-show="tab=='form'">
             <h3>
-                <span v-text="entity.name"></span> Form
+                <span v-text="entry.name"></span> Form
                 <span v-on:click="saveForm" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Form -->
-            <ccc-form :form="entity.form"></ccc-form>
+            <ccc-form :form="entry.form"></ccc-form>
         </div>
 
     </div>
 
 
-            <!-- Choose -->
-    <div v-show="choose.visible">
-        <ccc-choose :data="choose.data"></ccc-choose>
-    </div>
+    <!-- Choose -->
+    <ccc-choose v-show="choose.visible" :data="choose.data" v-on:close="close"></ccc-choose>
 
 </div>
 <br>
@@ -142,24 +132,45 @@
 @include('entity::choose')
 
 @include('entity::property')
-@include('entity::entity')
+@include('entity::entry')
 @include('entity::field')
 @include('entity::index')
+@include('entity::factory')
 @include('entity::relation')
 @include('entity::validation')
-@include('entity::factory')
 @include('entity::middleware')
 @include('entity::form')
 
 <script type="text/javascript">
 
+    function choose(data) {
+        vvv.showChoose(data);
+    }
+
+    const vm = {};
+
     vm.show = function (tab) {
-        vd.tab = tab;
+        this.tab = tab;
     };
 
-    vm.showEntity = function (entity) {
-        this.entity = entity;
-        vm.show('table');
+    vm.showChoose = function (data) {
+        this.choose.data = data;
+        this.choose.visible = true;
+    };
+
+    vm.close = function () {
+        this.choose.visible = false;
+    };
+
+    vm.load = function (data) {
+        if (data) {
+            this.project.load(data);
+        }
+    };
+
+    vm.showEntry = function (entry) {
+        this.entry = entry;
+        this.show('table');
     };
 
     vm.saveProject = function () {
@@ -171,53 +182,60 @@
 
     vm.saveMigration = function () {
         let data = {
-            entity: JSON.stringify(this.entity)
+            entry: JSON.stringify(this.entry)
         };
         save('/entity/table', data);
     };
 
     vm.saveModel = function () {
         let data = {
-            entity: JSON.stringify(this.entity)
+            entry: JSON.stringify(this.entry)
         };
         save('/entity/model', data);
     };
 
     vm.saveFactory = function () {
         let data = {
-            entity: JSON.stringify(this.entity)
+            entry: JSON.stringify(this.entry)
         };
         save('/entity/factory', data);
     };
 
     vm.saveController = function () {
         let data = {
-            entity: JSON.stringify(this.entity)
+            entry: JSON.stringify(this.entry)
         };
         save('/entity/controller', data);
     };
 
     vm.saveForm = function () {
         let data = {
-            entity: JSON.stringify(this.entity)
+            entry: JSON.stringify(this.entry)
         };
         save('/entity/form', data);
     };
 
 
-    vd.tab = 'project';
-    vd.choose = choose;
-    vd.entity = null;
-    vd.project = new Project('Project');
-    vd.project.load(@echo($project));
-
     const vvv = new Vue({
         el: '#entity',
-        data: vd,
-        methods: vm,
-        mounted: function () {
-            //console.log(vd);
-        }
+        data: {
+            tab: 'project',
+            choose: {
+                visible: false,
+                data: {
+                    message: '',
+                    display: null,
+                    array: [],
+                    callback: null
+                }
+            },
+            entry: null,
+            project: new Project('New Project')
+        },
+        created: function () {
+            this.load(@echo($project))
+        },
+        methods: vm
     });
 
 </script>

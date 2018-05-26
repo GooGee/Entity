@@ -25,11 +25,11 @@ class Field
         }
 
         $default = '';
-        if (isset($field->default)) {
-            if (is_numeric($field->default)) {
-                $default = "->default({$field->default})";
-            } else if ($field->default) {
-                $value = trim($field->default, '\'"');
+        if (isset($field->value)) {
+            if (is_numeric($field->value)) {
+                $default = "->default({$field->value})";
+            } else if ($field->value) {
+                $value = trim($field->value, '\'"');
                 $default = "->default('{$value}')";
             }
         }

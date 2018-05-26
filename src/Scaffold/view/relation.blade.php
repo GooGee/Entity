@@ -1,5 +1,5 @@
 <script type="text/x-template" id="tttRelation">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption>
             <h3>Relation</h3>
         </caption>
@@ -61,7 +61,7 @@
 
     Vue.component('ccc-relation', {
         template: '#tttRelation',
-        props: ['model'],
+        props: ['model', 'project'],
         methods: {
             plus: function (key) {
                 if (key) {
@@ -74,14 +74,19 @@
                 let data = {
                     message: 'Select the Model',
                     display: 'name',
-                    array: vd.project.entity.list,
-                    callback: function (yes, entity) {
+                    array: this.project.entry.list,
+                    callback: function (yes, entry) {
                         if (yes) {
-                            relation.create(entity.name, 'belongsTo');
+                            let rrr = relation.create(entry.name, 'belongsTo');
+                            try {
+                                relation.add(rrr);
+                            } catch (exc) {
+                                alert(exc);
+                            }
                         }
                     }
                 };
-                showChoose(data);
+                choose(data);
             },
             remove: function (relation) {
                 if (confirm('Are you sure?')) {
@@ -92,28 +97,28 @@
                 let data = {
                     message: 'Select the Model',
                     display: 'name',
-                    array: vd.project.entity.list,
-                    callback: function (yes, entity) {
+                    array: this.project.entry.list,
+                    callback: function (yes, entry) {
                         if (yes) {
-                            relation.model = entity.model.name;
+                            relation.model = entry.model.name;
                         }
                     }
                 };
-                showChoose(data);
+                choose(data);
             },
             selectPivot: function (relation) {
                 let data = {
                     message: 'Select the Pivot Table',
                     display: 'name',
-                    array: vd.project.entity.list,
-                    callback: function (yes, entity) {
+                    array: this.project.entry.list,
+                    callback: function (yes, entry) {
                         if (yes) {
-                            relation.pivotTable = entity.table.name;
-                            relation.pivot = entity;
+                            relation.pivotTable = entry.table.name;
+                            relation.pivot = entry;
                         }
                     }
                 };
-                showChoose(data);
+                choose(data);
             },
             selectForeign: function (relation) {
                 let list = this.model.table.field.list;
@@ -130,7 +135,7 @@
                         }
                     }
                 };
-                showChoose(data);
+                choose(data);
             },
             selectOther: function (relation) {
                 if (null == relation.pivot) {
@@ -147,7 +152,7 @@
                         }
                     }
                 };
-                showChoose(data);
+                choose(data);
             }
         }
     });

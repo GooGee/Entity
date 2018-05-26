@@ -1,12 +1,12 @@
 <script type="text/x-template" id="tttField">
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <caption>
             <h3>Field</h3>
         </caption>
         <thead>
         <tr>
             <th width="130px"></th>
-            <th width="180px">Name</th>
+            <th>Name</th>
             <th>Type</th>
             <th>Length</th>
             <th>Default</th>
@@ -58,7 +58,7 @@
                 </select>
             </td>
             <td><input v-model="field.length" class="form-control" type="text"></td>
-            <td><input v-model="field.default" class="form-control" type="text"></td>
+            <td><input v-model="field.value" class="form-control" type="text"></td>
             <td><input v-model="field.comment" class="form-control" type="text"></td>
             <td><input v-model="field.nullable" class="form-control" type="checkbox"></td>
             <td><input v-model="field.unsigned" class="form-control" type="checkbox"></td>
@@ -69,13 +69,12 @@
             <td>
                 <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
-            <td>
+            <td colspan="2" class="form-inline">
                 <select v-model="selectedField" class="form-control mr pull-left" style="width: auto;">
                     <option v-for="field in fieldList" v-bind:value="field" v-text="field.name"></option>
                 </select>
                 <span v-on:click="addField" class="btn btn-info">+</span>
             </td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -89,30 +88,46 @@
 
 <script type="text/javascript">
 
-    const fieldList = [
-        new Field('id', 'increments'),
-        new Field('user_id', 'integer'),
-        new Field('name', 'string', ''),
-        new Field('status', 'integer', 0),
-        new Field('created_at', 'timestamp'),
-        new Field('updated_at', 'timestamp'),
-        new Field('deleted_at', 'timestamp')
-    ];
-
     Vue.component('ccc-field', {
         template: '#tttField',
         props: ['table'],
         data: function () {
             return {
-                fieldList: fieldList,
-                selectedField: fieldList[0]
+                fieldList: [
+                    new Field('id', 'increments'),
+                    new Field('user_id', 'integer'),
+                    new Field('name', 'string', '', 10),
+                    new Field('status', 'integer', 0, 11),
+                    new Field('remember_token', 'string', '', 99),
+                    new Field('created_at', 'timestamp'),
+                    new Field('updated_at', 'timestamp'),
+                    new Field('deleted_at', 'timestamp')
+                ],
+                selectedField: null
             }
+        },
+        created: function () {
+            let field = this.fieldList[4];
+            field.nullable = true;
+            field = this.fieldList[5];
+            field.nullable = true;
+            field = this.fieldList[6];
+            field.nullable = true;
+            field = this.fieldList[7];
+            field.nullable = true;
+
+            this.selectedField = this.fieldList[0];
         },
         methods: {
             add: function () {
                 let name = prompt('Please enter the Field name');
                 if (name) {
-                    this.table.field.create(name, 'integer');
+                    let field = this.table.field.create(name, 'integer');
+                    try {
+                        this.table.field.add(field);
+                    } catch (exc) {
+                        alert(exc);
+                    }
                 }
             },
             remove: function (field) {
@@ -123,16 +138,21 @@
             rename: function (field) {
                 let name = prompt('Please enter the Field name', field.name);
                 if (name) {
-                    this.table.changeFieldName(field, name);
+                    try {
+                        field.name = name;
+                    } catch (exc) {
+                        alert(exc);
+                    }
                 }
             },
             addField: function () {
-                let field = this.table.field.create(this.selectedField.name, this.selectedField.type);
-
-                let nullList = ['deleted_at', 'created_at', 'updated_at'];
-                let index = nullList.indexOf(field.name);
-                if (index >= 0) {
-                    field.nullable = true;
+                let selected = this.selectedField;
+                let field = this.table.field.create(selected.name, selected.type);
+                try {
+                    field.load(selected);
+                    this.table.field.add(field);
+                } catch (exc) {
+                    alert(exc);
                 }
             }
         }

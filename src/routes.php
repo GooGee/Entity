@@ -9,6 +9,4 @@ Route::group(['namespace' => 'GooGee\\Entity'], function () {
     Route::post('entity/factory', 'EntityController@factory');
     Route::post('entity/controller', 'EntityController@controller');
     Route::post('entity/form', 'EntityController@form');
-
-    Route::get('entity/publish', 'EntityController@publish');
 });
