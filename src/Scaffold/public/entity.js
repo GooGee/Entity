@@ -35,102 +35,6 @@ function unique(array) {
 }
 
 
-function log(text) {
-    console.log(text);
-}
-
-/**
- * true undefined
- * true null
- * true ''
- * true ' '
- * true []
- * true {}
- *
- * @param object
- * @returns {boolean}
- */
-function isEmpty(object) {
-    if (null == object) {
-        return true;
-    }
-
-    let type = typeof (object);
-    if ("string" == type) {
-        let string = object.trim();
-        if (string.length > 0) {
-            return false;
-        }
-        return true;
-    }
-    
-    if (Array.isArray(object)) {
-        if (object.length > 0) {
-            return false;
-        }
-        return true;
-    }
-    
-    if ("object" == type) {
-        if (Object.keys(object).length > 0) {
-            return false;
-        }
-        return true;
-    }
-
-    return false;
-}
-
-function isIE() {
-    if (typeof (window.ActiveXObject) != "undefined") {
-        return true;
-    }
-    return "ActiveXObject" in window;
-}
-
-function look(message, status) {
-    alert(message);
-}
-
-function sure(message, callback) {
-    if (callback) {
-        return callback(confirm(message));
-    }
-    return confirm(message);
-}
-
-function input(message, value, callback) {
-    if (callback) {
-        return callback(prompt(message, value));
-    }
-    return prompt(message, value);
-}
-
-class Choose {
-    constructor() {
-        this.data = {
-            message: '',
-            display: null,
-            array: [],
-            callback: null
-        };
-
-        this.hide();
-    }
-
-    show(data) {
-        if (data) {
-            this.data = data;
-        }
-        this.visible = true;
-    }
-
-    hide() {
-        this.visible = false;
-    }
-}
-
-
 class JSONItem {
     toJSON() {
         let object = {};
@@ -262,7 +166,9 @@ class Project extends Item {
     }
 
     load(data) {
-        if (isEmpty(data)) {
+        if (data) {
+            //
+        } else {
             data = this.create();
         }
         super.load(data);
@@ -615,7 +521,7 @@ FormFieldList.prototype.ignoreList = ['form'];
 
 function get(url, callback) {
     if (null == callback) {
-        callback = look;
+        callback = alert;
     }
 
     axios.get(url)
@@ -629,7 +535,7 @@ function get(url, callback) {
 
 function post(url, data, callback) {
     if (null == callback) {
-        callback = look;
+        callback = alert;
     }
 
     axios.post(url, data)
@@ -644,15 +550,15 @@ function post(url, data, callback) {
 function handel(error) {
     log(error);
     if (error.response) {
-        look(error.response.data.message);
+        alert(error.response.data.message);
         return;
     }
-    look(error.message);
+    alert(error.message);
 }
 
 function save(url, data, callback) {
     post(url, data, function (json) {
-        look(json.text);
+        alert(json.text);
         if (callback) {
             callback(json);
             return;
@@ -673,6 +579,10 @@ function goto(url, time) {
     }, time);
 }
 
+
+function log(text) {
+    console.log(text);
+}
 
 function upperCapital(str) {
     if (str.match(/^[a-z]/)) {

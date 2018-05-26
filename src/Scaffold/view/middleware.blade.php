@@ -29,7 +29,8 @@
             <td>
                 <span class="pull-left">
                     <label v-for="method in methodArray" class="mr">
-                    <input v-model="middleware.method[method]" type="checkbox" v-text="method">
+                        <input v-model="middleware.method[method]" type="checkbox">
+                        <span v-text="method"></span>
                     </label>
                 </span>
             </td>
@@ -64,10 +65,9 @@
         methods: {
             add: function () {
                 let name = prompt('Please enter the Middleware name');
-                if (isEmpty(name)) {
-                    return;
+                if (name) {
+                    this.controller.middleware.create(name);
                 }
-                this.controller.middleware.create(name);
             },
             remove: function (middleware) {
                 if (confirm('Are you sure?')) {

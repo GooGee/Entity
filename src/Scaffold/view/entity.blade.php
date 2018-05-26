@@ -49,10 +49,9 @@
         methods: {
             add: function () {
                 let name = prompt('Please enter the Entity name');
-                if (isEmpty(name)) {
-                    return;
+                if (name) {
+                    this.project.entity.create(name);
                 }
-                this.project.entity.create(name);
             },
             show: function (entity) {
                 this.$emit('show', entity);

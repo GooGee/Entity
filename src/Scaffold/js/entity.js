@@ -130,7 +130,9 @@ class Project extends Item {
     }
 
     load(data) {
-        if (isEmpty(data)) {
+        if (data) {
+            //
+        } else {
             data = this.create();
         }
         super.load(data);

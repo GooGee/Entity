@@ -1,4 +1,8 @@
 
+function log(text) {
+    console.log(text);
+}
+
 function upperCapital(str) {
     if (str.match(/^[a-z]/)) {
         return str[0].toUpperCase() + str.substring(1);

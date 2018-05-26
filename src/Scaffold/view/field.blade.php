@@ -111,10 +111,9 @@
         methods: {
             add: function () {
                 let name = prompt('Please enter the Field name');
-                if (isEmpty(name)) {
-                    return;
+                if (name) {
+                    this.table.field.create(name, 'integer');
                 }
-                this.table.field.create(name, 'integer');
             },
             remove: function (field) {
                 if (confirm('Are you sure?')) {
@@ -123,10 +122,9 @@
             },
             rename: function (field) {
                 let name = prompt('Please enter the Field name', field.name);
-                if (isEmpty(name)) {
-                    return;
+                if (name) {
+                    this.table.changeFieldName(field, name);
                 }
-                this.table.changeFieldName(field, name);
             },
             addField: function () {
                 let field = this.table.field.create(this.selectedField.name, this.selectedField.type);

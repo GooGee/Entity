@@ -1,6 +1,6 @@
 function get(url, callback) {
     if (null == callback) {
-        callback = look;
+        callback = alert;
     }
 
     axios.get(url)
@@ -14,7 +14,7 @@ function get(url, callback) {
 
 function post(url, data, callback) {
     if (null == callback) {
-        callback = look;
+        callback = alert;
     }
 
     axios.post(url, data)
@@ -29,15 +29,15 @@ function post(url, data, callback) {
 function handel(error) {
     log(error);
     if (error.response) {
-        look(error.response.data.message);
+        alert(error.response.data.message);
         return;
     }
-    look(error.message);
+    alert(error.message);
 }
 
 function save(url, data, callback) {
     post(url, data, function (json) {
-        look(json.text);
+        alert(json.text);
         if (callback) {
             callback(json);
             return;

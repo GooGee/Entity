@@ -61,10 +61,9 @@
         methods: {
             add: function () {
                 let name = prompt('Please enter the Variable name');
-                if (isEmpty(name)) {
-                    return;
+                if (name) {
+                    this.variable.create(name, '');
                 }
-                this.variable.create(name, '');
             },
             remove: function (name) {
                 if (confirm('Are you sure?')) {

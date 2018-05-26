@@ -91,10 +91,9 @@
         methods: {
             add: function () {
                 let name = prompt('Please enter the Field name');
-                if (isEmpty(name)) {
-                    return;
+                if (name) {
+                    this.form.field.create(name, 'text');
                 }
-                this.form.field.create(name, 'text');
             },
             remove: function (field) {
                 if (confirm('Are you sure?')) {
@@ -120,10 +119,9 @@
             },
             setInstance: function () {
                 let name = prompt('Please enter the Instance name');
-                if (isEmpty(name)) {
-                    return;
+                if (name) {
+                    this.form.setInstance(name);
                 }
-                this.form.setInstance(name);
             }
         }
     });
