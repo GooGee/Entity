@@ -63,7 +63,7 @@
         </div>
 
         <!-- Seed -->
-        <div v-if="entry" v-show="tab=='seed'">
+        <div v-if="entry && tab=='seed'">
             <h3>
                 <span v-text="entry.factory.name"></span>
                 <span v-on:click="saveFactory" class="btn btn-success">Save</span>
@@ -77,7 +77,7 @@
         </div>
 
         <!-- Model -->
-        <div v-if="entry" v-show="tab=='model'">
+        <div v-if="entry && tab=='model'">
             <h3>
                 <span v-text="entry.model.name"></span> Model
                 <span v-on:click="saveModel" class="btn btn-success">Save</span>
@@ -94,7 +94,7 @@
         </div>
 
         <!-- Controller -->
-        <div v-if="entry" v-show="tab=='controller'">
+        <div v-if="entry && tab=='controller'">
             <h3>
                 <span v-text="entry.controller.name"></span>
                 <span v-on:click="saveController" class="btn btn-success">Save</span>
@@ -109,7 +109,7 @@
 
 
         <!-- Form -->
-        <div v-if="entry" v-show="tab=='form'">
+        <div v-if="entry && tab=='form'">
             <h3>
                 <span v-text="entry.name"></span> Form
                 <span v-on:click="saveForm" class="btn btn-success">Save</span>

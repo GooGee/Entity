@@ -23,9 +23,18 @@ class Form extends Entity.UniqueItem {
         })
     }
 
+    get instance(): string {
+        return this._instance
+    }
+
     set instance(name: string) {
         this._instance = name
-        this.field.list.forEach(field => field.vModel = name + '.' + field.name);
+        if (name) {
+            name = name + '.'
+        } else {
+            name = ''
+        }
+        this.field.list.forEach(field => field.vModel = name + field.name);
     }
 
 }

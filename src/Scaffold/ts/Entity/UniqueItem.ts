@@ -11,12 +11,6 @@ namespace Entity {
             this.name = name
         }
 
-        toJSON() {
-            let object = super.toJSON()
-            object.name = this.name
-            return object
-        }
-
         get name(): string {
             return this._name
         }
@@ -51,6 +45,6 @@ namespace Entity {
         }
 
     }
-    UniqueItem.prototype.ignoreList = ['beforeNameChange', 'afterNameChange']
+    UniqueItem.prototype.ignoreList = Item.prototype.ignoreList.concat(['beforeNameChange', 'afterNameChange'])
 
 }

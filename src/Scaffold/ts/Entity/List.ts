@@ -56,7 +56,7 @@ namespace Entity {
             })
         }
 
-        toJSON() {
+        toJSON(key: string) {
             return {
                 list: this.list
             }

@@ -124,10 +124,7 @@
                 }
             },
             setInstance: function () {
-                let name = prompt('Please enter the Instance name');
-                if (name) {
-                    this.form.instance = name;
-                }
+                this.form.instance = prompt('Please enter the Instance name', this.form.instance);
             }
         }
     });

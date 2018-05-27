@@ -5,10 +5,10 @@ laravel scaffold generator
 # Feature
 
 - Design table fields and indexes
+- Define model factories
 - Manage model relations
 - Make field validations
-- Define model factories
-- Configure controller middlewares
+- Configure controller middleware
 - Create Bootstrap forms
 
 # Requirement
@@ -20,10 +20,10 @@ laravel scaffold generator
 
 Make sure you have the following files:
 
-- public/css/bootstrap.min.css
-- public/js/es6-promise.auto.min.js
-- public/js/axios.min.js
-- public/js/vue.js
+- /public/css/bootstrap.min.css
+- /public/js/es6-promise.auto.min.js
+- /public/js/axios.min.js
+- /public/js/vue.js
 
 If you don't have these files, you can get them from `src\Scaffold\public`
 
@@ -53,6 +53,6 @@ php artisan vendor:publish --provider="GooGee\Entity\EntityServiceProvider"
 
 ![table](https://github.com/GooGee/Entity/raw/master/screenshot/table.png)
 
-![model](https://github.com/GooGee/Entity/raw/master/screenshot/model.png)
+![seed](https://github.com/GooGee/Entity/raw/master/screenshot/seed.png)
 
-![controller](https://github.com/GooGee/Entity/raw/master/screenshot/controller.png)
+![model](https://github.com/GooGee/Entity/raw/master/screenshot/model.png)

@@ -21,15 +21,13 @@ namespace Entity {
             }
         }
 
-        toJSON() {
+        toJSON(key: string) {
             let object: { [key: string]: any } = {}
-            for (let key in this) {
-                if (this.hasOwnProperty(key)) {
-                    if (this.ignoreList.indexOf(key) >= 0) {
-                        continue
-                    }
-                    object[key] = this[key]
+            for (const key of Object.keys(this)) {
+                if (this.ignoreList.indexOf(key) >= 0) {
+                    continue
                 }
+                object[key] = this[key]
             }
             return object
         }

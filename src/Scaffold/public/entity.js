@@ -142,15 +142,14 @@ var Entity;
                 }
             }
         };
-        Item.prototype.toJSON = function () {
+        Item.prototype.toJSON = function (key) {
             var object = {};
-            for (var key in this) {
-                if (this.hasOwnProperty(key)) {
-                    if (this.ignoreList.indexOf(key) >= 0) {
-                        continue;
-                    }
-                    object[key] = this[key];
+            for (var _i = 0, _a = Object.keys(this); _i < _a.length; _i++) {
+                var key_1 = _a[_i];
+                if (this.ignoreList.indexOf(key_1) >= 0) {
+                    continue;
                 }
+                object[key_1] = this[key_1];
             }
             return object;
         };
@@ -212,7 +211,7 @@ var Entity;
                 _this.add(item);
             });
         };
-        List.prototype.toJSON = function () {
+        List.prototype.toJSON = function (key) {
             return {
                 list: this.list
             };
@@ -233,11 +232,6 @@ var Entity;
             _this.name = name;
             return _this;
         }
-        UniqueItem.prototype.toJSON = function () {
-            var object = _super.prototype.toJSON.call(this);
-            object.name = this.name;
-            return object;
-        };
         Object.defineProperty(UniqueItem.prototype, "name", {
             get: function () {
                 return this._name;
@@ -269,7 +263,7 @@ var Entity;
         return UniqueItem;
     }(Entity.Item));
     Entity.UniqueItem = UniqueItem;
-    UniqueItem.prototype.ignoreList = ['beforeNameChange', 'afterNameChange'];
+    UniqueItem.prototype.ignoreList = Entity.Item.prototype.ignoreList.concat(['beforeNameChange', 'afterNameChange']);
 })(Entity || (Entity = {}));
 var Entity;
 (function (Entity) {
@@ -445,9 +439,18 @@ var Form = /** @class */ (function (_super) {
         });
     };
     Object.defineProperty(Form.prototype, "instance", {
+        get: function () {
+            return this._instance;
+        },
         set: function (name) {
             this._instance = name;
-            this.field.list.forEach(function (field) { return field.vModel = name + '.' + field.name; });
+            if (name) {
+                name = name + '.';
+            }
+            else {
+                name = '';
+            }
+            this.field.list.forEach(function (field) { return field.vModel = name + field.name; });
         },
         enumerable: true,
         configurable: true
@@ -461,6 +464,7 @@ var FormField = /** @class */ (function (_super) {
         var _this = _super.call(this, name) || this;
         _this.type = type;
         _this.value = value;
+        _this.vModel = name;
         _this.label = upperCapital(name);
         return _this;
     }

@@ -96,9 +96,9 @@
                 fieldList: [
                     new Field('id', 'increments'),
                     new Field('user_id', 'integer'),
-                    new Field('name', 'string', '', 10),
+                    new Field('name', 'string', '""', 10),
                     new Field('status', 'integer', 0, 11),
-                    new Field('remember_token', 'string', '', 99),
+                    new Field('remember_token', 'string', '""', 99),
                     new Field('created_at', 'timestamp'),
                     new Field('updated_at', 'timestamp'),
                     new Field('deleted_at', 'timestamp')
