@@ -23,6 +23,12 @@ namespace Entity {
             this.list.splice(index, 1)
         }
 
+        merge(array: T[]) {
+            array.forEach(item => {
+                this.list.push(item)
+            })
+        }
+
         moveUp(item: Item) {
             moveUp(this.list, item);
         }

@@ -7,6 +7,7 @@ class Model extends Entity.UniqueItem {
     instance: string
     relation = new Entity.UniqueList<Relation>(Relation)
     validation = new Entity.UniqueList<Validation>(Validation)
+    protected static ignoreList = Entity.UniqueItem.ignoreList.concat(['table'])
     
     constructor(name: string, table: Table) {
         super(name)
@@ -25,4 +26,3 @@ class Model extends Entity.UniqueItem {
         })
     }
 }
-Model.prototype.ignoreList = Entity.UniqueItem.prototype.ignoreList.concat(['table'])

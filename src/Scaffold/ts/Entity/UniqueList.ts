@@ -43,34 +43,12 @@ namespace Entity {
             item.offBeforeNameChange(this.handelNameChange)
         }
 
-        merge(array: T[]): T[] {
-            let list: T[] = []
+        merge(array: T[]) {
             array.forEach(item => {
                 if (this.find(item.name)) {
                     return
                 }
-                list.push(item)
-            })
-            return this.list.concat(list)
-        }
-
-        load(object: any) {
-            let array: UniqueItem[]
-            if (Array.isArray(object)) {
-                array = object
-            } else {
-                if (Array.isArray(object.list)) {
-                    array = object.list
-                } else {
-                    return
-                }
-            }
-
-            this.clear()
-            array.forEach(one => {
-                let item = this.create(one.name)
-                item.load(one)
-                this.add(item)
+                this.list.push(item)
             })
         }
 

@@ -5,6 +5,7 @@ namespace Entity {
         protected _name: string = ''
         protected beforeNameChange = new Entity.Event<NameChange>()
         protected afterNameChange = new Entity.Event<NameChange>()
+        protected static ignoreList = Item.ignoreList.concat(['beforeNameChange', 'afterNameChange'])
 
         constructor(name: string) {
             super()
@@ -45,6 +46,5 @@ namespace Entity {
         }
 
     }
-    UniqueItem.prototype.ignoreList = Item.prototype.ignoreList.concat(['beforeNameChange', 'afterNameChange'])
 
 }

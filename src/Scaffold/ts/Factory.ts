@@ -3,6 +3,7 @@ class Factory extends Entity.UniqueItem {
     path: string = ''
     table: Table
     field = new Entity.UniqueList<Field>(Field)
+    protected static ignoreList = Entity.UniqueItem.ignoreList.concat(['table'])
 
     constructor(name: string, table: Table) {
         super(name)
@@ -21,4 +22,3 @@ class Factory extends Entity.UniqueItem {
     }
 
 }
-Factory.prototype.ignoreList = Entity.UniqueItem.prototype.ignoreList.concat(['table'])

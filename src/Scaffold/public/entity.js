@@ -128,35 +128,36 @@ var Entity;
         function Item() {
         }
         Item.prototype.load = function (data) {
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    if (this.ignoreList.indexOf(key) >= 0) {
-                        continue;
-                    }
-                    var item = data[key];
-                    if (this[key] && this[key].load) {
-                        this[key].load(item);
-                        continue;
-                    }
-                    this[key] = item;
+            var ignoreList = Object.getPrototypeOf(this).constructor.ignoreList;
+            for (var _i = 0, _a = Object.keys(data); _i < _a.length; _i++) {
+                var key = _a[_i];
+                if (ignoreList.indexOf(key) >= 0) {
+                    continue;
                 }
+                var item = data[key];
+                if (this[key] && this[key].load) {
+                    this[key].load(item);
+                    continue;
+                }
+                this[key] = item;
             }
         };
         Item.prototype.toJSON = function (key) {
             var object = {};
+            var ignoreList = Object.getPrototypeOf(this).constructor.ignoreList;
             for (var _i = 0, _a = Object.keys(this); _i < _a.length; _i++) {
                 var key_1 = _a[_i];
-                if (this.ignoreList.indexOf(key_1) >= 0) {
+                if (ignoreList.indexOf(key_1) >= 0) {
                     continue;
                 }
                 object[key_1] = this[key_1];
             }
             return object;
         };
+        Item.ignoreList = Array();
         return Item;
     }());
     Entity.Item = Item;
-    Item.prototype.ignoreList = [];
 })(Entity || (Entity = {}));
 var Entity;
 (function (Entity) {
@@ -260,10 +261,10 @@ var Entity;
         UniqueItem.prototype.offAfterNameChange = function (callback) {
             this.afterNameChange.off(callback);
         };
+        UniqueItem.ignoreList = Entity.Item.ignoreList.concat(['beforeNameChange', 'afterNameChange']);
         return UniqueItem;
     }(Entity.Item));
     Entity.UniqueItem = UniqueItem;
-    UniqueItem.prototype.ignoreList = Entity.Item.prototype.ignoreList.concat(['beforeNameChange', 'afterNameChange']);
 })(Entity || (Entity = {}));
 var Entity;
 (function (Entity) {
@@ -403,9 +404,9 @@ var Factory = /** @class */ (function (_super) {
             _this.field.add(fff);
         });
     };
+    Factory.ignoreList = Entity.UniqueItem.ignoreList.concat(['table']);
     return Factory;
 }(Entity.UniqueItem));
-Factory.prototype.ignoreList = Entity.UniqueItem.prototype.ignoreList.concat(['table']);
 var Field = /** @class */ (function (_super) {
     __extends(Field, _super);
     function Field(name, type, value, length) {
@@ -455,9 +456,9 @@ var Form = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Form.ignoreList = Entity.UniqueItem.ignoreList.concat(['model']);
     return Form;
 }(Entity.UniqueItem));
-Form.prototype.ignoreList = Entity.UniqueItem.prototype.ignoreList.concat(['model']);
 var FormField = /** @class */ (function (_super) {
     __extends(FormField, _super);
     function FormField(name, type, value) {
@@ -512,9 +513,9 @@ var Model = /** @class */ (function (_super) {
             _this.validation.add(validation);
         });
     };
+    Model.ignoreList = Entity.UniqueItem.ignoreList.concat(['table']);
     return Model;
 }(Entity.UniqueItem));
-Model.prototype.ignoreList = Entity.UniqueItem.prototype.ignoreList.concat(['table']);
 var Project = /** @class */ (function (_super) {
     __extends(Project, _super);
     function Project() {
@@ -608,10 +609,10 @@ var Entity;
             _this.owner = owner;
             return _this;
         }
+        OwnerItem.ignoreList = Entity.UniqueItem.ignoreList.concat(['owner']);
         return OwnerItem;
     }(Entity.UniqueItem));
     Entity.OwnerItem = OwnerItem;
-    OwnerItem.prototype.ignoreList = Entity.UniqueItem.prototype.ignoreList.concat(['owner']);
 })(Entity || (Entity = {}));
 var Entity;
 (function (Entity) {

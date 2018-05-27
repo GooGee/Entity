@@ -5,6 +5,7 @@ class Form extends Entity.UniqueItem {
     path: string
     model: Model
     field = new Entity.UniqueList<FormField>(FormField)
+    protected static ignoreList = Entity.UniqueItem.ignoreList.concat(['model'])
 
     constructor(name: string, model: Model) {
         super(name);
@@ -38,4 +39,3 @@ class Form extends Entity.UniqueItem {
     }
 
 }
-Form.prototype.ignoreList = Entity.UniqueItem.prototype.ignoreList.concat(['model'])
