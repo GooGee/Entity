@@ -29,6 +29,13 @@ namespace Entity {
             this.afterNameChange.emit(event)
         }
 
+        toJSON(key: string) {
+            let object = super.toJSON(key)
+            delete object._name
+            object.name = this.name
+            return object
+        }
+
         onBeforeNameChange(callback: Listener<NameChange>) {
             return this.beforeNameChange.on(callback)
         }

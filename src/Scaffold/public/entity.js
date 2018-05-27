@@ -255,6 +255,12 @@ var Entity;
             enumerable: true,
             configurable: true
         });
+        UniqueItem.prototype.toJSON = function (key) {
+            var object = _super.prototype.toJSON.call(this, key);
+            delete object._name;
+            object.name = this.name;
+            return object;
+        };
         UniqueItem.prototype.onBeforeNameChange = function (callback) {
             return this.beforeNameChange.on(callback);
         };
@@ -378,7 +384,7 @@ var Entry = /** @class */ (function (_super) {
     __extends(Entry, _super);
     function Entry() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.name = upperCapital(_this.name);
+        _this.name = upperCapital(snake2camel(_this.name));
         _this.table = new Table(_this.name);
         _this.factory = new Factory(_this.name, _this.table);
         _this.model = new Model(_this.name, _this.table);
@@ -585,6 +591,9 @@ var Relation = /** @class */ (function (_super) {
     __extends(Relation, _super);
     function Relation(name, type) {
         var _this = _super.call(this, name) || this;
+        _this.pivot = '';
+        _this.foreignKey = '';
+        _this.otherKey = '';
         _this.name = lowerCapital(name);
         _this.type = type;
         _this.model = name;

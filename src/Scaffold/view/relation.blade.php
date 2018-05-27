@@ -30,13 +30,15 @@
                 <span v-on:click="selectModel(relation)" class="btn btn-default" v-text="relation.model"></span>
             </td>
             <td>
-                <span v-on:click="selectPivot(relation)" class="btn btn-default" v-text="plus(relation.pivotTable)"></span>
+                <span v-on:click="selectPivot(relation)" class="btn btn-default" v-text="plus(relation.pivot)"></span>
             </td>
             <td>
-                <span v-on:click="selectForeign(relation)" class="btn btn-default" v-text="plus(relation.foreignKey)"></span>
+                <span v-on:click="selectForeign(relation)" class="btn btn-default"
+                      v-text="plus(relation.foreignKey)"></span>
             </td>
             <td>
-                <span v-on:click="selectOther(relation)" class="btn btn-default" v-text="plus(relation.otherKey)"></span>
+                <span v-on:click="selectOther(relation)" class="btn btn-default"
+                      v-text="plus(relation.otherKey)"></span>
             </td>
         </tr>
         </tbody>
@@ -113,8 +115,7 @@
                     array: this.project.entry.list,
                     callback: function (yes, entry) {
                         if (yes) {
-                            relation.pivotTable = entry.table.name;
-                            relation.pivot = entry;
+                            relation.pivot = entry.table.name;
                         }
                     }
                 };
@@ -123,7 +124,12 @@
             selectForeign: function (relation) {
                 let list = this.model.table.field.list;
                 if (relation.pivot) {
-                    list = relation.pivot.table.field.list;
+                    let pivot = this.getPivot(relation.pivot);
+                    if (!pivot) {
+                        alert('Unknown pivot table!');
+                        return;
+                    }
+                    list = pivot.field.list;
                 }
                 let data = {
                     message: 'Select the Foreign Key',
@@ -138,14 +144,19 @@
                 choose(data);
             },
             selectOther: function (relation) {
-                if (null == relation.pivot) {
+                if (!relation.pivot) {
                     alert('Please select a Pivot table first!');
+                    return;
+                }
+                let pivot = this.getPivot(relation.pivot);
+                if (!pivot) {
+                    alert('Unknown pivot table!');
                     return;
                 }
                 let data = {
                     message: 'Select the Other Key',
                     display: 'name',
-                    array: relation.pivot.table.field.list,
+                    array: pivot.field.list,
                     callback: function (yes, field) {
                         if (yes) {
                             relation.otherKey = field.name;
@@ -153,6 +164,17 @@
                     }
                 };
                 choose(data);
+            },
+            getPivot: function (name) {
+                let table = null;
+                this.project.entry.list.forEach(entry => {
+                    if (entry.table.name == name) {
+                        table = entry.table;
+                        return false;
+                    }
+                    return true;
+                });
+                return table;
             }
         }
     });

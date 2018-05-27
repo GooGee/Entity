@@ -1,6 +1,6 @@
 
 class Entry extends Entity.UniqueItem {
-    name = upperCapital(this.name)
+    name = upperCapital(snake2camel(this.name))
     table = new Table(this.name)
     factory = new Factory(this.name, this.table)
     model = new Model(this.name, this.table)
