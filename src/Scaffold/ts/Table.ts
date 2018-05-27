@@ -5,14 +5,20 @@ class Table extends Entity.UniqueItem {
     field = new Entity.UniqueList<Field>(Field)
     index = new Entity.UniqueList<Index>(Index)
 
-    change(field: Field, name: string) {
-        let old = field.name
-        field.name = name
+    constructor(name: string) {
+        super(name)
+        this.field.onAfterNameChange(this.handelNameChange)
+    }
+
+    private handelNameChange = (event: Entity.NameChange) => {
         this.index.list.forEach(index => {
-            let fff = index.field.find(old)
-            if (fff) {
-                fff.name = name
-            }
+            index.field.list.every(field => {
+                if (field.name == event.old) {
+                    field.name = event.name
+                    return false
+                }
+                return true
+            })
         })
     }
 

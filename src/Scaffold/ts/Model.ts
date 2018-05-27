@@ -1,5 +1,5 @@
 
-class Model extends Entity.UniqueItem {
+class Model extends FieldItem {
     table: Table
     primaryKey = 'id'
     nameSpace: string
@@ -8,12 +8,17 @@ class Model extends Entity.UniqueItem {
     relation = new Entity.UniqueList<Relation>(Relation)
     validation = new Entity.UniqueList<Validation>(Validation)
     protected static ignoreList = Entity.UniqueItem.ignoreList.concat(['table'])
-    
+
     constructor(name: string, table: Table) {
         super(name)
         this.table = table
         this.name = upperCapital(name)
         this.instance = lowerCapital(name)
+        this.table.field.onAfterNameChange(this.handelNameChange)
+    }
+
+    get field() {
+        return this.validation
     }
 
     update() {

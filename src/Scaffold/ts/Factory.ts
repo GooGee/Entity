@@ -1,5 +1,5 @@
 
-class Factory extends Entity.UniqueItem {
+class Factory extends FieldItem {
     path: string = ''
     table: Table
     field = new Entity.UniqueList<Field>(Field)
@@ -9,6 +9,7 @@ class Factory extends Entity.UniqueItem {
         super(name)
         this.name = upperCapital(name) + 'Factory'
         this.table = table
+        this.table.field.onAfterNameChange(this.handelNameChange)
     }
 
     update() {

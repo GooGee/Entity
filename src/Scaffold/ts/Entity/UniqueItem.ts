@@ -21,7 +21,7 @@ namespace Entity {
                 return
             }
 
-            let event = new NameChange(this, name)
+            let event = new NameChange(this, name, this._name)
             this.beforeNameChange.emit(event)
 
             this._name = name

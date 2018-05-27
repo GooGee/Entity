@@ -2,6 +2,7 @@
 namespace Entity {
 
     export class UniqueList<T extends UniqueItem> extends List<T> {
+        protected afterNameChange = new Entity.Event<NameChange>()
 
         find(name: string): T | null {
             let found = null
@@ -15,8 +16,35 @@ namespace Entity {
             return found
         }
 
-        private handelNameChange = (event: NameChange) => {
+        add(item: T) {
+            this.invalidThrow(item.name)
+
+            item.onBeforeNameChange(this.handelBeforeNameChange)
+            item.onAfterNameChange(this.handelAfterNameChange)
+            this.list.push(item)
+        }
+
+        remove(item: T) {
+            super.remove(item)
+            item.offBeforeNameChange(this.handelBeforeNameChange)
+            item.offAfterNameChange(this.handelAfterNameChange)
+        }
+
+        merge(array: T[]) {
+            array.forEach(item => {
+                if (this.find(item.name)) {
+                    return
+                }
+                this.list.push(item)
+            })
+        }
+
+        private handelBeforeNameChange = (event: NameChange) => {
             this.invalidThrow(event.name)
+        }
+
+        private handelAfterNameChange = (event: NameChange) => {
+            this.afterNameChange.emit(event)
         }
 
         invalidThrow(name: string) {
@@ -31,25 +59,12 @@ namespace Entity {
             }
         }
 
-        add(item: T) {
-            this.invalidThrow(item.name)
-
-            item.onBeforeNameChange(this.handelNameChange)
-            this.list.push(item)
+        onAfterNameChange(callback: Listener<NameChange>) {
+            return this.afterNameChange.on(callback)
         }
 
-        remove(item: T) {
-            super.remove(item)
-            item.offBeforeNameChange(this.handelNameChange)
-        }
-
-        merge(array: T[]) {
-            array.forEach(item => {
-                if (this.find(item.name)) {
-                    return
-                }
-                this.list.push(item)
-            })
+        offAfterNameChange(callback: Listener<NameChange>) {
+            this.afterNameChange.off(callback)
         }
 
     }

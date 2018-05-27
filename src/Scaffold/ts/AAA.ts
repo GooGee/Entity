@@ -5,4 +5,6 @@
 /// <reference path="./Entity/UniqueItem.ts" />
 /// <reference path="./Entity/UniqueList.ts" />
 
+/// <reference path="./FieldItem.ts" />
+
 const AAA = ''

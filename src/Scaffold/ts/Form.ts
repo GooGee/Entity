@@ -1,5 +1,5 @@
 
-class Form extends Entity.UniqueItem {
+class Form extends FieldItem {
     _instance: string
     method = 'POST'
     path: string
@@ -12,6 +12,7 @@ class Form extends Entity.UniqueItem {
         this.name = lowerCapital(name)
         this.model = model;
         this.instance = model.instance;
+        this.model.validation.onAfterNameChange(this.handelNameChange)
     }
 
     update() {

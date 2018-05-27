@@ -181,6 +181,12 @@ var Entity;
             var index = this.list.indexOf(item);
             this.list.splice(index, 1);
         };
+        List.prototype.merge = function (array) {
+            var _this = this;
+            array.forEach(function (item) {
+                _this.list.push(item);
+            });
+        };
         List.prototype.moveUp = function (item) {
             moveUp(this.list, item);
         };
@@ -241,7 +247,7 @@ var Entity;
                 if (this._name == name) {
                     return;
                 }
-                var event = new Entity.NameChange(this, name);
+                var event = new Entity.NameChange(this, name, this._name);
                 this.beforeNameChange.emit(event);
                 this._name = name;
                 this.afterNameChange.emit(event);
@@ -272,8 +278,12 @@ var Entity;
         __extends(UniqueList, _super);
         function UniqueList() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.handelNameChange = function (event) {
+            _this.afterNameChange = new Entity.Event();
+            _this.handelBeforeNameChange = function (event) {
                 _this.invalidThrow(event.name);
+            };
+            _this.handelAfterNameChange = function (event) {
+                _this.afterNameChange.emit(event);
             };
             return _this;
         }
@@ -288,6 +298,26 @@ var Entity;
             });
             return found;
         };
+        UniqueList.prototype.add = function (item) {
+            this.invalidThrow(item.name);
+            item.onBeforeNameChange(this.handelBeforeNameChange);
+            item.onAfterNameChange(this.handelAfterNameChange);
+            this.list.push(item);
+        };
+        UniqueList.prototype.remove = function (item) {
+            _super.prototype.remove.call(this, item);
+            item.offBeforeNameChange(this.handelBeforeNameChange);
+            item.offAfterNameChange(this.handelAfterNameChange);
+        };
+        UniqueList.prototype.merge = function (array) {
+            var _this = this;
+            array.forEach(function (item) {
+                if (_this.find(item.name)) {
+                    return;
+                }
+                _this.list.push(item);
+            });
+        };
         UniqueList.prototype.invalidThrow = function (name) {
             if (Array.isArray(name.match(/^[a-z_A-Z][a-z_A-Z\d]*$/))) {
                 // ok
@@ -299,56 +329,39 @@ var Entity;
                 throw name + ' already exists!';
             }
         };
-        UniqueList.prototype.add = function (item) {
-            this.invalidThrow(item.name);
-            item.onBeforeNameChange(this.handelNameChange);
-            this.list.push(item);
+        UniqueList.prototype.onAfterNameChange = function (callback) {
+            return this.afterNameChange.on(callback);
         };
-        UniqueList.prototype.remove = function (item) {
-            _super.prototype.remove.call(this, item);
-            item.offBeforeNameChange(this.handelNameChange);
-        };
-        UniqueList.prototype.merge = function (array) {
-            var _this = this;
-            var list = [];
-            array.forEach(function (item) {
-                if (_this.find(item.name)) {
-                    return;
-                }
-                list.push(item);
-            });
-            return this.list.concat(list);
-        };
-        UniqueList.prototype.load = function (object) {
-            var _this = this;
-            var array;
-            if (Array.isArray(object)) {
-                array = object;
-            }
-            else {
-                if (Array.isArray(object.list)) {
-                    array = object.list;
-                }
-                else {
-                    return;
-                }
-            }
-            this.clear();
-            array.forEach(function (one) {
-                var item = _this.create(one.name);
-                item.load(one);
-                _this.add(item);
-            });
+        UniqueList.prototype.offAfterNameChange = function (callback) {
+            this.afterNameChange.off(callback);
         };
         return UniqueList;
     }(Entity.List));
     Entity.UniqueList = UniqueList;
 })(Entity || (Entity = {}));
+var FieldItem = /** @class */ (function (_super) {
+    __extends(FieldItem, _super);
+    function FieldItem() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.handelNameChange = function (event) {
+            _this.field.list.every(function (field) {
+                if (field.name == event.old) {
+                    field.name = event.name;
+                    return false;
+                }
+                return true;
+            });
+        };
+        return _this;
+    }
+    return FieldItem;
+}(Entity.UniqueItem));
 /// <reference path="./Entity/Item.ts" />
 /// <reference path="./Entity/Newable.ts" />
 /// <reference path="./Entity/List.ts" />
 /// <reference path="./Entity/UniqueItem.ts" />
 /// <reference path="./Entity/UniqueList.ts" />
+/// <reference path="./FieldItem.ts" />
 var AAA = '';
 var Controller = /** @class */ (function (_super) {
     __extends(Controller, _super);
@@ -392,6 +405,7 @@ var Factory = /** @class */ (function (_super) {
         _this.field = new Entity.UniqueList(Field);
         _this.name = upperCapital(name) + 'Factory';
         _this.table = table;
+        _this.table.field.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
     Factory.prototype.update = function () {
@@ -406,7 +420,7 @@ var Factory = /** @class */ (function (_super) {
     };
     Factory.ignoreList = Entity.UniqueItem.ignoreList.concat(['table']);
     return Factory;
-}(Entity.UniqueItem));
+}(FieldItem));
 var Field = /** @class */ (function (_super) {
     __extends(Field, _super);
     function Field(name, type, value, length) {
@@ -427,6 +441,7 @@ var Form = /** @class */ (function (_super) {
         _this.name = lowerCapital(name);
         _this.model = model;
         _this.instance = model.instance;
+        _this.model.validation.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
     Form.prototype.update = function () {
@@ -458,7 +473,7 @@ var Form = /** @class */ (function (_super) {
     });
     Form.ignoreList = Entity.UniqueItem.ignoreList.concat(['model']);
     return Form;
-}(Entity.UniqueItem));
+}(FieldItem));
 var FormField = /** @class */ (function (_super) {
     __extends(FormField, _super);
     function FormField(name, type, value) {
@@ -501,8 +516,16 @@ var Model = /** @class */ (function (_super) {
         _this.table = table;
         _this.name = upperCapital(name);
         _this.instance = lowerCapital(name);
+        _this.table.field.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
+    Object.defineProperty(Model.prototype, "field", {
+        get: function () {
+            return this.validation;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Model.prototype.update = function () {
         var _this = this;
         this.table.field.list.forEach(function (field) {
@@ -515,7 +538,7 @@ var Model = /** @class */ (function (_super) {
     };
     Model.ignoreList = Entity.UniqueItem.ignoreList.concat(['table']);
     return Model;
-}(Entity.UniqueItem));
+}(FieldItem));
 var Project = /** @class */ (function (_super) {
     __extends(Project, _super);
     function Project() {
@@ -571,24 +594,26 @@ var Relation = /** @class */ (function (_super) {
 }(Entity.UniqueItem));
 var Table = /** @class */ (function (_super) {
     __extends(Table, _super);
-    function Table() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function Table(name) {
+        var _this = _super.call(this, name) || this;
         _this.path = '';
         _this.name = camel2snake(lowerCapital(_this.name));
         _this.field = new Entity.UniqueList(Field);
         _this.index = new Entity.UniqueList(Index);
+        _this.handelNameChange = function (event) {
+            _this.index.list.forEach(function (index) {
+                index.field.list.every(function (field) {
+                    if (field.name == event.old) {
+                        field.name = event.name;
+                        return false;
+                    }
+                    return true;
+                });
+            });
+        };
+        _this.field.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
-    Table.prototype.change = function (field, name) {
-        var old = field.name;
-        field.name = name;
-        this.index.list.forEach(function (index) {
-            var fff = index.field.find(old);
-            if (fff) {
-                fff.name = name;
-            }
-        });
-    };
     return Table;
 }(Entity.UniqueItem));
 var Validation = /** @class */ (function (_super) {
@@ -658,9 +683,10 @@ var Entity;
 var Entity;
 (function (Entity) {
     var NameChange = /** @class */ (function () {
-        function NameChange(sender, name) {
+        function NameChange(sender, name, old) {
             this.sender = sender;
             this.name = name;
+            this.old = old;
         }
         return NameChange;
     }());
