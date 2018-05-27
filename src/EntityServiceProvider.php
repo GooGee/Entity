@@ -35,8 +35,8 @@ class EntityServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/Generator/template', 'template');
 
         $this->publishes([
-            __DIR__ . '/Scaffold/public/entity.css' => public_path('css/entity.css'),
-            __DIR__ . '/Scaffold/public/entity.js' => public_path('js/entity.js'),
+            __DIR__ . '/Scaffold/css/entity.css' => public_path('css/entity.css'),
+            __DIR__ . '/Scaffold/entity.js' => public_path('js/entity.js'),
         ], 'public');
     }
 

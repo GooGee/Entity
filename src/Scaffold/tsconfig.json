@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outFile": "./public/entity.js",
+        "outFile": "./entity.js",
         "allowJs": true,
         "strict": true,
         "strictPropertyInitialization": false,
