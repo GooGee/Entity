@@ -12,8 +12,8 @@ class Relation
     {
         $this->name = $relation->name;
 
-        if (!empty($relation->pivotTable)) {
-            $array = [$relation->pivotTable];
+        if (!empty($relation->pivot)) {
+            $array = [$relation->pivot];
             if (!empty($relation->foreignKey)) {
                 $array[] = $relation->foreignKey;
             }

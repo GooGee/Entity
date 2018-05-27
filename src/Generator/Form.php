@@ -18,7 +18,7 @@ class Form
         $this->filePath = $form->path;
 
         $this->method = $form->method;
-        $this->instance = $form->instance;
+        $this->instance = $form->_instance;
         $this->fieldList = $form->field->list;
     }
 

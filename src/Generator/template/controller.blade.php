@@ -50,7 +50,7 @@ class @echo($controller->name) extends Controller
         $@echo($model->instance) = new @echo($model->name);
         $@echo($model->instance)->fill($array);
         $@echo($model->instance)->save();
-        return ;
+        return redirect('/@echo($controller->blade)/' . $@echo($model->instance)->id);
     }
 
     /**
@@ -91,7 +91,7 @@ class @echo($controller->name) extends Controller
         $array = $this->validate($request, @echo($model->name)::$ruleArray);
         $@echo($model->instance) = @echo($model->name)::findOrFail($id);
         $@echo($model->instance)->update($array);
-        return ;
+        return redirect('/@echo($controller->blade)/' . $id);
     }
 
     /**
@@ -104,6 +104,6 @@ class @echo($controller->name) extends Controller
     {
         $@echo($model->instance) = @echo($model->name)::findOrFail($id);
         $@echo($model->instance)->delete();
-        return ;
+        return redirect('/@echo($controller->blade)');
     }
 }

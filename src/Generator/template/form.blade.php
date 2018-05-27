@@ -7,8 +7,8 @@
 
 @else
     <div class="form-group">
-        <label class="control-label col-sm-2">@echo($field->label)</label>
-        <div class="col-sm-9">
+        <label class="control-label col-xs-2">@echo($field->label)</label>
+        <div class="col-xs-9">
         @if($field->type == 'text' or $field->type == 'password')
             <input v-model="@echo($field->vModel)" name="@echo($field->name)" class="form-control" type="@echo($field->type)">
         @elseif($field->type == 'textarea')
@@ -26,12 +26,13 @@
         @endif
         </div>
     </div>
+
 @endif
 @endforeach
 
     <div class="form-group">
-        <label class="control-label col-sm-2"></label>
-        <div class="col-sm-9">
+        <label class="control-label col-xs-2"></label>
+        <div class="col-xs-9">
             <button v-on:click="save(@echo($form->instance))" class="btn btn-primary" type="button">Save</button>
         </div>
     </div>
