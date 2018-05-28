@@ -14,13 +14,6 @@ class EntityServiceProvider extends ServiceProvider
     public function boot()
     {
         /**
-         * @echo($data)
-         * use this directive to avoid conflict with Vue
-         */
-        \Blade::directive('echo', function ($expression) {
-            return "<?php echo {$expression}; ?>";
-        });
-        /**
          * @brace('vue.data') -> {{vue.data}}
          * if Blade's rawTags is changed, @{{}} will not work
          */

@@ -7,27 +7,36 @@ use Illuminate\Routing\Controller;
 
 class EntityController extends Controller
 {
-    const FileName = 'entity.json';
+    const EntityPath = 'entity/';
 
     protected $json = [
         'code' => 0,
         'text' => 'ok',
+        'data' => null,
     ];
 
     function index()
     {
-        $project = null;
-        if (\Storage::exists(self::FileName)) {
-            $project = \Storage::get(self::FileName);
+        $fileList = \Storage::files(self::EntityPath);
+        foreach ($fileList as $key => $file) {
+            $fileList[$key] = str_replace('entity/', '', $file);
         }
-        return view('entity::project', compact('project'));
+
+        return view('entity::project', compact('fileList'));
+    }
+
+    function load(Request $request)
+    {
+        $this->json['data'] = null;
+        $file = self::EntityPath . $request['file'];
+        $this->json['data'] = \Storage::get($file);
+        return response()->json($this->json);
     }
 
     function store(Request $request)
     {
-        $project = $request['project'];
-        \Storage::put('entity.json', $project);
-
+        $file = self::EntityPath . $request['file'];
+        \Storage::put($file, $request['project']);
         return response()->json($this->json);
     }
 

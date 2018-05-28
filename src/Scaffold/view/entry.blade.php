@@ -1,6 +1,6 @@
 <script type="text/x-template" id="tttEntry">
     <table class="table">
-        <caption><h3>Entity</h3></caption>
+        <caption><h3>Entry</h3></caption>
         <thead>
         <tr>
             <th width="200px"></th>

@@ -10,7 +10,8 @@
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -31,11 +32,31 @@
 
     <div class="container">
 
+        <!-- File -->
+        <div v-show="tab=='file'">
+            <h3>File
+                <span v-on:click="refresh" class="btn btn-warning">Refresh</span>
+            </h3>
+            <table class="table">
+                <tr v-for="file in fileList">
+                    <td>
+                        <span v-text="file"></span>
+                        <span v-on:click="load(file)" class="btn btn-warning">Load</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span v-on:click="create" class="btn btn-warning">New</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <!-- Project -->
-        <div v-show="tab=='project'">
+        <div v-if="project && tab=='project'">
             <h3>
                 <span v-text="project.name"></span>
-                <span v-on:click="saveProject" class="btn btn-success">Save</span>
+                <span v-on:click="save" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
@@ -46,7 +67,7 @@
         </div>
 
         <!-- Migration -->
-        <div v-if="entry" v-show="tab=='table'">
+        <div v-if="entry && tab=='table'">
             <h3>
                 <span v-text="entry.table.name"></span> Table
                 <span v-on:click="saveMigration" class="btn btn-success">Save</span>
@@ -144,28 +165,18 @@
 <script type="text/javascript">
 
     function choose(data) {
-        vvv.showChoose(data);
+        vvv.choose.data = data;
+        vvv.choose.visible = true;
     }
 
     const vm = {};
-
-    vm.show = function (tab) {
-        this.tab = tab;
-    };
-
-    vm.showChoose = function (data) {
-        this.choose.data = data;
-        this.choose.visible = true;
-    };
 
     vm.close = function () {
         this.choose.visible = false;
     };
 
-    vm.load = function (data) {
-        if (data) {
-            this.project.load(data);
-        }
+    vm.show = function (tab) {
+        this.tab = tab;
     };
 
     vm.showEntry = function (entry) {
@@ -173,8 +184,66 @@
         this.show('table');
     };
 
-    vm.saveProject = function () {
+    vm.setFileList = function (list) {
+        if (Array.isArray(list)) {
+            this.fileList = list;
+        }
+    };
+
+    vm.warn = function () {
+        if (this.project == null) {
+            return true;
+        }
+        return confirm('Warning!\nAll unsaved changes will be lost!\nContinue?');
+    };
+
+    vm.refresh = function () {
+        if (this.warn()) {
+            location.reload();
+        }
+    };
+
+    vm.create = function () {
+        if (this.warn()) {
+            // ok
+        } else {
+            return;
+        }
+
+        let name = prompt('', '');
+        if (name) {
+            name = name.replace(' ', '');
+            if (this.fileList.indexOf(name) > -1) {
+                alert(name + ' already exists!');
+                return;
+            }
+
+            this.file = name;
+            this.project = new Project(name);
+            this.show('project');
+        }
+    };
+
+    vm.load = function (name) {
+        if (this.warn()) {
+            // ok
+        } else {
+            return;
+        }
+
+        let me = this;
+        get('/entity/load?file=' + name, function (json) {
+            let ppp = JSON.parse(json.data);
+            me.file = name;
+            me.project = new Project(ppp.file);
+            me.project.load(ppp);
+            me.show('project');
+        });
+    };
+
+    vm.save = function () {
         let data = {
+            file: this.file,
             project: JSON.stringify(this.project)
         };
         save('/entity', data);
@@ -219,7 +288,7 @@
     const vvv = new Vue({
         el: '#entity',
         data: {
-            tab: 'project',
+            tab: 'file',
             choose: {
                 visible: false,
                 data: {
@@ -229,11 +298,13 @@
                     callback: null
                 }
             },
+            file: null,
+            fileList: [],
             entry: null,
-            project: new Project('New Project')
+            project: null
         },
         created: function () {
-            this.load(@echo($project))
+            this.setFileList(<?php echo json_encode($fileList); ?>);
         },
         methods: vm
     });

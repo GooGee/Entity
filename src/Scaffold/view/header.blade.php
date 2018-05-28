@@ -11,10 +11,12 @@
         <div class="collapse navbar-collapse">
             <div>
                 <ul class="nav navbar-nav">
-                    <li v-bind:class="{active: 'project' == tab}">
-                        <a v-on:click="show('project')" href="javascript:void(0);">Project</a></li>
+                    <li v-bind:class="{active: 'file' == tab}">
+                        <a v-on:click="show('file')" href="javascript:void(0);">File</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li v-bind:class="{active: 'project' == tab}">
+                        <a v-on:click="show('project')" href="javascript:void(0);">Project</a></li>
                     <li v-bind:class="{active: 'table' == tab}">
                         <a v-on:click="show('table')" href="javascript:void(0);">Table</a></li>
                     <li v-bind:class="{active: 'seed' == tab}">
