@@ -222,7 +222,7 @@
             return;
         }
 
-        let name = prompt('', '');
+        let name = prompt('Please enter the file name', 'entity.json');
         if (name) {
             name = name.replace(' ', '');
             if (this.fileList.indexOf(name) > -1) {

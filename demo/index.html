@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <title>Entity</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+  <style>
+
+    .border {
+      border: 1px solid darkgray;
+      border-radius: 3px;
+    }
+
+    .mr {
+      margin-right: 6px;
+    }
+
+  </style>
+
+  <link rel="stylesheet" href="/Entity/demo/bootstrap.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script type="text/javascript" src="/Entity/src/Scaffold/entity.js"></script>
+</head>
+<body>
+<!--[if lt IE 11]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please
+  <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div id="entity">
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+            <span class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                  aria-controls="navbar">
+                <span class="sr-only">Toggle</span>
+                <span class="icon-bar"></span>
+            </span>
+        <span class="navbar-brand">Entity</span>
+      </div>
+      <div class="collapse navbar-collapse">
+        <div>
+          <ul class="nav navbar-nav">
+            <li v-bind:class="{active: 'file' == tab}">
+              <a v-on:click="show('file')" href="javascript:void(0);">File</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li v-bind:class="{active: 'project' == tab}">
+              <a v-on:click="show('project')" href="javascript:void(0);">Project</a></li>
+            <li v-bind:class="{active: 'table' == tab}">
+              <a v-on:click="show('table')" href="javascript:void(0);">Table</a></li>
+            <li v-bind:class="{active: 'seed' == tab}">
+              <a v-on:click="show('seed')" href="javascript:void(0);">Seed</a></li>
+            <li v-bind:class="{active: 'model' == tab}">
+              <a v-on:click="show('model')" href="javascript:void(0);">Model</a></li>
+            <li v-bind:class="{active: 'controller' == tab}">
+              <a v-on:click="show('controller')" href="javascript:void(0);">Controller</a></li>
+            <li v-bind:class="{active: 'form' == tab}">
+              <a v-on:click="show('form')" href="javascript:void(0);">Form</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- /.nav-collapse -->
+    </div>
+    <!-- /.container -->
+  </nav>
+  <!-- /.navbar -->
+
+  <div style="margin-top:55px"></div>
+
+  <div class="container">
+
+    <!-- File -->
+    <div v-show="tab=='file'">
+      <h3>File
+        <span v-on:click="refresh" class="btn btn-warning">Refresh</span>
+      </h3>
+      <table class="table">
+        <tr v-for="file in fileList">
+          <td>
+            <span v-text="file"></span>
+            <span v-on:click="load(file)" class="btn btn-warning">Load</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span v-on:click="create" class="btn btn-warning">New</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Project -->
+    <div v-if="project && tab=='project'">
+      <h3>
+        <span v-text="project.name"></span>
+        <span v-on:click="save" class="btn btn-success">Save</span>
+      </h3>
+
+      <!-- Property -->
+      <ccc-property :object="project" :button="true"></ccc-property>
+
+      <!-- Entry -->
+      <ccc-entry :project="project" v-on:show="showEntry"></ccc-entry>
+    </div>
+
+    <!-- Migration -->
+    <div v-if="entry && tab=='table'">
+      <h3>
+        <span v-text="entry.table.name"></span> Table
+        <span v-on:click="saveMigration" class="btn btn-success">Save</span>
+      </h3>
+
+      <!-- Property -->
+      <ccc-property :object="entry.table"></ccc-property>
+
+      <!-- Field -->
+      <ccc-field :table="entry.table"></ccc-field>
+
+      <!-- Index -->
+      <ccc-index :table="entry.table"></ccc-index>
+    </div>
+
+    <!-- Seed -->
+    <div v-if="entry && tab=='seed'">
+      <h3>
+        <span v-text="entry.factory.name"></span>
+        <span v-on:click="saveFactory" class="btn btn-success">Save</span>
+      </h3>
+
+      <!-- Property -->
+      <ccc-property :object="entry.factory"></ccc-property>
+
+      <!-- Factory -->
+      <ccc-factory :factory="entry.factory"></ccc-factory>
+    </div>
+
+    <!-- Model -->
+    <div v-if="entry && tab=='model'">
+      <h3>
+        <span v-text="entry.model.name"></span> Model
+        <span v-on:click="saveModel" class="btn btn-success">Save</span>
+      </h3>
+
+      <!-- Property -->
+      <ccc-property :object="entry.model"></ccc-property>
+
+      <!-- Relation -->
+      <ccc-relation :model="entry.model" :project="project"></ccc-relation>
+
+      <!-- Validation -->
+      <ccc-validation :model="entry.model"></ccc-validation>
+    </div>
+
+    <!-- Controller -->
+    <div v-if="entry && tab=='controller'">
+      <h3>
+        <span v-text="entry.controller.name"></span>
+        <span v-on:click="saveController" class="btn btn-success">Save</span>
+      </h3>
+
+      <!-- Property -->
+      <ccc-property :object="entry.controller"></ccc-property>
+
+      <!-- Middleware -->
+      <ccc-middleware :controller="entry.controller"></ccc-middleware>
+    </div>
+
+
+    <!-- Form -->
+    <div v-if="entry && tab=='form'">
+      <h3>
+        <span v-text="entry.name"></span> Form
+        <span v-on:click="saveForm" class="btn btn-success">Save</span>
+      </h3>
+
+      <!-- Form -->
+      <ccc-form :form="entry.form"></ccc-form>
+    </div>
+
+  </div>
+
+
+  <!-- Choose -->
+  <ccc-choose v-show="choose.visible" :data="choose.data" v-on:close="close"></ccc-choose>
+
+</div>
+<br>
+
+<template id="tttDialogue">
+  <div class="modal" tabindex="-1" role="dialog" style="display: block; margin-top: 55px">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+                <span v-show="dialogue.canClose" v-on:click="$emit('hide')" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></span>
+          <h4 class="modal-title">
+            <slot name="title"></slot>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <slot name="body"></slot>
+        </div>
+        <div v-show="dialogue.footer" class="modal-footer">
+          <slot name="footer"></slot>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+</template>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-dialogue', {
+    template: '#tttDialogue',
+    props: ['dialogue']
+  });
+
+</script>
+<script type="text/x-template" id="tttChoose">
+
+  <ccc-dialogue :dialogue="dialogue" v-on:hide="no">
+    <template slot="title"><span v-text="data.message"></span></template>
+    <template slot="body">
+      <select v-model="data.item" class="form-control">
+        <option v-for="item in data.array" v-bind:value="item" v-text="display(item)"></option>
+      </select>
+    </template>
+    <template slot="footer">
+      <span v-on:click="yes" class="btn btn-success">V</span>
+      <span v-on:click="no" class="btn btn-danger">X</span>
+    </template>
+  </ccc-dialogue>
+
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-choose', {
+    template: '#tttChoose',
+    props: ['data'],
+    data: function () {
+      return {
+        dialogue: {
+          canClose: true,
+          footer: true
+        }
+      };
+    },
+    methods: {
+      display: function (item) {
+        if (this.data.display) {
+          return item[this.data.display];
+        }
+        return item;
+      },
+      yes: function () {
+        if (this.data.item) {
+          if (this.data.callback) {
+            this.data.callback(true, this.data.item);
+          }
+          this.$emit('close');
+        }
+      },
+      no: function () {
+        if (this.data.callback) {
+          this.data.callback(false);
+        }
+        this.$emit('close');
+      }
+    }
+  });
+
+</script>
+
+<script type="text/x-template" id="tttProperty">
+  <table class="table">
+    <caption>
+      <h3>Property</h3>
+    </caption>
+    <thead>
+    <tr>
+      <th style="width: 155px">Name</th>
+      <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="(value, key) in object" v-if="typeof(value) == 'string'">
+      <td v-text="key=='_name'?'name':key"></td>
+      <td>
+                <span v-if="button">
+                    <span v-on:click="change(key, value)" class="btn btn-default" v-text="object[key]"></span>
+                </span>
+                <span v-else>
+                    <input v-model="object[key]" class="form-control" type="text">
+                </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-property', {
+    template: '#tttProperty',
+    props: ['object', 'button'],
+    methods: {
+      change: function (key, value) {
+        let name = prompt('Please enter the ' + key, value);
+        if (name) {
+          this.object.change(key, name);
+        }
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttEntry">
+  <table class="table">
+    <caption><h3>Entry</h3></caption>
+    <thead>
+    <tr>
+      <th width="200px"></th>
+      <th>Table</th>
+      <th>Factory</th>
+      <th>Model</th>
+      <th>Controller</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="entry in project.entry.list">
+      <td>
+        <div class="btn-group">
+          <span v-on:click="project.entry.moveUp(entry)" class="btn btn-info">↑</span>
+          <span v-on:click="project.entry.moveDown(entry)" class="btn btn-info">↓</span>
+        </div>
+        <span v-on:click="show(entry)" class="btn btn-primary">Show</span>
+        <span v-on:click="remove(entry)" class="btn btn-danger">X</span>
+      </td>
+      <td><input v-model="entry.table.name" class="form-control" type="text"></td>
+      <td><input v-model="entry.factory.name" class="form-control" type="text"></td>
+      <td><input v-model="entry.model.name" class="form-control" type="text"></td>
+      <td><input v-model="entry.controller.name" class="form-control" type="text"></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td>
+        <span v-on:click="add" class="btn btn-primary">+</span>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-entry', {
+    template: '#tttEntry',
+    props: ['project'],
+    methods: {
+      add: function () {
+        let name = prompt('Please enter the Entity name');
+        if (name) {
+          let entry = this.project.entry.create(name);
+          try {
+            entry.from(this.project);
+            this.project.entry.add(entry);
+          } catch (exc) {
+            alert(exc);
+          }
+        }
+      },
+      show: function (entry) {
+        this.$emit('show', entry);
+      },
+      remove: function (entry) {
+        if (confirm('Are you sure?')) {
+          this.project.entry.remove(entry);
+        }
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttField">
+  <table class="table">
+    <caption>
+      <h3>Field</h3>
+    </caption>
+    <thead>
+    <tr>
+      <th width="130px"></th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Length</th>
+      <th>Default</th>
+      <th>Comment</th>
+      <th>Nullable</th>
+      <th>Unsigned</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="field in table.field.list">
+      <td>
+        <div class="btn-group">
+          <span v-on:click="table.field.moveUp(field)" class="btn btn-info">↑</span>
+          <span v-on:click="table.field.moveDown(field)" class="btn btn-info">↓</span>
+        </div>
+        <span v-on:click="remove(field)" class="btn btn-danger">X</span>
+      </td>
+      <td>
+        <span v-on:click="rename(field)" class="btn btn-default" v-text="field.name"></span>
+      </td>
+      <td>
+        <select v-model="field.type" class="form-control">
+          <option value="bigIncrements">bigIncrements</option>
+          <option value="bigInteger">bigInteger</option>
+          <option value="binary">binary</option>
+          <option value="boolean">boolean</option>
+          <option value="char">char</option>
+          <option value="date">date</option>
+          <option value="dateTime">dateTime</option>
+          <option value="decimal">decimal</option>
+          <option value="double">double</option>
+          <option value="enum">enum</option>
+          <option value="float">float</option>
+          <option value="increments">increments</option>
+          <option value="integer">integer</option>
+          <option value="json">json</option>
+          <option value="jsonb">jsonb</option>
+          <option value="longText">longText</option>
+          <option value="mediumInteger">mediumInteger</option>
+          <option value="mediumText">mediumText</option>
+          <option value="morphs">morphs</option>
+          <option value="smallInteger">smallInteger</option>
+          <option value="string">string</option>
+          <option value="text">text</option>
+          <option value="time">time</option>
+          <option value="tinyInteger">tinyInteger</option>
+          <option value="timestamp">timestamp</option>
+          <option value="uuid">uuid</option>
+        </select>
+      </td>
+      <td><input v-model="field.length" class="form-control" type="text"></td>
+      <td><input v-model="field.value" class="form-control" type="text"></td>
+      <td><input v-model="field.comment" class="form-control" type="text"></td>
+      <td><input v-model="field.nullable" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.unsigned" class="form-control" type="checkbox"></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td>
+        <span v-on:click="add" class="btn btn-primary">+</span>
+      </td>
+      <td colspan="2" class="form-inline">
+        <select v-model="selectedField" class="form-control mr pull-left" style="width: auto;">
+          <option v-for="field in fieldList" v-bind:value="field" v-text="field.name"></option>
+        </select>
+        <span v-on:click="addField" class="btn btn-info">+</span>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-field', {
+    template: '#tttField',
+    props: ['table'],
+    data: function () {
+      return {
+        fieldList: [
+          new Field('id', 'increments'),
+          new Field('user_id', 'integer'),
+          new Field('name', 'string', '""', 10),
+          new Field('status', 'integer', 0, 11),
+          new Field('remember_token', 'string', null, 100),
+          new Field('created_at', 'timestamp'),
+          new Field('updated_at', 'timestamp'),
+          new Field('deleted_at', 'timestamp')
+        ],
+        selectedField: null
+      }
+    },
+    created: function () {
+      let field = this.fieldList[4];
+      field.nullable = true;
+      field = this.fieldList[5];
+      field.nullable = true;
+      field = this.fieldList[6];
+      field.nullable = true;
+      field = this.fieldList[7];
+      field.nullable = true;
+
+      this.selectedField = this.fieldList[0];
+    },
+    methods: {
+      add: function () {
+        let name = prompt('Please enter the Field name');
+        if (name) {
+          let field = this.table.field.create(name, 'integer');
+          try {
+            this.table.field.add(field);
+          } catch (exc) {
+            alert(exc);
+          }
+        }
+      },
+      remove: function (field) {
+        if (confirm('Are you sure?')) {
+          this.table.field.remove(field);
+        }
+      },
+      rename: function (field) {
+        let name = prompt('Please enter the Field name', field.name);
+        if (name) {
+          try {
+            field.name = name;
+          } catch (exc) {
+            alert(exc);
+          }
+        }
+      },
+      addField: function () {
+        let selected = this.selectedField;
+        let field = this.table.field.create(selected.name, selected.type);
+        try {
+          field.load(selected);
+          this.table.field.add(field);
+        } catch (exc) {
+          alert(exc);
+        }
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttIndex">
+  <table class="table">
+    <caption><h3>Index</h3></caption>
+    <thead>
+    <tr>
+      <th width="50px"></th>
+      <th style="width: 120px;">Type</th>
+      <th>Field</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="index in table.index.list">
+      <td>
+        <span v-on:click="remove(index)" class="btn btn-danger">X</span>
+      </td>
+      <td>
+        <select v-model="index.type" class="form-control">
+          <option value="primary">primary</option>
+          <option value="unique">unique</option>
+          <option value="index">index</option>
+        </select>
+      </td>
+      <td>
+                <span v-for="field in index.field.list" class="border mr pull-left">
+                    <div class="text-center" v-text="field.name"></div>
+                    <div class="btn-group">
+                      <span v-on:click="index.field.moveUp(field)" class="btn btn-info btn-xs">←</span>
+                      <span v-on:click="index.field.moveDown(field)" class="btn btn-info btn-xs">→</span>
+                      <span v-on:click="index.field.remove(field)" class="btn btn-danger btn-xs">X</span>
+                    </div>
+                </span>
+
+        <span v-on:click="addField(index)" class="btn btn-info">+</span>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td>
+        <span v-on:click="createIndex" class="btn btn-primary">+</span>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-index', {
+    template: '#tttIndex',
+    props: ['table'],
+    data: function () {
+      return {
+        index: 0
+      };
+    },
+    methods: {
+      createIndex: function () {
+        this.index += 1;
+        let index = this.table.index.create('index' + this.index, 'index');
+        this.table.index.add(index);
+      },
+      addField: function (index) {
+        let data = {
+          message: 'Select a field',
+          display: 'name',
+          array: this.table.field.list,
+          callback: function (yes, field) {
+            if (yes) {
+              let fff = index.field.create(field.name);
+              try {
+                index.field.add(fff);
+              } catch (exc) {
+                alert(exc);
+              }
+            }
+          }
+        };
+        choose(data);
+      },
+      remove: function (index) {
+        if (confirm('Are you sure?')) {
+          this.table.index.remove(index);
+        }
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttFactory">
+  <table class="table">
+    <caption>
+      <h3>Factory</h3>
+    </caption>
+    <thead>
+    <tr>
+      <th width="50px"></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Method</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="field in factory.field.list">
+      <td><span v-on:click="remove(field)" class="btn btn-danger">X</span></td>
+      <td v-text="field.name"></td>
+      <td>
+        <select v-model="field.type" class="form-control">
+          <option value="raw">Raw</option>
+          <option value="property">Property</option>
+          <option value="method">Method</option>
+        </select>
+      </td>
+      <td>
+        <div v-if="'raw' == field.type">
+          <input v-model="field.raw" class="form-control" type="text">
+        </div>
+        <div v-else class="form-inline">
+          <label><input v-model="field.unique" type="checkbox"> Unique</label>
+          <select v-show="'method' == field.type" v-model="field.method" class="form-control">
+            <option value="name">name</option>
+            <option value="firstName">firstName</option>
+            <option value="title">title</option>
+            <option value="creditCardNumber">creditCardNumber</option>
+            <option value="iban">iban</option>
+            <option value="words">words</option>
+            <option value="sentence">sentence</option>
+            <option value="sentences">sentences</option>
+            <option value="paragraph">paragraph</option>
+            <option value="paragraphs">paragraphs</option>
+            <option value="text">text</option>
+            <option value="realText">realText</option>
+            <option value="password">password</option>
+            <option value="slug">slug</option>
+            <option value="amPm">amPm</option>
+            <option value="date">date</option>
+            <option value="dayOfMonth">dayOfMonth</option>
+            <option value="dayOfWeek">dayOfWeek</option>
+            <option value="iso8601">iso8601</option>
+            <option value="month">month</option>
+            <option value="monthName">monthName</option>
+            <option value="time">time</option>
+            <option value="unixTime">unixTime</option>
+            <option value="year">year</option>
+            <option value="dateTime">dateTime</option>
+            <option value="dateTimeAd">dateTimeAd</option>
+            <option value="dateTimeBetween">dateTimeBetween</option>
+            <option value="dateTimeInInterval">dateTimeInInterval</option>
+            <option value="dateTimeThisCentury">dateTimeThisCentury</option>
+            <option value="dateTimeThisDecade">dateTimeThisDecade</option>
+            <option value="dateTimeThisYear">dateTimeThisYear</option>
+            <option value="dateTimeThisMonth">dateTimeThisMonth</option>
+            <option value="boolean">boolean</option>
+            <option value="randomNumber">randomNumber</option>
+            <option value="randomKey">randomKey</option>
+            <option value="numberBetween">numberBetween</option>
+            <option value="randomFloat">randomFloat</option>
+            <option value="randomElement">randomElement</option>
+            <option value="randomElements">randomElements</option>
+            <option value="shuffle">shuffle</option>
+            <option value="shuffleArray">shuffleArray</option>
+            <option value="shuffleString">shuffleString</option>
+            <option value="numerify">numerify</option>
+            <option value="lexify">lexify</option>
+            <option value="bothify">bothify</option>
+            <option value="asciify">asciify</option>
+            <option value="regexify">regexify</option>
+            <option value="toLower">toLower</option>
+            <option value="toUpper">toUpper</option>
+            <option value="optional">optional</option>
+            <option value="unique">unique</option>
+            <option value="valid">valid</option>
+            <option value="biasedNumberBetween">biasedNumberBetween</option>
+            <option value="file">file</option>
+            <option value="imageUrl">imageUrl</option>
+            <option value="image">image</option>
+            <option value="randomHtml">randomHtml</option>
+          </select>
+          <input v-show="'method' == field.type" v-model="field.parameters" class="form-control" type="text">
+          <select v-show="'property' == field.type" v-model="field.property" class="form-control">
+            <option value="name">name</option>
+            <option value="firstName">firstName</option>
+            <option value="firstNameMale">firstNameMale</option>
+            <option value="firstNameFemale">firstNameFemale</option>
+            <option value="lastName">lastName</option>
+            <option value="title">title</option>
+            <option value="titleMale">titleMale</option>
+            <option value="titleFemale">titleFemale</option>
+            <option value="citySuffix">citySuffix</option>
+            <option value="streetSuffix">streetSuffix</option>
+            <option value="buildingNumber">buildingNumber</option>
+            <option value="city">city</option>
+            <option value="streetName">streetName</option>
+            <option value="streetAddress">streetAddress</option>
+            <option value="postcode">postcode</option>
+            <option value="address">address</option>
+            <option value="country">country</option>
+            <option value="latitude">latitude</option>
+            <option value="longitude">longitude</option>
+            <option value="ean13">ean13</option>
+            <option value="ean8">ean8</option>
+            <option value="isbn13">isbn13</option>
+            <option value="isbn10">isbn10</option>
+            <option value="phoneNumber">phoneNumber</option>
+            <option value="company">company</option>
+            <option value="companySuffix">companySuffix</option>
+            <option value="jobTitle">jobTitle</option>
+            <option value="creditCardType">creditCardType</option>
+            <option value="creditCardNumber">creditCardNumber</option>
+            <option value="creditCardExpirationDate">creditCardExpirationDate</option>
+            <option value="creditCardExpirationDateString">creditCardExpirationDateString</option>
+            <option value="creditCardDetails">creditCardDetails</option>
+            <option value="bankAccountNumber">bankAccountNumber</option>
+            <option value="swiftBicNumber">swiftBicNumber</option>
+            <option value="vat">vat</option>
+            <option value="word">word</option>
+            <option value="words">words</option>
+            <option value="sentence">sentence</option>
+            <option value="sentences">sentences</option>
+            <option value="paragraph">paragraph</option>
+            <option value="paragraphs">paragraphs</option>
+            <option value="text">text</option>
+            <option value="email">email</option>
+            <option value="safeEmail">safeEmail</option>
+            <option value="freeEmail">freeEmail</option>
+            <option value="companyEmail">companyEmail</option>
+            <option value="freeEmailDomain">freeEmailDomain</option>
+            <option value="safeEmailDomain">safeEmailDomain</option>
+            <option value="userName">userName</option>
+            <option value="password">password</option>
+            <option value="domainName">domainName</option>
+            <option value="domainWord">domainWord</option>
+            <option value="tld">tld</option>
+            <option value="url">url</option>
+            <option value="slug">slug</option>
+            <option value="ipv4">ipv4</option>
+            <option value="ipv6">ipv6</option>
+            <option value="localIpv4">localIpv4</option>
+            <option value="macAddress">macAddress</option>
+            <option value="unixTime">unixTime</option>
+            <option value="dateTime">dateTime</option>
+            <option value="dateTimeAD">dateTimeAD</option>
+            <option value="iso8601">iso8601</option>
+            <option value="dateTimeThisCentury">dateTimeThisCentury</option>
+            <option value="dateTimeThisDecade">dateTimeThisDecade</option>
+            <option value="dateTimeThisYear">dateTimeThisYear</option>
+            <option value="dateTimeThisMonth">dateTimeThisMonth</option>
+            <option value="amPm">amPm</option>
+            <option value="dayOfMonth">dayOfMonth</option>
+            <option value="dayOfWeek">dayOfWeek</option>
+            <option value="month">month</option>
+            <option value="monthName">monthName</option>
+            <option value="year">year</option>
+            <option value="century">century</option>
+            <option value="timezone">timezone</option>
+            <option value="md5">md5</option>
+            <option value="sha1">sha1</option>
+            <option value="sha256">sha256</option>
+            <option value="locale">locale</option>
+            <option value="countryCode">countryCode</option>
+            <option value="countryISOAlpha3">countryISOAlpha3</option>
+            <option value="languageCode">languageCode</option>
+            <option value="currencyCode">currencyCode</option>
+            <option value="boolean">boolean</option>
+            <option value="randomDigit">randomDigit</option>
+            <option value="randomDigitNotNull">randomDigitNotNull</option>
+            <option value="randomLetter">randomLetter</option>
+            <option value="randomAscii">randomAscii</option>
+            <option value="macProcessor">macProcessor</option>
+            <option value="linuxProcessor">linuxProcessor</option>
+            <option value="userAgent">userAgent</option>
+            <option value="chrome">chrome</option>
+            <option value="firefox">firefox</option>
+            <option value="safari">safari</option>
+            <option value="opera">opera</option>
+            <option value="internetExplorer">internetExplorer</option>
+            <option value="windowsPlatformToken">windowsPlatformToken</option>
+            <option value="macPlatformToken">macPlatformToken</option>
+            <option value="linuxPlatformToken">linuxPlatformToken</option>
+            <option value="uuid">uuid</option>
+            <option value="mimeType">mimeType</option>
+            <option value="fileExtension">fileExtension</option>
+            <option value="hexColor">hexColor</option>
+            <option value="safeHexColor">safeHexColor</option>
+            <option value="rgbColor">rgbColor</option>
+            <option value="rgbColorAsArray">rgbColorAsArray</option>
+            <option value="rgbCssColor">rgbCssColor</option>
+            <option value="safeColorName">safeColorName</option>
+            <option value="colorName">colorName</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      <td><span v-on:click="factory.update()" class="btn btn-primary">All</span></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-factory', {
+    template: '#tttFactory',
+    props: ['factory'],
+    methods: {
+      remove: function (field) {
+        if (confirm('Are you sure?')) {
+          this.factory.field.remove(field);
+        }
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttRelation">
+  <table class="table">
+    <caption>
+      <h3>Relation</h3>
+    </caption>
+    <thead>
+    <tr>
+      <th width="50px"></th>
+      <th>Function Name</th>
+      <th>Type</th>
+      <th>Model</th>
+      <th>Pivot Table</th>
+      <th>Foreign Key</th>
+      <th>Other Key</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="relation in model.relation.list">
+      <td>
+        <span v-on:click="remove(relation)" class="btn btn-danger">X</span>
+      </td>
+      <td><input v-model="relation.name" class="form-control" type="text"></td>
+      <td><select v-model="relation.type" class="form-control">
+        <option value="belongsTo">belongsTo</option>
+        <option value="belongsToMany">belongsToMany</option>
+        <option value="hasOne">hasOne</option>
+        <option value="hasMany">hasMany</option>
+      </select></td>
+      <td>
+        <span v-on:click="selectModel(relation)" class="btn btn-default" v-text="relation.model"></span>
+      </td>
+      <td>
+        <span v-on:click="selectPivot(relation)" class="btn btn-default" v-text="plus(relation.pivot)"></span>
+      </td>
+      <td>
+                <span v-on:click="selectForeign(relation)" class="btn btn-default"
+                      v-text="plus(relation.foreignKey)"></span>
+      </td>
+      <td>
+                <span v-on:click="selectOther(relation)" class="btn btn-default"
+                      v-text="plus(relation.otherKey)"></span>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td>
+        <span v-on:click="add" class="btn btn-primary">+</span>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-relation', {
+    template: '#tttRelation',
+    props: ['model', 'project'],
+    methods: {
+      plus: function (key) {
+        if (key) {
+          return key;
+        }
+        return '+';
+      },
+      add: function () {
+        let relation = this.model.relation;
+        let data = {
+          message: 'Select the Model',
+          display: 'name',
+          array: this.project.entry.list,
+          callback: function (yes, entry) {
+            if (yes) {
+              let rrr = relation.create(entry.name, 'belongsTo');
+              try {
+                relation.add(rrr);
+              } catch (exc) {
+                alert(exc);
+              }
+            }
+          }
+        };
+        choose(data);
+      },
+      remove: function (relation) {
+        if (confirm('Are you sure?')) {
+          this.model.relation.remove(relation);
+        }
+      },
+      selectModel: function (relation) {
+        let data = {
+          message: 'Select the Model',
+          display: 'name',
+          array: this.project.entry.list,
+          callback: function (yes, entry) {
+            if (yes) {
+              relation.model = entry.model.name;
+            }
+          }
+        };
+        choose(data);
+      },
+      selectPivot: function (relation) {
+        let data = {
+          message: 'Select the Pivot Table',
+          display: 'name',
+          array: this.project.entry.list,
+          callback: function (yes, entry) {
+            if (yes) {
+              relation.pivot = entry.table.name;
+            }
+          }
+        };
+        choose(data);
+      },
+      selectForeign: function (relation) {
+        let list = this.model.table.field.list;
+        if (relation.pivot) {
+          let pivot = this.getPivot(relation.pivot);
+          if (!pivot) {
+            alert('Unknown pivot table!');
+            return;
+          }
+          list = pivot.field.list;
+        }
+        let data = {
+          message: 'Select the Foreign Key',
+          display: 'name',
+          array: list,
+          callback: function (yes, field) {
+            if (yes) {
+              relation.foreignKey = field.name;
+            }
+          }
+        };
+        choose(data);
+      },
+      selectOther: function (relation) {
+        if (!relation.pivot) {
+          alert('Please select a Pivot table first!');
+          return;
+        }
+        let pivot = this.getPivot(relation.pivot);
+        if (!pivot) {
+          alert('Unknown pivot table!');
+          return;
+        }
+        let data = {
+          message: 'Select the Other Key',
+          display: 'name',
+          array: pivot.field.list,
+          callback: function (yes, field) {
+            if (yes) {
+              relation.otherKey = field.name;
+            }
+          }
+        };
+        choose(data);
+      },
+      getPivot: function (name) {
+        let table = null;
+        this.project.entry.list.forEach(entry => {
+          if (entry.table.name == name) {
+            table = entry.table;
+            return false;
+          }
+          return true;
+        });
+        return table;
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttValidation">
+  <table class="table">
+    <caption><h3>Validation</h3></caption>
+    <thead>
+    <tr>
+      <th width="50px"></th>
+      <th>Field</th>
+      <th>Fillable</th>
+      <th>Hidden</th>
+      <th>integer</th>
+      <th>numeric</th>
+      <th>alpha</th>
+      <th>alpha_num</th>
+      <th>string</th>
+      <th>email</th>
+      <th>required</th>
+      <th class="col-xs-1">Min</th>
+      <th class="col-xs-1">Max</th>
+      <th>RegExp</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="field in model.validation.list">
+      <td>
+        <span v-on:click="remove(field)" class="btn btn-danger">X</span>
+      </td>
+      <td v-text="field.name"></td>
+      <td><input v-model="field.fillable" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.hidden" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.integer" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.numeric" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.alpha" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.alpha_num" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.string" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.email" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.required" class="form-control" type="checkbox"></td>
+      <td><input v-model="field.rule.min" class="form-control" type="text"></td>
+      <td><input v-model="field.rule.max" class="form-control" type="text"></td>
+      <td><input v-model="field.rule.regex" class="form-control" type="text"></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      <td><span v-on:click="model.update()" class="btn btn-primary">All</span></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-validation', {
+    template: '#tttValidation',
+    props: ['model'],
+    methods: {
+      remove: function (field) {
+        if (confirm('Are you sure?')) {
+          this.model.validation.remove(field);
+        }
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttMiddleware">
+  <table class="table">
+    <caption><h3>Middleware</h3></caption>
+    <thead>
+    <tr>
+      <th width="150px"></th>
+      <th style="width: 22%;">Name</th>
+      <th style="width: 120px;">Type</th>
+      <th>Method</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="middleware in controller.middleware.list">
+      <td>
+        <div class="btn-group">
+          <span v-on:click="controller.middleware.moveUp(middleware)" class="btn btn-info">↑</span>
+          <span v-on:click="controller.middleware.moveDown(middleware)" class="btn btn-info">↓</span>
+        </div>
+        <span v-on:click="remove(middleware)" class="btn btn-danger">X</span>
+      </td>
+      <td><input v-model="middleware.name" class="form-control" type="text"></td>
+      <td>
+        <select v-model="middleware.type" class="form-control">
+          <option value="all">All</option>
+          <option value="only">Only</option>
+          <option value="except">Except</option>
+        </select>
+      </td>
+      <td>
+                <span class="pull-left">
+                    <label v-for="method in methodArray" class="mr">
+                      <input v-model="middleware.method[method]" type="checkbox">
+                      <span v-text="method"></span>
+                    </label>
+                </span>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td>
+        <span v-on:click="add" class="btn btn-primary">+</span>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-middleware', {
+    template: '#tttMiddleware',
+    props: ['controller'],
+    data: function () {
+      return {
+        methodArray: ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']
+      };
+    },
+    methods: {
+      add: function () {
+        let name = prompt('Please enter the Middleware name');
+        if (name) {
+          let middleware = this.controller.middleware.create(name);
+          this.controller.middleware.add(middleware);
+        }
+      },
+      remove: function (middleware) {
+        if (confirm('Are you sure?')) {
+          this.controller.middleware.remove(middleware);
+        }
+      }
+    }
+  });
+
+</script>
+<script type="text/x-template" id="tttForm">
+  <table class="table">
+    <caption>
+      <h3>Form</h3>
+    </caption>
+    <thead>
+    <tr>
+      <th width="130px"></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>v-model</th>
+      <th>Label</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="field in form.field.list">
+      <td>
+        <div class="btn-group">
+          <span v-on:click="form.field.moveUp(field)" class="btn btn-info">↑</span>
+          <span v-on:click="form.field.moveDown(field)" class="btn btn-info">↓</span>
+        </div>
+        <span v-on:click="remove(field)" class="btn btn-danger">X</span>
+      </td>
+      <td><input v-model="field.name" class="form-control" type="text"></td>
+      <td>
+        <select v-model="field.type" class="form-control">
+          <option value="text">text</option>
+          <option value="password">password</option>
+          <option value="hidden">hidden</option>
+          <option value="textarea">textarea</option>
+          <option value="checkbox">checkbox</option>
+          <option value="radio">radio</option>
+          <option value="select">select</option>
+        </select>
+      </td>
+      <td><input v-model="field.value" class="form-control" type="text"></td>
+      <td><input v-model="field.vModel" class="form-control" type="text"></td>
+      <td><input v-model="field.label" class="form-control" type="text"></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td>
+        <span v-on:click="add" class="btn btn-primary">+</span>
+      </td>
+      <td>
+        <span v-on:click="form.update()" class="btn btn-primary">All</span>
+      </td>
+      <td>
+        <div class="btn-group">
+          <span v-on:click="method('GET')" v-bind:class="methodGet">GET</span>
+          <span v-on:click="method('POST')" v-bind:class="methodPost">POST</span>
+        </div>
+      </td>
+      <td>
+        <div class="btn-group">
+          <span v-on:click="method('PATCH')" class="btn btn-info">PATCH</span>
+          <span v-on:click="method('DELETE')" class="btn btn-info">DELETE</span>
+        </div>
+      </td>
+      <td>
+        <span v-on:click="setInstance()" class="btn btn-default">Set</span>
+      </td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</script>
+
+
+<script type="text/javascript">
+
+  Vue.component('ccc-form', {
+    template: '#tttForm',
+    props: ['form'],
+    computed: {
+      methodGet: function () {
+        if ('GET' == this.form.method) {
+          return 'btn btn-info active';
+        }
+        return 'btn btn-info';
+      },
+      methodPost: function () {
+        if ('POST' == this.form.method) {
+          return 'btn btn-info active';
+        }
+        return 'btn btn-info';
+      }
+    },
+    methods: {
+      add: function () {
+        let name = prompt('Please enter the Field name');
+        if (name) {
+          let field = this.form.field.create(name, 'text');
+          this.form.field.add(field);
+        }
+      },
+      remove: function (field) {
+        if (confirm('Are you sure?')) {
+          this.form.field.remove(field);
+        }
+      },
+      method: function (method) {
+        if (method == 'GET') {
+          this.form.method = method;
+          return;
+        }
+
+        this.form.method = 'POST';
+        let field = this.form.field.find('_method');
+        if (field) {
+          //
+        } else {
+          field = this.form.field.create('_method', 'hidden');
+          this.form.field.add(field);
+        }
+
+        if (method == 'PATCH') {
+          field.value = 'patch';
+        }
+        if (method == 'DELETE') {
+          field.value = 'delete';
+        }
+      },
+      setInstance: function () {
+        this.form.instance = prompt('Please enter the Instance name', this.form.instance);
+      }
+    }
+  });
+
+</script>
+
+<script type="text/javascript">
+
+  function choose(data) {
+    vvv.choose.data = data;
+    vvv.choose.visible = true;
+  }
+
+  const vm = {};
+
+  vm.close = function () {
+    this.choose.visible = false;
+  };
+
+  vm.show = function (tab) {
+    this.tab = tab;
+  };
+
+  vm.showEntry = function (entry) {
+    this.entry = entry;
+    this.show('table');
+  };
+
+  vm.setFileList = function (list) {
+    if (Array.isArray(list)) {
+      this.fileList = list;
+    }
+  };
+
+  vm.warn = function () {
+    if (this.project == null) {
+      return true;
+    }
+    return confirm('Warning!\nAll unsaved changes will be lost!\nContinue?');
+  };
+
+  vm.refresh = function () {
+    if (this.warn()) {
+      location.reload();
+    }
+  };
+
+  vm.create = function () {
+    if (this.warn()) {
+      // ok
+    } else {
+      return;
+    }
+
+    let name = prompt('Please enter the file name', 'entity.json');
+    if (name) {
+      name = name.replace(' ', '');
+      if (this.fileList.indexOf(name) > -1) {
+        alert(name + ' already exists!');
+        return;
+      }
+
+      this.file = name;
+      this.project = new Project(name);
+      this.show('project');
+    }
+  };
+
+  vm.load = function (name) {
+    if (this.warn()) {
+      // ok
+    } else {
+      return;
+    }
+
+    let me = this;
+    get('/entity/load?file=' + name, function (json) {
+      let ppp = JSON.parse(json.data);
+      me.file = name;
+      me.project = new Project(ppp.file);
+      me.project.load(ppp);
+      me.show('project');
+    });
+  };
+
+  vm.save = function () {
+    let data = {
+      file: this.file,
+      project: JSON.stringify(this.project)
+    };
+    save('/entity', data);
+  };
+
+  vm.saveMigration = function () {
+    let data = {
+      entry: JSON.stringify(this.entry)
+    };
+    save('/entity/table', data);
+  };
+
+  vm.saveModel = function () {
+    let data = {
+      entry: JSON.stringify(this.entry)
+    };
+    save('/entity/model', data);
+  };
+
+  vm.saveFactory = function () {
+    let data = {
+      entry: JSON.stringify(this.entry)
+    };
+    save('/entity/factory', data);
+  };
+
+  vm.saveController = function () {
+    let data = {
+      entry: JSON.stringify(this.entry)
+    };
+    save('/entity/controller', data);
+  };
+
+  vm.saveForm = function () {
+    let data = {
+      entry: JSON.stringify(this.entry)
+    };
+    save('/entity/form', data);
+  };
+
+
+  const vvv = new Vue({
+    el: '#entity',
+    data: {
+      tab: 'file',
+      choose: {
+        visible: false,
+        data: {
+          message: '',
+          display: null,
+          array: [],
+          callback: null
+        }
+      },
+      file: null,
+      fileList: [],
+      entry: null,
+      project: null
+    },
+    created: function () {
+      this.setFileList();
+    },
+    methods: vm
+  });
+
+  window.onload = function () {
+    window.save = function () {
+      alert('Not available in demo!');
+    }
+  }
+
+</script>
+
+</body>
+</html>
