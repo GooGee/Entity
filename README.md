@@ -1,6 +1,6 @@
 # Entity
 
-laravel scaffold generator
+laravel scaffold generator [Demo](https://googee.github.io/Entity/demo)
 
 # Feature
 

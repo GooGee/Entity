@@ -7,8 +7,21 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <title>Entity</title>
-
     <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <style>
+
+        .border
+        {
+            border: 1px solid darkgray;
+            border-radius: 3px;
+        }
+
+        .mr
+        {
+            margin-right: 6px;
+        }
+
+    </style>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -17,7 +30,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-    <link rel="stylesheet" href="/css/entity.css">
     <script type="text/javascript" src="/js/entity.js"></script>
 </head>
 <body>
