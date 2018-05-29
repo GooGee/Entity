@@ -13,8 +13,11 @@ class EntityServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        require(__DIR__ . '/routes.php');
-        //$this->loadRoutesFrom(__DIR__.'/routes.php');
+        \Blade::directive('echo', function ($expression) {
+            return "<?php echo {$expression}; ?>";
+        });
+
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
         $this->loadViewsFrom(__DIR__ . '/Scaffold/view', 'entity');
         $this->loadViewsFrom(__DIR__ . '/Generator/template', 'template');
 

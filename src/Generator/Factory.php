@@ -12,14 +12,14 @@ class Factory
     public $modelName;
     public $fieldList = [];
 
-    function __construct($entry)
+    function __construct($table)
     {
-        $factory = $entry->factory;
+        $factory = $table->factory;
         $this->fileName = $factory->name . '.php';
         $this->filePath = $factory->path;
 
-        $this->table = $entry->table;
-        $this->modelName = $entry->model->nameSpace . '\\' . $entry->model->name;
+        $this->table = $table;
+        $this->modelName = $table->model->nameSpace . '\\' . $table->model->name;
         $this->loadField($factory->field->list);
     }
 

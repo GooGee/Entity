@@ -18,18 +18,18 @@ class Model
     public $relationList;
     public $ruleList;
 
-    function __construct($entry)
+    function __construct($table)
     {
-        $model = $entry->model;
+        $model = $table->model;
         $this->name = $model->name;
         $this->fileName = $this->name . '.php';
         $this->filePath = $model->path;
         $this->nameSpace = $model->nameSpace;
-        $this->table = $entry->table->name;
+        $this->table = $table->name;
         $this->primaryKey = $model->primaryKey;
 
-        $this->setTimeStamps($entry->table);
-        $this->setDates($entry->table);
+        $this->setTimeStamps($table);
+        $this->setDates($table);
 
         $validation = $model->validation;
         $this->setFillable($validation);

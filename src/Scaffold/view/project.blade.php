@@ -74,82 +74,82 @@
             <!-- Property -->
             <ccc-property :object="project" :button="true"></ccc-property>
 
-            <!-- Entry -->
-            <ccc-entry :project="project" v-on:show="showEntry"></ccc-entry>
+            <!-- Table -->
+            <ccc-table :project="project" v-on:show="showTable"></ccc-table>
         </div>
 
-        <!-- Migration -->
-        <div v-if="entry && tab=='table'">
+        <!-- Table -->
+        <div v-if="table && tab=='table'">
             <h3>
-                <span v-text="entry.table.name"></span> Table
+                <span v-text="table.name"></span> Table
                 <span v-on:click="saveMigration" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="entry.table"></ccc-property>
+            <ccc-property :object="table"></ccc-property>
 
             <!-- Field -->
-            <ccc-field :table="entry.table"></ccc-field>
+            <ccc-field :table="table"></ccc-field>
 
             <!-- Index -->
-            <ccc-index :table="entry.table"></ccc-index>
+            <ccc-index :table="table"></ccc-index>
         </div>
 
         <!-- Seed -->
-        <div v-if="entry && tab=='seed'">
+        <div v-if="table && tab=='seed'">
             <h3>
-                <span v-text="entry.factory.name"></span>
+                <span v-text="table.factory.name"></span>
                 <span v-on:click="saveFactory" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="entry.factory"></ccc-property>
+            <ccc-property :object="table.factory"></ccc-property>
 
             <!-- Factory -->
-            <ccc-factory :factory="entry.factory"></ccc-factory>
+            <ccc-factory :factory="table.factory"></ccc-factory>
         </div>
 
         <!-- Model -->
-        <div v-if="entry && tab=='model'">
+        <div v-if="table && tab=='model'">
             <h3>
-                <span v-text="entry.model.name"></span> Model
+                <span v-text="table.model.name"></span> Model
                 <span v-on:click="saveModel" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="entry.model"></ccc-property>
+            <ccc-property :object="table.model"></ccc-property>
 
             <!-- Relation -->
-            <ccc-relation :model="entry.model" :project="project"></ccc-relation>
+            <ccc-relation :model="table.model" :project="project"></ccc-relation>
 
             <!-- Validation -->
-            <ccc-validation :model="entry.model"></ccc-validation>
+            <ccc-validation :model="table.model"></ccc-validation>
         </div>
 
         <!-- Controller -->
-        <div v-if="entry && tab=='controller'">
+        <div v-if="table && tab=='controller'">
             <h3>
-                <span v-text="entry.controller.name"></span>
+                <span v-text="table.controller.name"></span>
                 <span v-on:click="saveController" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Property -->
-            <ccc-property :object="entry.controller"></ccc-property>
+            <ccc-property :object="table.controller"></ccc-property>
 
             <!-- Middleware -->
-            <ccc-middleware :controller="entry.controller"></ccc-middleware>
+            <ccc-middleware :controller="table.controller"></ccc-middleware>
         </div>
 
 
         <!-- Form -->
-        <div v-if="entry && tab=='form'">
+        <div v-if="table && tab=='form'">
             <h3>
-                <span v-text="entry.name"></span> Form
+                <span v-text="table.name"></span> Form
                 <span v-on:click="saveForm" class="btn btn-success">Save</span>
             </h3>
 
             <!-- Form -->
-            <ccc-form :form="entry.form"></ccc-form>
+            <ccc-form :form="table.form"></ccc-form>
         </div>
 
     </div>
@@ -165,7 +165,7 @@
 @include('entity::choose')
 
 @include('entity::property')
-@include('entity::entry')
+@include('entity::table')
 @include('entity::field')
 @include('entity::index')
 @include('entity::factory')
@@ -191,8 +191,8 @@
         this.tab = tab;
     };
 
-    vm.showEntry = function (entry) {
-        this.entry = entry;
+    vm.showTable = function (table) {
+        this.table = table;
         this.show('table');
     };
 
@@ -263,35 +263,35 @@
 
     vm.saveMigration = function () {
         let data = {
-            entry: JSON.stringify(this.entry)
+            table: JSON.stringify(this.table)
         };
         save('/entity/table', data);
     };
 
     vm.saveModel = function () {
         let data = {
-            entry: JSON.stringify(this.entry)
+            table: JSON.stringify(this.table)
         };
         save('/entity/model', data);
     };
 
     vm.saveFactory = function () {
         let data = {
-            entry: JSON.stringify(this.entry)
+            table: JSON.stringify(this.table)
         };
         save('/entity/factory', data);
     };
 
     vm.saveController = function () {
         let data = {
-            entry: JSON.stringify(this.entry)
+            table: JSON.stringify(this.table)
         };
         save('/entity/controller', data);
     };
 
     vm.saveForm = function () {
         let data = {
-            entry: JSON.stringify(this.entry)
+            table: JSON.stringify(this.table)
         };
         save('/entity/form', data);
     };
@@ -312,7 +312,7 @@
             },
             file: null,
             fileList: [],
-            entry: null,
+            table: null,
             project: null
         },
         created: function () {

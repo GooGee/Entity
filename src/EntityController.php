@@ -43,9 +43,9 @@ class EntityController extends Controller
 
     function table(Request $request)
     {
-        $json = $request['entry'];
-        $entry = json_decode($json);
-        $mmm = new Generator\Migration($entry);
+        $json = $request['table'];
+        $table = json_decode($json);
+        $mmm = new Generator\Migration($table);
         $mmm->save();
 
         return response()->json($this->json);
@@ -53,9 +53,9 @@ class EntityController extends Controller
 
     function model(Request $request)
     {
-        $json = $request['entry'];
-        $entry = json_decode($json);
-        $model = new Generator\Model($entry);
+        $json = $request['table'];
+        $table = json_decode($json);
+        $model = new Generator\Model($table);
         $model->save();
 
         return response()->json($this->json);
@@ -63,9 +63,9 @@ class EntityController extends Controller
 
     function factory(Request $request)
     {
-        $json = $request['entry'];
-        $entry = json_decode($json);
-        $factory = new Generator\Factory($entry);
+        $json = $request['table'];
+        $table = json_decode($json);
+        $factory = new Generator\Factory($table);
         $factory->save();
 
         return response()->json($this->json);
@@ -73,9 +73,9 @@ class EntityController extends Controller
 
     function controller(Request $request)
     {
-        $json = $request['entry'];
-        $entry = json_decode($json);
-        $ccc = new Generator\Controller($entry);
+        $json = $request['table'];
+        $table = json_decode($json);
+        $ccc = new Generator\Controller($table);
         $ccc->save();
 
         return response()->json($this->json);
@@ -83,9 +83,9 @@ class EntityController extends Controller
 
     function form(Request $request)
     {
-        $json = $request['entry'];
-        $entry = json_decode($json);
-        $form = new Generator\Form($entry);
+        $json = $request['table'];
+        $table = json_decode($json);
+        $form = new Generator\Form($table);
         $form->save();
 
         return response()->json($this->json);

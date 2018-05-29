@@ -30,6 +30,7 @@
                     <option value="hidden">hidden</option>
                     <option value="textarea">textarea</option>
                     <option value="checkbox">checkbox</option>
+                    <option value="group">checkbox group</option>
                     <option value="radio">radio</option>
                     <option value="select">select</option>
                 </select>
@@ -124,7 +125,10 @@
                 }
             },
             setInstance: function () {
-                this.form.instance = prompt('Please enter the Instance name', this.form.instance);
+                let instance = prompt('Please enter the Instance name', this.form.instance);
+                if (typeof instance == 'string') {
+                    this.form.instance = instance;
+                }
             }
         }
     });

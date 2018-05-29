@@ -350,7 +350,7 @@ var FieldItem = /** @class */ (function (_super) {
     function FieldItem() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.handelNameChange = function (event) {
-            _this.field.list.every(function (field) {
+            _this.fieldList.list.every(function (field) {
                 if (field.name == event.old) {
                     field.name = event.name;
                     return false;
@@ -380,29 +380,6 @@ var Controller = /** @class */ (function (_super) {
     }
     return Controller;
 }(Entity.UniqueItem));
-var Entry = /** @class */ (function (_super) {
-    __extends(Entry, _super);
-    function Entry() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.name = upperCapital(snake2camel(_this.name));
-        _this.table = new Table(_this.name);
-        _this.factory = new Factory(_this.name, _this.table);
-        _this.model = new Model(_this.name, _this.table);
-        _this.controller = new Controller(_this.name);
-        _this.form = new Form(_this.name, _this.model);
-        return _this;
-    }
-    Entry.prototype.from = function (project) {
-        this.table.path = project.migrationPath;
-        this.model.nameSpace = project.modelNameSpace;
-        this.model.path = project.modelPath;
-        this.factory.path = project.factoryPath;
-        this.controller.nameSpace = project.controllerNameSpace;
-        this.controller.path = project.controllerPath;
-        this.form.path = project.formPath;
-    };
-    return Entry;
-}(Entity.UniqueItem));
 var Factory = /** @class */ (function (_super) {
     __extends(Factory, _super);
     function Factory(name, table) {
@@ -414,6 +391,13 @@ var Factory = /** @class */ (function (_super) {
         _this.table.field.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
+    Object.defineProperty(Factory.prototype, "fieldList", {
+        get: function () {
+            return this.field;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Factory.prototype.update = function () {
         var _this = this;
         this.table.field.list.forEach(function (field) {
@@ -450,6 +434,13 @@ var Form = /** @class */ (function (_super) {
         _this.model.validation.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
+    Object.defineProperty(Form.prototype, "fieldList", {
+        get: function () {
+            return this.field;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Form.prototype.update = function () {
         var _this = this;
         this.model.validation.list.forEach(function (field) {
@@ -525,7 +516,7 @@ var Model = /** @class */ (function (_super) {
         _this.table.field.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
-    Object.defineProperty(Model.prototype, "field", {
+    Object.defineProperty(Model.prototype, "fieldList", {
         get: function () {
             return this.validation;
         },
@@ -549,7 +540,7 @@ var Project = /** @class */ (function (_super) {
     __extends(Project, _super);
     function Project() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.version = 2.0;
+        _this.version = 3.0;
         _this.nameSpace = 'App';
         _this.migrationPath = 'database\\migrations';
         _this.modelNameSpace = 'App\\Model';
@@ -558,7 +549,7 @@ var Project = /** @class */ (function (_super) {
         _this.controllerNameSpace = 'App\\Http\\Controllers';
         _this.controllerPath = 'app\\Http\\Controllers';
         _this.formPath = 'resources\\views';
-        _this.entry = new Entity.UniqueList(Entry);
+        _this.table = new Entity.UniqueList(Table);
         return _this;
     }
     Project.prototype.change = function (key, value) {
@@ -567,21 +558,20 @@ var Project = /** @class */ (function (_super) {
             this.changeNameSpace(value);
         }
         this[key] = value;
-        this.entry.list.forEach(function (entry) { return entry.from(_this); });
+        this.table.list.forEach(function (table) { return table.from(_this); });
     };
     Project.prototype.changeNameSpace = function (nameSpace) {
         var ns = this.nameSpace;
-        for (var key in this) {
-            if (this.hasOwnProperty(key)) {
-                var item = this[key];
-                if ("string" == typeof item) {
-                    if (this[key] == ns) {
-                        this[key] = nameSpace;
-                        continue;
-                    }
-                    var re = new RegExp('^' + ns + '\\\\');
-                    this[key] = item.replace(re, nameSpace + '\\');
+        for (var _i = 0, _a = Object.keys(this); _i < _a.length; _i++) {
+            var key = _a[_i];
+            var item = this[key];
+            if ("string" == typeof item) {
+                if (this[key] == ns) {
+                    this[key] = nameSpace;
+                    continue;
                 }
+                var re = new RegExp('^' + ns + '\\\\');
+                this[key] = item.replace(re, nameSpace + '\\');
             }
         }
     };
@@ -609,6 +599,10 @@ var Table = /** @class */ (function (_super) {
         _this.name = camel2snake(lowerCapital(_this.name));
         _this.field = new Entity.UniqueList(Field);
         _this.index = new Entity.UniqueList(Index);
+        _this.factory = new Factory(_this.name, _this);
+        _this.model = new Model(_this.name, _this);
+        _this.controller = new Controller(_this.name);
+        _this.form = new Form(_this.name, _this.model);
         _this.handelNameChange = function (event) {
             _this.index.list.forEach(function (index) {
                 index.field.list.every(function (field) {
@@ -623,6 +617,15 @@ var Table = /** @class */ (function (_super) {
         _this.field.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
+    Table.prototype.from = function (project) {
+        this.path = project.migrationPath;
+        this.model.nameSpace = project.modelNameSpace;
+        this.model.path = project.modelPath;
+        this.factory.path = project.factoryPath;
+        this.controller.nameSpace = project.controllerNameSpace;
+        this.controller.path = project.controllerPath;
+        this.form.path = project.formPath;
+    };
     return Table;
 }(Entity.UniqueItem));
 var Validation = /** @class */ (function (_super) {

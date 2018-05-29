@@ -13,11 +13,10 @@ class Migration
     public $fieldList;
     public $indexList;
 
-    function __construct($entry)
+    function __construct($table)
     {
-        $table = $entry->table;
         $this->tableName = $table->name;
-        $this->className = "Create{$entry->model->name}Table";
+        $this->className = "Create{$table->model->name}Table";
         $this->fileName = date('Y_m_d') . '_000000_create_' . $table->name . '_table.php';
         $this->filePath = $table->path;
 

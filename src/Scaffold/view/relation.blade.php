@@ -76,10 +76,10 @@
                 let data = {
                     message: 'Select the Model',
                     display: 'name',
-                    array: this.project.entry.list,
-                    callback: function (yes, entry) {
+                    array: this.project.table.list,
+                    callback: function (yes, table) {
                         if (yes) {
-                            let rrr = relation.create(entry.name, 'belongsTo');
+                            let rrr = relation.create(table.name, 'belongsTo');
                             try {
                                 relation.add(rrr);
                             } catch (exc) {
@@ -99,10 +99,10 @@
                 let data = {
                     message: 'Select the Model',
                     display: 'name',
-                    array: this.project.entry.list,
-                    callback: function (yes, entry) {
+                    array: this.project.table.list,
+                    callback: function (yes, table) {
                         if (yes) {
-                            relation.model = entry.model.name;
+                            relation.model = table.model.name;
                         }
                     }
                 };
@@ -112,10 +112,10 @@
                 let data = {
                     message: 'Select the Pivot Table',
                     display: 'name',
-                    array: this.project.entry.list,
-                    callback: function (yes, entry) {
+                    array: this.project.table.list,
+                    callback: function (yes, table) {
                         if (yes) {
-                            relation.pivot = entry.table.name;
+                            relation.pivot = table.name;
                         }
                     }
                 };
@@ -167,9 +167,9 @@
             },
             getPivot: function (name) {
                 let table = null;
-                this.project.entry.list.forEach(entry => {
-                    if (entry.table.name == name) {
-                        table = entry.table;
+                this.project.table.list.forEach(ttt => {
+                    if (ttt.name == name) {
+                        table = ttt;
                         return false;
                     }
                     return true;

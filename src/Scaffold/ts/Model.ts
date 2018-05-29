@@ -17,7 +17,7 @@ class Model extends FieldItem {
         this.table.field.onAfterNameChange(this.handelNameChange)
     }
 
-    get field() {
+    get fieldList() {
         return this.validation
     }
 

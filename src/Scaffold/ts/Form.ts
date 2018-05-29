@@ -15,6 +15,10 @@ class Form extends FieldItem {
         this.model.validation.onAfterNameChange(this.handelNameChange)
     }
 
+    get fieldList() {
+        return this.field
+    }
+
     update() {
         this.model.validation.list.forEach(field => {
             if (this.field.find(field.name)) {

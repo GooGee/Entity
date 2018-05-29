@@ -13,14 +13,14 @@ class Controller
     public $blade;
     public $middlewareList;
 
-    function __construct($entry)
+    function __construct($table)
     {
-        $controller = $entry->controller;
+        $controller = $table->controller;
         $this->name = $controller->name;
         $this->fileName = $this->name . '.php';
         $this->filePath = $controller->path;
         $this->nameSpace = $controller->nameSpace;
-        $this->model = $entry->model;
+        $this->model = $table->model;
         $this->blade = $controller->blade;
         $this->getMiddleware($controller->middleware->list);
     }

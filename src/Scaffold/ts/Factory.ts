@@ -12,6 +12,10 @@ class Factory extends FieldItem {
         this.table.field.onAfterNameChange(this.handelNameChange)
     }
 
+    get fieldList() {
+        return this.field
+    }
+
     update() {
         this.table.field.list.forEach(field => {
             if (this.field.find(field.name)) {

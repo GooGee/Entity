@@ -11,7 +11,6 @@
             <th>numeric</th>
             <th>alpha</th>
             <th>alpha_num</th>
-            <th>string</th>
             <th>email</th>
             <th>required</th>
             <th class="col-xs-1">Min</th>
@@ -31,7 +30,6 @@
             <td><input v-model="field.rule.numeric" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.alpha" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.alpha_num" class="form-control" type="checkbox"></td>
-            <td><input v-model="field.rule.string" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.email" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.required" class="form-control" type="checkbox"></td>
             <td><input v-model="field.rule.min" class="form-control" type="text"></td>
@@ -43,7 +41,6 @@
         <tr>
             <td></td>
             <td><span v-on:click="model.update()" class="btn btn-primary">All</span></td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
