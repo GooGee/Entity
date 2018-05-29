@@ -12,7 +12,7 @@ class Model extends FieldItem {
     constructor(name: string, table: Table) {
         super(name)
         this.table = table
-        this.name = upperCapital(name)
+        this.name = snake2camel(upperCapital(name))
         this.instance = lowerCapital(name)
         this.table.field.onAfterNameChange(this.handelNameChange)
     }

@@ -7,7 +7,7 @@ class Factory extends FieldItem {
 
     constructor(name: string, table: Table) {
         super(name)
-        this.name = upperCapital(name) + 'Factory'
+        this.name = snake2camel(upperCapital(name)) + 'Factory'
         this.table = table
         this.table.field.onAfterNameChange(this.handelNameChange)
     }

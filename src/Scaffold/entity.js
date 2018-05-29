@@ -373,7 +373,7 @@ var Controller = /** @class */ (function (_super) {
     __extends(Controller, _super);
     function Controller() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.name = upperCapital(_this.name) + 'Controller';
+        _this.name = snake2camel(upperCapital(_this.name)) + 'Controller';
         _this.blade = lowerCapital(_this.name);
         _this.middleware = new Entity.UniqueList(Middleware);
         return _this;
@@ -386,7 +386,7 @@ var Factory = /** @class */ (function (_super) {
         var _this = _super.call(this, name) || this;
         _this.path = '';
         _this.field = new Entity.UniqueList(Field);
-        _this.name = upperCapital(name) + 'Factory';
+        _this.name = snake2camel(upperCapital(name)) + 'Factory';
         _this.table = table;
         _this.table.field.onAfterNameChange(_this.handelNameChange);
         return _this;
@@ -511,7 +511,7 @@ var Model = /** @class */ (function (_super) {
         _this.relation = new Entity.UniqueList(Relation);
         _this.validation = new Entity.UniqueList(Validation);
         _this.table = table;
-        _this.name = upperCapital(name);
+        _this.name = snake2camel(upperCapital(name));
         _this.instance = lowerCapital(name);
         _this.table.field.onAfterNameChange(_this.handelNameChange);
         return _this;
