@@ -373,8 +373,8 @@ var Controller = /** @class */ (function (_super) {
     __extends(Controller, _super);
     function Controller() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.name = snake2camel(upperCapital(_this.name)) + 'Controller';
         _this.blade = lowerCapital(_this.name);
+        _this.name = snake2camel(upperCapital(_this.name)) + 'Controller';
         _this.middleware = new Entity.UniqueList(Middleware);
         return _this;
     }
