@@ -124,7 +124,7 @@
             selectForeign: function (relation) {
                 let list = this.model.table.field.list;
                 if (relation.pivot) {
-                    let pivot = this.getPivot(relation.pivot);
+                    let pivot = this.project.table.find(relation.pivot);
                     if (!pivot) {
                         alert('Unknown pivot table!');
                         return;
@@ -148,7 +148,7 @@
                     alert('Please select a Pivot table first!');
                     return;
                 }
-                let pivot = this.getPivot(relation.pivot);
+                let pivot = this.project.table.find(relation.pivot);
                 if (!pivot) {
                     alert('Unknown pivot table!');
                     return;
@@ -164,17 +164,6 @@
                     }
                 };
                 choose(data);
-            },
-            getPivot: function (name) {
-                let table = null;
-                this.project.table.list.forEach(ttt => {
-                    if (ttt.name == name) {
-                        table = ttt;
-                        return false;
-                    }
-                    return true;
-                });
-                return table;
             }
         }
     });

@@ -109,82 +109,82 @@
       <!-- Property -->
       <ccc-property :object="project" :button="true"></ccc-property>
 
-      <!-- Entry -->
-      <ccc-entry :project="project" v-on:show="showEntry"></ccc-entry>
+      <!-- Table -->
+      <ccc-table :project="project" v-on:show="showTable"></ccc-table>
     </div>
 
-    <!-- Migration -->
-    <div v-if="entry && tab=='table'">
+    <!-- Table -->
+    <div v-if="table && tab=='table'">
       <h3>
-        <span v-text="entry.table.name"></span> Table
+        <span v-text="table.name"></span> Table
         <span v-on:click="saveMigration" class="btn btn-success">Save</span>
       </h3>
 
       <!-- Property -->
-      <ccc-property :object="entry.table"></ccc-property>
+      <ccc-property :object="table"></ccc-property>
 
       <!-- Field -->
-      <ccc-field :table="entry.table"></ccc-field>
+      <ccc-field :table="table"></ccc-field>
 
       <!-- Index -->
-      <ccc-index :table="entry.table"></ccc-index>
+      <ccc-index :table="table"></ccc-index>
     </div>
 
     <!-- Seed -->
-    <div v-if="entry && tab=='seed'">
+    <div v-if="table && tab=='seed'">
       <h3>
-        <span v-text="entry.factory.name"></span>
+        <span v-text="table.factory.name"></span>
         <span v-on:click="saveFactory" class="btn btn-success">Save</span>
       </h3>
 
       <!-- Property -->
-      <ccc-property :object="entry.factory"></ccc-property>
+      <ccc-property :object="table.factory"></ccc-property>
 
       <!-- Factory -->
-      <ccc-factory :factory="entry.factory"></ccc-factory>
+      <ccc-factory :factory="table.factory"></ccc-factory>
     </div>
 
     <!-- Model -->
-    <div v-if="entry && tab=='model'">
+    <div v-if="table && tab=='model'">
       <h3>
-        <span v-text="entry.model.name"></span> Model
+        <span v-text="table.model.name"></span> Model
         <span v-on:click="saveModel" class="btn btn-success">Save</span>
       </h3>
 
       <!-- Property -->
-      <ccc-property :object="entry.model"></ccc-property>
+      <ccc-property :object="table.model"></ccc-property>
 
       <!-- Relation -->
-      <ccc-relation :model="entry.model" :project="project"></ccc-relation>
+      <ccc-relation :model="table.model" :project="project"></ccc-relation>
 
       <!-- Validation -->
-      <ccc-validation :model="entry.model"></ccc-validation>
+      <ccc-validation :model="table.model"></ccc-validation>
     </div>
 
     <!-- Controller -->
-    <div v-if="entry && tab=='controller'">
+    <div v-if="table && tab=='controller'">
       <h3>
-        <span v-text="entry.controller.name"></span>
+        <span v-text="table.controller.name"></span>
         <span v-on:click="saveController" class="btn btn-success">Save</span>
       </h3>
 
       <!-- Property -->
-      <ccc-property :object="entry.controller"></ccc-property>
+      <ccc-property :object="table.controller"></ccc-property>
 
       <!-- Middleware -->
-      <ccc-middleware :controller="entry.controller"></ccc-middleware>
+      <ccc-middleware :controller="table.controller"></ccc-middleware>
     </div>
 
 
     <!-- Form -->
-    <div v-if="entry && tab=='form'">
+    <div v-if="table && tab=='form'">
       <h3>
-        <span v-text="entry.name"></span> Form
+        <span v-text="table.name"></span> Form
         <span v-on:click="saveForm" class="btn btn-success">Save</span>
       </h3>
 
       <!-- Form -->
-      <ccc-form :form="entry.form"></ccc-form>
+      <ccc-form :form="table.form"></ccc-form>
     </div>
 
   </div>
@@ -331,9 +331,9 @@
   });
 
 </script>
-<script type="text/x-template" id="tttEntry">
+<script type="text/x-template" id="tttTable">
   <table class="table">
-    <caption><h3>Entry</h3></caption>
+    <caption><h3>Table</h3></caption>
     <thead>
     <tr>
       <th width="200px"></th>
@@ -344,19 +344,19 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="entry in project.entry.list">
+    <tr v-for="table in project.table.list">
       <td>
         <div class="btn-group">
-          <span v-on:click="project.entry.moveUp(entry)" class="btn btn-info">↑</span>
-          <span v-on:click="project.entry.moveDown(entry)" class="btn btn-info">↓</span>
+          <span v-on:click="project.table.moveUp(table)" class="btn btn-info">↑</span>
+          <span v-on:click="project.table.moveDown(table)" class="btn btn-info">↓</span>
         </div>
-        <span v-on:click="show(entry)" class="btn btn-primary">Show</span>
-        <span v-on:click="remove(entry)" class="btn btn-danger">X</span>
+        <span v-on:click="show(table)" class="btn btn-primary">Show</span>
+        <span v-on:click="remove(table)" class="btn btn-danger">X</span>
       </td>
-      <td><input v-model="entry.table.name" class="form-control" type="text"></td>
-      <td><input v-model="entry.factory.name" class="form-control" type="text"></td>
-      <td><input v-model="entry.model.name" class="form-control" type="text"></td>
-      <td><input v-model="entry.controller.name" class="form-control" type="text"></td>
+      <td><input v-model="table.name" class="form-control" type="text"></td>
+      <td><input v-model="table.factory.name" class="form-control" type="text"></td>
+      <td><input v-model="table.model.name" class="form-control" type="text"></td>
+      <td><input v-model="table.controller.name" class="form-control" type="text"></td>
     </tr>
     </tbody>
     <tfoot>
@@ -376,28 +376,28 @@
 
 <script type="text/javascript">
 
-  Vue.component('ccc-entry', {
-    template: '#tttEntry',
+  Vue.component('ccc-table', {
+    template: '#tttTable',
     props: ['project'],
     methods: {
       add: function () {
-        let name = prompt('Please enter the Entity name');
+        let name = prompt('Please enter the table name');
         if (name) {
-          let entry = this.project.entry.create(name);
+          let table = this.project.table.create(name);
           try {
-            entry.from(this.project);
-            this.project.entry.add(entry);
+            table.from(this.project);
+            this.project.table.add(table);
           } catch (exc) {
             alert(exc);
           }
         }
       },
-      show: function (entry) {
-        this.$emit('show', entry);
+      show: function (table) {
+        this.$emit('show', table);
       },
-      remove: function (entry) {
+      remove: function (table) {
         if (confirm('Are you sure?')) {
-          this.project.entry.remove(entry);
+          this.project.table.remove(table);
         }
       }
     }
@@ -968,10 +968,10 @@
         let data = {
           message: 'Select the Model',
           display: 'name',
-          array: this.project.entry.list,
-          callback: function (yes, entry) {
+          array: this.project.table.list,
+          callback: function (yes, table) {
             if (yes) {
-              let rrr = relation.create(entry.name, 'belongsTo');
+              let rrr = relation.create(table.name, 'belongsTo');
               try {
                 relation.add(rrr);
               } catch (exc) {
@@ -991,10 +991,10 @@
         let data = {
           message: 'Select the Model',
           display: 'name',
-          array: this.project.entry.list,
-          callback: function (yes, entry) {
+          array: this.project.table.list,
+          callback: function (yes, table) {
             if (yes) {
-              relation.model = entry.model.name;
+              relation.model = table.model.name;
             }
           }
         };
@@ -1004,10 +1004,10 @@
         let data = {
           message: 'Select the Pivot Table',
           display: 'name',
-          array: this.project.entry.list,
-          callback: function (yes, entry) {
+          array: this.project.table.list,
+          callback: function (yes, table) {
             if (yes) {
-              relation.pivot = entry.table.name;
+              relation.pivot = table.name;
             }
           }
         };
@@ -1016,7 +1016,7 @@
       selectForeign: function (relation) {
         let list = this.model.table.field.list;
         if (relation.pivot) {
-          let pivot = this.getPivot(relation.pivot);
+          let pivot = this.project.table.find(relation.pivot);
           if (!pivot) {
             alert('Unknown pivot table!');
             return;
@@ -1040,7 +1040,7 @@
           alert('Please select a Pivot table first!');
           return;
         }
-        let pivot = this.getPivot(relation.pivot);
+        let pivot = this.project.table.find(relation.pivot);
         if (!pivot) {
           alert('Unknown pivot table!');
           return;
@@ -1056,17 +1056,6 @@
           }
         };
         choose(data);
-      },
-      getPivot: function (name) {
-        let table = null;
-        this.project.entry.list.forEach(entry => {
-          if (entry.table.name == name) {
-            table = entry.table;
-            return false;
-          }
-          return true;
-        });
-        return table;
       }
     }
   });
@@ -1085,7 +1074,6 @@
       <th>numeric</th>
       <th>alpha</th>
       <th>alpha_num</th>
-      <th>string</th>
       <th>email</th>
       <th>required</th>
       <th class="col-xs-1">Min</th>
@@ -1105,7 +1093,6 @@
       <td><input v-model="field.rule.numeric" class="form-control" type="checkbox"></td>
       <td><input v-model="field.rule.alpha" class="form-control" type="checkbox"></td>
       <td><input v-model="field.rule.alpha_num" class="form-control" type="checkbox"></td>
-      <td><input v-model="field.rule.string" class="form-control" type="checkbox"></td>
       <td><input v-model="field.rule.email" class="form-control" type="checkbox"></td>
       <td><input v-model="field.rule.required" class="form-control" type="checkbox"></td>
       <td><input v-model="field.rule.min" class="form-control" type="text"></td>
@@ -1117,7 +1104,6 @@
     <tr>
       <td></td>
       <td><span v-on:click="model.update()" class="btn btn-primary">All</span></td>
-      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -1261,6 +1247,7 @@
           <option value="hidden">hidden</option>
           <option value="textarea">textarea</option>
           <option value="checkbox">checkbox</option>
+          <option value="group">checkbox group</option>
           <option value="radio">radio</option>
           <option value="select">select</option>
         </select>
@@ -1355,7 +1342,10 @@
         }
       },
       setInstance: function () {
-        this.form.instance = prompt('Please enter the Instance name', this.form.instance);
+        let instance = prompt('Please enter the Instance name', this.form.instance);
+        if (typeof instance == 'string') {
+          this.form.instance = instance;
+        }
       }
     }
   });
@@ -1379,8 +1369,8 @@
     this.tab = tab;
   };
 
-  vm.showEntry = function (entry) {
-    this.entry = entry;
+  vm.showTable = function (table) {
+    this.table = table;
     this.show('table');
   };
 
@@ -1451,35 +1441,35 @@
 
   vm.saveMigration = function () {
     let data = {
-      entry: JSON.stringify(this.entry)
+      table: JSON.stringify(this.table)
     };
     save('/entity/table', data);
   };
 
   vm.saveModel = function () {
     let data = {
-      entry: JSON.stringify(this.entry)
+      table: JSON.stringify(this.table)
     };
     save('/entity/model', data);
   };
 
   vm.saveFactory = function () {
     let data = {
-      entry: JSON.stringify(this.entry)
+      table: JSON.stringify(this.table)
     };
     save('/entity/factory', data);
   };
 
   vm.saveController = function () {
     let data = {
-      entry: JSON.stringify(this.entry)
+      table: JSON.stringify(this.table)
     };
     save('/entity/controller', data);
   };
 
   vm.saveForm = function () {
     let data = {
-      entry: JSON.stringify(this.entry)
+      table: JSON.stringify(this.table)
     };
     save('/entity/form', data);
   };
@@ -1500,7 +1490,7 @@
       },
       file: null,
       fileList: [],
-      entry: null,
+      table: null,
       project: null
     },
     created: function () {
