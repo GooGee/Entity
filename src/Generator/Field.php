@@ -12,10 +12,13 @@ class Field
         $name = $field->name;
         $type = $field->type;
 
-        if (empty($field->length)) {
-            $length = '';
-        } else {
-            $length = ", {$field->length}";
+        $length = '';
+        if (in_array($type, ['char', 'string', 'float', 'double', 'decimal'])) {
+            if (empty($field->length)) {
+                //
+            } else {
+                $length = ", {$field->length}";
+            }
         }
 
         if (empty($field->nullable)) {

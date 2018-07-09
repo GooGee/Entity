@@ -1,7 +1,6 @@
 
 class Table extends Entity.UniqueItem {
     path: string = ''
-    name = camel2snake(lowerCapital(this.name))
     field = new Entity.UniqueList<Field>(Field)
     index = new Entity.UniqueList<Index>(Index)
     factory = new Factory(this.name, this)
@@ -11,6 +10,7 @@ class Table extends Entity.UniqueItem {
 
     constructor(name: string) {
         super(name)
+        this.name = camel2snake(lowerCapital(this.name))
         this.field.onAfterNameChange(this.handelNameChange)
     }
 
