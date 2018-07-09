@@ -371,11 +371,11 @@ var FieldItem = /** @class */ (function (_super) {
 var AAA = '';
 var Controller = /** @class */ (function (_super) {
     __extends(Controller, _super);
-    function Controller() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function Controller(name) {
+        var _this = _super.call(this, name) || this;
+        _this.middleware = new Entity.UniqueList(Middleware);
         _this.blade = lowerCapital(_this.name);
         _this.name = snake2camel(upperCapital(_this.name)) + 'Controller';
-        _this.middleware = new Entity.UniqueList(Middleware);
         return _this;
     }
     return Controller;
@@ -596,7 +596,6 @@ var Table = /** @class */ (function (_super) {
     function Table(name) {
         var _this = _super.call(this, name) || this;
         _this.path = '';
-        _this.name = camel2snake(lowerCapital(_this.name));
         _this.field = new Entity.UniqueList(Field);
         _this.index = new Entity.UniqueList(Index);
         _this.factory = new Factory(_this.name, _this);
@@ -614,6 +613,7 @@ var Table = /** @class */ (function (_super) {
                 });
             });
         };
+        _this.name = camel2snake(lowerCapital(_this.name));
         _this.field.onAfterNameChange(_this.handelNameChange);
         return _this;
     }
