@@ -971,7 +971,7 @@
           array: this.project.table.list,
           callback: function (yes, table) {
             if (yes) {
-              let rrr = relation.create(table.name, 'belongsTo');
+              let rrr = relation.create(table.model.name, 'belongsTo');
               try {
                 relation.add(rrr);
               } catch (exc) {
@@ -1422,11 +1422,10 @@
     }
 
     let me = this;
-    get('/entity/load?file=' + name, function (json) {
-      let ppp = JSON.parse(json.data);
+    get('/Entity/demo/' + name, function (json) {
       me.file = name;
-      me.project = new Project(ppp.file);
-      me.project.load(ppp);
+      me.project = new Project(json.file);
+      me.project.load(json);
       me.show('project');
     });
   };
@@ -1489,7 +1488,7 @@
         }
       },
       file: null,
-      fileList: [],
+      fileList: ['entity.json'],
       table: null,
       project: null
     },

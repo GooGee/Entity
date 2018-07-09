@@ -79,7 +79,7 @@
                     array: this.project.table.list,
                     callback: function (yes, table) {
                         if (yes) {
-                            let rrr = relation.create(table.name, 'belongsTo');
+                            let rrr = relation.create(table.model.name, 'belongsTo');
                             try {
                                 relation.add(rrr);
                             } catch (exc) {
