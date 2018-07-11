@@ -62,6 +62,9 @@ class Factory
         $parameters = '';
         if (isset($field->parameters)) {
             $parameters = $field->parameters;
+            if (preg_match('/[A-Za-z]/', $parameters)) {
+                $parameters = "'$parameters'";
+            }
         }
         $this->fieldList[] = "'$field->name' => \$faker{$unique}->$field->method($parameters),";
     }

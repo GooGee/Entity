@@ -11,7 +11,7 @@
 
 @else
     <div class="form-group">
-        <label class="control-label col-xs-3 text-right">@echo($field->label)</label>
+        <label class="control-label col-xs-2">@echo($field->label)</label>
         <div class="col-xs-9">
         @if($field->type == 'text' or $field->type == 'password')
             @if(empty($field->vModel))
@@ -24,7 +24,7 @@
             <textarea v-model="@echo($field->vModel)" name="@echo($field->name)" class="form-control"></textarea>
 
         @elseif($field->type == 'checkbox')
-            <label>
+            <label class="checkbox-inline">
                 <input v-model="@echo($field->vModel)" name="@echo($field->name)" value="@echo($field->value)" type="checkbox">
                 <span>@echo($field->label)</span>
             </label>

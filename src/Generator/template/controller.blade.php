@@ -35,6 +35,7 @@ class @echo($controller->name) extends Controller
     {
         $@echo($model->instance) = new @echo($model->name);
         $@echo($model->instance)->_token = csrf_token();
+        $@echo($model->instance)->_url = '/@echo($model->instance)';
         return view('@echo($controller->blade).form', compact('@echo($model->instance)'));
     }
 
@@ -76,6 +77,7 @@ class @echo($controller->name) extends Controller
         $@echo($model->instance) = @echo($model->name)::findOrFail($id);
         $@echo($model->instance)->_token = csrf_token();
         $@echo($model->instance)->_method = 'PATCH';
+        $@echo($model->instance)->_url = '/@echo($model->instance)/' . $id;
         return view('@echo($controller->blade).form', compact('@echo($model->instance)'));
     }
 
