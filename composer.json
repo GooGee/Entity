@@ -14,5 +14,12 @@
         "psr-4": {
             "GooGee\\Entity\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "GooGee\\Entity\\EntityServiceProvider"
+            ]
+        }
     }
 }
