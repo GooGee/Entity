@@ -25,10 +25,10 @@
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-    <script type="text/javascript" src="/js/es6-promise.min.js"></script>
+    <script type="text/javascript" src="/js/es6-promise.auto.min.js"></script>
     <script type="text/javascript" src="/js/vue.js"></script>
     <script type="text/javascript" src="/js/axios.min.js"></script>
-    <script type="text/javascript" src="/js/entity.js"></script>
+    <script type="text/javascript" src="/vendor/entity/js/entity.js"></script>
 </head>
 <body>
 <!--[if lt IE 11]>
