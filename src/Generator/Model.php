@@ -106,11 +106,7 @@ class Model
     {
         $this->ruleList = [];
         foreach ($validation->list as $field) {
-            $rule = new Rule($field);
-            if ($rule->empty) {
-                continue;
-            }
-            $this->ruleList[] = $rule;
+            $this->ruleList[] = new Rule($field);
         }
     }
 

@@ -21,11 +21,6 @@ class Rule
             }
         }
 
-        if (empty($array)) {
-            $this->empty = true;
-            return;
-        }
-
         $name = $field->name;
         $string = $this->array2string($array);
         $this->text = "'{$name}' => [{$string}],";
