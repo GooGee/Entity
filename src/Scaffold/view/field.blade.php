@@ -29,32 +29,7 @@
             </td>
             <td>
                 <select v-model="field.type" class="form-control">
-                    <option value="bigIncrements">bigIncrements</option>
-                    <option value="bigInteger">bigInteger</option>
-                    <option value="binary">binary</option>
-                    <option value="boolean">boolean</option>
-                    <option value="char">char</option>
-                    <option value="date">date</option>
-                    <option value="dateTime">dateTime</option>
-                    <option value="decimal">decimal</option>
-                    <option value="double">double</option>
-                    <option value="enum">enum</option>
-                    <option value="float">float</option>
-                    <option value="increments">increments</option>
-                    <option value="integer">integer</option>
-                    <option value="json">json</option>
-                    <option value="jsonb">jsonb</option>
-                    <option value="longText">longText</option>
-                    <option value="mediumInteger">mediumInteger</option>
-                    <option value="mediumText">mediumText</option>
-                    <option value="morphs">morphs</option>
-                    <option value="smallInteger">smallInteger</option>
-                    <option value="string">string</option>
-                    <option value="text">text</option>
-                    <option value="time">time</option>
-                    <option value="tinyInteger">tinyInteger</option>
-                    <option value="timestamp">timestamp</option>
-                    <option value="uuid">uuid</option>
+                    <option v-for="(ttt, key) in typeList" :value="key" v-text="key"></option>
                 </select>
             </td>
             <td><input v-model="field.length" class="form-control" type="text"></td>
@@ -66,11 +41,14 @@
         </tbody>
         <tfoot>
         <tr>
-            <td>
+            <td colspan="2" class="form-inline">
+                <select v-model="type" class="form-control">
+                    <option v-for="(ttt, key) in typeList" :value="key" v-text="key"></option>
+                </select>
                 <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td colspan="2" class="form-inline">
-                <select v-model="selectedField" class="form-control mr pull-left" style="width: auto;">
+                <select v-model="selectedField" class="form-control">
                     <option v-for="field in fieldList" v-bind:value="field" v-text="field.name"></option>
                 </select>
                 <span v-on:click="addField" class="btn btn-info">+</span>
@@ -93,6 +71,41 @@
         props: ['table'],
         data: function () {
             return {
+                type: 'string',
+                typeList: {
+                    binary: null,
+                    boolean: false,
+                    char: '""',
+                    date: '',
+                    dateTime: '',
+                    dateTimeTz: '',
+                    decimal: 0,
+                    double: 0,
+                    float: 0,
+                    'enum': '',
+                    geometry: '',
+                    increments: '',
+                    integer: 0,
+                    tinyInteger: 0,
+                    smallInteger: 0,
+                    mediumInteger: 0,
+                    bigInteger: 0,
+                    ipAddress: '',
+                    json: '',
+                    jsonb: '',
+                    macAddress: '',
+                    morphs: '',
+                    string: '""',
+                    text: '""',
+                    mediumText: '""',
+                    longText: '""',
+                    time: '',
+                    timeTz: '',
+                    timestamp: null,
+                    timestampTz: null,
+                    uuid: '',
+                    year: ''
+                },
                 fieldList: [
                     new Field('id', 'increments'),
                     new Field('user_id', 'integer'),
@@ -125,6 +138,9 @@
                     let field = this.table.field.create(name, 'integer');
                     try {
                         this.table.field.add(field);
+                        if (this.typeList[this.type] !== '') {
+                            field.value = this.typeList[this.type];
+                        }
                     } catch (exc) {
                         alert(exc);
                     }
@@ -146,11 +162,8 @@
                 }
             },
             addField: function () {
-                let selected = this.selectedField;
-                let field = this.table.field.create(selected.name, selected.type);
                 try {
-                    field.load(selected);
-                    this.table.field.add(field);
+                    this.table.field.add(this.selectedField);
                 } catch (exc) {
                     alert(exc);
                 }
