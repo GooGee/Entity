@@ -41,10 +41,7 @@
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="2" class="form-inline">
-                <select v-model="type" class="form-control">
-                    <option v-for="(ttt, key) in typeList" :value="key" v-text="key"></option>
-                </select>
+            <td class="form-inline">
                 <span v-on:click="add" class="btn btn-primary">+</span>
             </td>
             <td colspan="2" class="form-inline">
@@ -53,6 +50,7 @@
                 </select>
                 <span v-on:click="addField" class="btn btn-info">+</span>
             </td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -71,7 +69,6 @@
         props: ['table'],
         data: function () {
             return {
-                type: 'string',
                 typeList: {
                     binary: null,
                     boolean: false,
@@ -135,12 +132,9 @@
             add: function () {
                 let name = prompt('Please enter the Field name');
                 if (name) {
-                    let field = this.table.field.create(name, 'integer');
                     try {
+                        let field = this.table.field.create(name, 'integer');
                         this.table.field.add(field);
-                        if (this.typeList[this.type] !== '') {
-                            field.value = this.typeList[this.type];
-                        }
                     } catch (exc) {
                         alert(exc);
                     }
