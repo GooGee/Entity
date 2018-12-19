@@ -14,8 +14,8 @@ class Form
     function __construct($table)
     {
         $form = $table->form;
-        $this->fileName = $form->name . '.html';
-        $this->filePath = $form->path;
+        $this->fileName = 'form.blade.php';
+        $this->filePath = $form->path . DIRECTORY_SEPARATOR . $form->name;
 
         $this->method = $form->method;
         $this->instance = $form->_instance;
