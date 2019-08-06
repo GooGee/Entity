@@ -2,13 +2,8 @@
 class Project extends Entity.UniqueItem {
     version = 3.0
     nameSpace = 'App'
-    migrationPath = 'database\\migrations'
     modelNameSpace = 'App\\Model'
-    modelPath = 'app\\Model'
-    factoryPath = 'database\\factories'
     controllerNameSpace = 'App\\Http\\Controllers'
-    controllerPath = 'app\\Http\\Controllers'
-    formPath = 'resources\\views'
     table = new Entity.UniqueList<Table>(Table)
 
     change(key: string, value: string) {
@@ -21,15 +16,14 @@ class Project extends Entity.UniqueItem {
     }
 
     changeNameSpace(nameSpace: string) {
-        let ns = this.nameSpace
         for (const key of Object.keys(this)) {
             let item = this[key]
             if ("string" == typeof item) {
-                if (this[key] == ns) {
+                if (this[key] == this.nameSpace) {
                     this[key] = nameSpace
                     continue
                 }
-                let re = new RegExp('^' + ns + '\\\\')
+                let re = new RegExp('^' + this.nameSpace + '\\\\')
                 this[key] = item.replace(re, nameSpace + '\\')
             }
         }

@@ -3,7 +3,6 @@ class Model extends FieldItem {
     table: Table
     primaryKey = 'id'
     nameSpace: string
-    path: string
     instance: string
     relation = new Entity.UniqueList<Relation>(Relation)
     validation = new Entity.UniqueList<Validation>(Validation)

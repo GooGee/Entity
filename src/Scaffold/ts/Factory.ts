@@ -1,6 +1,5 @@
 
 class Factory extends FieldItem {
-    path: string = ''
     table: Table
     field = new Entity.UniqueList<Field>(Field)
     protected static ignoreList = Entity.UniqueItem.ignoreList.concat(['table'])

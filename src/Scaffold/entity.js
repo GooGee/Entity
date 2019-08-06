@@ -1,8 +1,11 @@
 "use strict";
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -167,12 +170,12 @@ var Entity;
             this.itemType = type;
         }
         List.prototype.create = function () {
+            var _a;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
             return new ((_a = this.itemType).bind.apply(_a, [void 0].concat(args)))();
-            var _a;
         };
         List.prototype.add = function (item) {
             this.list.push(item);
@@ -384,7 +387,6 @@ var Factory = /** @class */ (function (_super) {
     __extends(Factory, _super);
     function Factory(name, table) {
         var _this = _super.call(this, name) || this;
-        _this.path = '';
         _this.field = new Entity.UniqueList(Field);
         _this.name = snake2camel(upperCapital(name)) + 'Factory';
         _this.table = table;
@@ -542,13 +544,8 @@ var Project = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.version = 3.0;
         _this.nameSpace = 'App';
-        _this.migrationPath = 'database\\migrations';
         _this.modelNameSpace = 'App\\Model';
-        _this.modelPath = 'app\\Model';
-        _this.factoryPath = 'database\\factories';
         _this.controllerNameSpace = 'App\\Http\\Controllers';
-        _this.controllerPath = 'app\\Http\\Controllers';
-        _this.formPath = 'resources\\views';
         _this.table = new Entity.UniqueList(Table);
         return _this;
     }
@@ -561,16 +558,15 @@ var Project = /** @class */ (function (_super) {
         this.table.list.forEach(function (table) { return table.from(_this); });
     };
     Project.prototype.changeNameSpace = function (nameSpace) {
-        var ns = this.nameSpace;
         for (var _i = 0, _a = Object.keys(this); _i < _a.length; _i++) {
             var key = _a[_i];
             var item = this[key];
             if ("string" == typeof item) {
-                if (this[key] == ns) {
+                if (this[key] == this.nameSpace) {
                     this[key] = nameSpace;
                     continue;
                 }
-                var re = new RegExp('^' + ns + '\\\\');
+                var re = new RegExp('^' + this.nameSpace + '\\\\');
                 this[key] = item.replace(re, nameSpace + '\\');
             }
         }
@@ -595,7 +591,6 @@ var Table = /** @class */ (function (_super) {
     __extends(Table, _super);
     function Table(name) {
         var _this = _super.call(this, name) || this;
-        _this.path = '';
         _this.field = new Entity.UniqueList(Field);
         _this.index = new Entity.UniqueList(Index);
         _this.factory = new Factory(_this.name, _this);
@@ -618,13 +613,8 @@ var Table = /** @class */ (function (_super) {
         return _this;
     }
     Table.prototype.from = function (project) {
-        this.path = project.migrationPath;
         this.model.nameSpace = project.modelNameSpace;
-        this.model.path = project.modelPath;
-        this.factory.path = project.factoryPath;
         this.controller.nameSpace = project.controllerNameSpace;
-        this.controller.path = project.controllerPath;
-        this.form.path = project.formPath;
     };
     return Table;
 }(Entity.UniqueItem));

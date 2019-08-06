@@ -1,6 +1,5 @@
 
 class Table extends Entity.UniqueItem {
-    path: string = ''
     field = new Entity.UniqueList<Field>(Field)
     index = new Entity.UniqueList<Index>(Index)
     factory = new Factory(this.name, this)
@@ -15,13 +14,8 @@ class Table extends Entity.UniqueItem {
     }
 
     from(project: Project) {
-        this.path = project.migrationPath;
         this.model.nameSpace = project.modelNameSpace;
-        this.model.path = project.modelPath;
-        this.factory.path = project.factoryPath;
         this.controller.nameSpace = project.controllerNameSpace;
-        this.controller.path = project.controllerPath;
-        this.form.path = project.formPath;
     }
 
     private handelNameChange = (event: Entity.NameChange) => {

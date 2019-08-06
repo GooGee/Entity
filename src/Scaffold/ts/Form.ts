@@ -2,7 +2,6 @@
 class Form extends FieldItem {
     _instance: string
     method = 'POST'
-    path: string
     model: Model
     field = new Entity.UniqueList<FormField>(FormField)
     protected static ignoreList = Entity.UniqueItem.ignoreList.concat(['model'])

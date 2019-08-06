@@ -83,9 +83,6 @@
                 <span v-on:click="saveMigration" class="btn btn-success">Save</span>
             </h3>
 
-            <!-- Property -->
-            <ccc-property :object="table"></ccc-property>
-
             <!-- Field -->
             <ccc-field :table="table"></ccc-field>
 
@@ -99,9 +96,6 @@
                 <span v-text="table.factory.name"></span>
                 <span v-on:click="saveFactory" class="btn btn-success">Save</span>
             </h3>
-
-            <!-- Property -->
-            <ccc-property :object="table.factory"></ccc-property>
 
             <!-- Factory -->
             <ccc-factory :factory="table.factory"></ccc-factory>
@@ -130,9 +124,6 @@
                 <span v-text="table.controller.name"></span>
                 <span v-on:click="saveController" class="btn btn-success">Save</span>
             </h3>
-
-            <!-- Property -->
-            <ccc-property :object="table.controller"></ccc-property>
 
             <!-- Middleware -->
             <ccc-middleware :controller="table.controller"></ccc-middleware>
@@ -220,15 +211,15 @@
             return;
         }
 
-        let name = prompt('Please enter the file name', 'entity.json');
+        let name = prompt('Please enter the file name', 'entity');
+        name = name.replace(' ', '');
         if (name) {
-            name = name.replace(' ', '');
             if (this.fileList.indexOf(name) > -1) {
                 alert(name + ' already exists!');
                 return;
             }
 
-            this.file = name;
+            this.file = name + '.json';
             this.project = new Project(name);
             this.show('project');
         }
@@ -261,6 +252,7 @@
 
     vm.saveMigration = function () {
         let data = {
+            name: this.project.name,
             table: JSON.stringify(this.table)
         };
         save('/entity/table', data);
@@ -268,6 +260,7 @@
 
     vm.saveModel = function () {
         let data = {
+            name: this.project.name,
             table: JSON.stringify(this.table)
         };
         save('/entity/model', data);
@@ -275,6 +268,7 @@
 
     vm.saveFactory = function () {
         let data = {
+            name: this.project.name,
             table: JSON.stringify(this.table)
         };
         save('/entity/factory', data);
@@ -282,6 +276,7 @@
 
     vm.saveController = function () {
         let data = {
+            name: this.project.name,
             table: JSON.stringify(this.table)
         };
         save('/entity/controller', data);
@@ -289,6 +284,7 @@
 
     vm.saveForm = function () {
         let data = {
+            name: this.project.name,
             table: JSON.stringify(this.table)
         };
         save('/entity/form', data);
