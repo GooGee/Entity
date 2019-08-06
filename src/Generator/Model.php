@@ -18,12 +18,12 @@ class Model
     public $relationList;
     public $ruleList;
 
-    function __construct($table)
+    function __construct($table, $path)
     {
         $model = $table->model;
         $this->name = $model->name;
         $this->fileName = $this->name . '.php';
-        $this->filePath = $model->path;
+        $this->filePath = $path . DIRECTORY_SEPARATOR . $this->fileName;
         $this->nameSpace = $model->nameSpace;
         $this->table = $table->name;
         $this->primaryKey = $model->primaryKey;
@@ -128,13 +128,12 @@ class Model
         return "'{$string}'";
     }
 
-    public function save()
+    public function text()
     {
         $model = $this;
         $view = view('template::model', compact('model'));
 
-        $file = new File($this->fileName, $this->filePath);
-        $file->save("<?php \n" . $view->render());
+        return "<?php \n" . $view->render();
     }
 
 }

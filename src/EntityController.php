@@ -43,50 +43,55 @@ class EntityController extends Controller
 
     function table(Request $request)
     {
+        $path = self::EntityPath . $request['name'] . '/migration';
         $json = $request['table'];
         $table = json_decode($json);
-        $mmm = new Generator\Migration($table);
-        $mmm->save();
+        $mmm = new Generator\Migration($table, $path);
+        \Storage::put($mmm->filePath, $mmm->text());
 
         return response()->json($this->json);
     }
 
     function model(Request $request)
     {
+        $path = self::EntityPath . $request['name'] . '/model';
         $json = $request['table'];
         $table = json_decode($json);
-        $model = new Generator\Model($table);
-        $model->save();
+        $model = new Generator\Model($table, $path);
+        \Storage::put($model->filePath, $model->text());
 
         return response()->json($this->json);
     }
 
     function factory(Request $request)
     {
+        $path = self::EntityPath . $request['name'] . '/factory';
         $json = $request['table'];
         $table = json_decode($json);
-        $factory = new Generator\Factory($table);
-        $factory->save();
+        $factory = new Generator\Factory($table, $path);
+        \Storage::put($factory->filePath, $factory->text());
 
         return response()->json($this->json);
     }
 
     function controller(Request $request)
     {
+        $path = self::EntityPath . $request['name'] . '/controller';
         $json = $request['table'];
         $table = json_decode($json);
-        $ccc = new Generator\Controller($table);
-        $ccc->save();
+        $ccc = new Generator\Controller($table, $path);
+        \Storage::put($ccc->filePath, $ccc->text());
 
         return response()->json($this->json);
     }
 
     function form(Request $request)
     {
+        $path = self::EntityPath . $request['name'] . '/view';
         $json = $request['table'];
         $table = json_decode($json);
-        $form = new Generator\Form($table);
-        $form->save();
+        $form = new Generator\Form($table, $path);
+        \Storage::put($form->filePath, $form->text());
 
         return response()->json($this->json);
     }

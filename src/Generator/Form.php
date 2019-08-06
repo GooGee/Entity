@@ -11,24 +11,23 @@ class Form
     public $instance;
     public $fieldList;
 
-    function __construct($table)
+    function __construct($table, $path)
     {
         $form = $table->form;
         $this->fileName = 'form.blade.php';
-        $this->filePath = $form->path . DIRECTORY_SEPARATOR . $form->name;
+        $this->filePath = $path . DIRECTORY_SEPARATOR . $form->name . DIRECTORY_SEPARATOR . $this->fileName;
 
         $this->method = $form->method;
         $this->instance = $form->_instance;
         $this->fieldList = $form->field->list;
     }
 
-    public function save()
+    public function text()
     {
         $form = $this;
         $view = view('template::form', compact('form'));
 
-        $file = new File($this->fileName, $this->filePath);
-        $file->save($view->render());
+        return "<?php \n" . $view->render();
     }
 
 }

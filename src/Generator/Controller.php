@@ -13,12 +13,12 @@ class Controller
     public $blade;
     public $middlewareList;
 
-    function __construct($table)
+    function __construct($table, $path)
     {
         $controller = $table->controller;
         $this->name = $controller->name;
         $this->fileName = $this->name . '.php';
-        $this->filePath = $controller->path;
+        $this->filePath = $path . DIRECTORY_SEPARATOR . $this->fileName;
         $this->nameSpace = $controller->nameSpace;
         $this->model = $table->model;
         $this->blade = $controller->blade;
@@ -33,14 +33,13 @@ class Controller
         }
     }
 
-    public function save()
+    public function text()
     {
         $controller = $this;
         $model = $this->model;
         $view = view('template::controller', compact('controller', 'model'));
 
-        $file = new File($this->fileName, $this->filePath);
-        $file->save("<?php \n" . $view->render());
+        return "<?php \n" . $view->render();
     }
 
 }

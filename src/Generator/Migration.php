@@ -13,12 +13,12 @@ class Migration
     public $fieldList;
     public $indexList;
 
-    function __construct($table)
+    function __construct($table, $path)
     {
         $this->tableName = $table->name;
         $this->className = "Create{$table->model->name}Table";
         $this->fileName = '0000_00_00_000000_create_' . $table->name . '_table.php';
-        $this->filePath = $table->path;
+        $this->filePath = $path . DIRECTORY_SEPARATOR . $this->fileName;
 
         $this->fieldList = [];
         foreach ($table->field->list as $field) {
@@ -31,13 +31,12 @@ class Migration
         }
     }
 
-    public function save()
+    public function text()
     {
         $migration = $this;
         $view = view('template::migration', compact('migration'));
 
-        $file = new File($this->fileName, $this->filePath);
-        $file->save("<?php \n" . $view->render());
+        return "<?php \n" . $view->render();
     }
 
 }

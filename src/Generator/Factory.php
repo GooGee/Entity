@@ -12,11 +12,11 @@ class Factory
     public $modelName;
     public $fieldList = [];
 
-    function __construct($table)
+    function __construct($table, $path)
     {
         $factory = $table->factory;
         $this->fileName = $factory->name . '.php';
-        $this->filePath = $factory->path;
+        $this->filePath = $path . DIRECTORY_SEPARATOR . $this->fileName;
 
         $this->table = $table;
         $this->modelName = $table->model->nameSpace . '\\' . $table->model->name;
@@ -77,13 +77,12 @@ class Factory
         $this->fieldList[] = "'$field->name' => $field->raw,";
     }
 
-    public function save()
+    public function text()
     {
         $factory = $this;
         $view = view('template::factory', compact('factory'));
 
-        $file = new File($this->fileName, $this->filePath);
-        $file->save("<?php \n" . $view->render());
+        return "<?php \n" . $view->render();
     }
 
 }
