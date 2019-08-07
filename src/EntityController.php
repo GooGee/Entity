@@ -43,7 +43,7 @@ class EntityController extends Controller
 
     function table(Request $request)
     {
-        $path = self::EntityPath . $request['name'] . '/migration';
+        $path = self::EntityPath . $request['name'] . '/migrations';
         $json = $request['table'];
         $table = json_decode($json);
         $mmm = new Generator\Migration($table, $path);
@@ -54,7 +54,7 @@ class EntityController extends Controller
 
     function model(Request $request)
     {
-        $path = self::EntityPath . $request['name'] . '/model';
+        $path = self::EntityPath . $request['name'] . '/Model';
         $json = $request['table'];
         $table = json_decode($json);
         $model = new Generator\Model($table, $path);
@@ -65,7 +65,7 @@ class EntityController extends Controller
 
     function factory(Request $request)
     {
-        $path = self::EntityPath . $request['name'] . '/factory';
+        $path = self::EntityPath . $request['name'] . '/factories';
         $json = $request['table'];
         $table = json_decode($json);
         $factory = new Generator\Factory($table, $path);
@@ -76,7 +76,7 @@ class EntityController extends Controller
 
     function controller(Request $request)
     {
-        $path = self::EntityPath . $request['name'] . '/controller';
+        $path = self::EntityPath . $request['name'] . '/controllers';
         $json = $request['table'];
         $table = json_decode($json);
         $ccc = new Generator\Controller($table, $path);
@@ -87,7 +87,7 @@ class EntityController extends Controller
 
     function form(Request $request)
     {
-        $path = self::EntityPath . $request['name'] . '/view';
+        $path = self::EntityPath . $request['name'] . '/views';
         $json = $request['table'];
         $table = json_decode($json);
         $form = new Generator\Form($table, $path);
