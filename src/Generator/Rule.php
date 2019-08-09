@@ -12,12 +12,12 @@ class Rule
     {
         $array = [];
         foreach ($field->rule as $key => $value) {
-            if (is_bool($value)) {
-                if ($value) {
+            if ($value) {
+                if (is_bool($value)) {
                     $array[] = $key;
+                } else {
+                    $array[] = $key . ':' . $value;
                 }
-            } else {
-                $array[] = $key . ':' . $value;
             }
         }
 
