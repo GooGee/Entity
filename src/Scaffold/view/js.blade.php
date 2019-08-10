@@ -365,6 +365,18 @@ class Controller extends Entity.UniqueItem {
     }
 }
 /// <reference path="./Entity/UniqueItem.ts" />
+class FactoryField extends Entity.UniqueItem {
+    constructor(name, type) {
+        super(name);
+        this.method = null;
+        this.parameters = null;
+        this.property = null;
+        this.raw = null;
+        this.unique = false;
+        this.type = type;
+    }
+}
+/// <reference path="./Entity/UniqueItem.ts" />
 /// <reference path="./Entity/UniqueList.ts" />
 class FieldItem extends Entity.UniqueItem {
     constructor() {
@@ -380,12 +392,13 @@ class FieldItem extends Entity.UniqueItem {
         };
     }
 }
+/// <reference path="./FactoryField.ts" />
 /// <reference path="./FieldItem.ts" />
 /// <reference path="./Entity/UniqueList.ts" />
 class Factory extends FieldItem {
     constructor(name, table) {
         super(name);
-        this.field = new Entity.UniqueList(Field);
+        this.field = new Entity.UniqueList(FactoryField);
         this.name = snake2camel(upperCapital(name)) + 'Factory';
         this.table = table;
         this.table.field.onAfterNameChange(this.handelNameChange);
@@ -394,13 +407,18 @@ class Factory extends FieldItem {
         return this.field;
     }
     update() {
+        const list = [];
         this.table.field.list.forEach(field => {
-            if (this.field.find(field.name)) {
+            const found = this.field.find(field.name);
+            if (found) {
+                list.push(found);
                 return;
             }
-            let fff = this.field.create(field.name, 'raw');
-            this.field.add(fff);
+            const fff = this.field.create(field.name, 'raw');
+            list.push(fff);
         });
+        this.field.clear();
+        this.field.list.push(...list);
     }
 }
 Factory.ignoreList = Entity.UniqueItem.ignoreList.concat(['table']);
@@ -744,6 +762,7 @@ class Table extends Entity.UniqueItem {
         this.controller.nameSpace = project.controllerNameSpace;
     }
 }
+/// <reference path="./Entity/Item.ts" />
 /// <reference path="./Entity/UniqueItem.ts" />
 class Validation extends Entity.UniqueItem {
     constructor() {
@@ -772,13 +791,18 @@ class Model extends FieldItem {
         return this.validation;
     }
     update() {
+        const list = [];
         this.table.field.list.forEach(field => {
-            if (this.validation.find(field.name)) {
+            const found = this.validation.find(field.name);
+            if (found) {
+                list.push(found);
                 return;
             }
-            let validation = this.validation.create(field.name);
-            this.validation.add(validation);
+            const validation = this.validation.create(field.name);
+            list.push(validation);
         });
+        this.validation.clear();
+        this.validation.list.push(...list);
     }
 }
 Model.ignoreList = Entity.UniqueItem.ignoreList.concat(['table']);

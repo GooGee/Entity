@@ -27,12 +27,19 @@ class Model extends FieldItem {
     }
 
     update() {
+        const list: Array<Validation> = []
         this.table.field.list.forEach(field => {
-            if (this.validation.find(field.name)) {
+            const found = this.validation.find(field.name)
+            if (found) {
+                list.push(found)
                 return
             }
-            let validation = this.validation.create(field.name)
-            this.validation.add(validation)
+
+            const validation = this.validation.create(field.name)
+            list.push(validation)
         })
+
+        this.validation.clear()
+        this.validation.list.push(...list)
     }
 }
