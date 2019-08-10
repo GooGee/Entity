@@ -1,9 +1,10 @@
+/// <reference path="./FactoryField.ts" />
 /// <reference path="./FieldItem.ts" />
 /// <reference path="./Entity/UniqueList.ts" />
 
 class Factory extends FieldItem {
     table: Table
-    field = new Entity.UniqueList<Field>(Field)
+    field = new Entity.UniqueList<FactoryField>(FactoryField)
     protected static ignoreList = Entity.UniqueItem.ignoreList.concat(['table'])
 
     constructor(name: string, table: Table) {
@@ -18,13 +19,20 @@ class Factory extends FieldItem {
     }
 
     update() {
+        const list: Array<FactoryField> = []
         this.table.field.list.forEach(field => {
-            if (this.field.find(field.name)) {
+            const found = this.field.find(field.name)
+            if (found) {
+                list.push(found)
                 return
             }
-            let fff = this.field.create(field.name, 'raw')
-            this.field.add(fff)
+
+            const fff = this.field.create(field.name, 'raw')
+            list.push(fff)
         })
+
+        this.field.clear()
+        this.field.list.push(...list)
     }
 
 }
