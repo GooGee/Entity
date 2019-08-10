@@ -12,38 +12,82 @@ class Field
         $name = $field->name;
         $type = $field->type;
 
-        $length = '';
-        if (in_array($type, ['char', 'string', 'float', 'double', 'decimal'])) {
-            if (empty($field->length)) {
-                //
-            } else {
-                $length = ", {$field->length}";
+        $length = $this->length($field);
+        $allowNull = $this->allowNull($field);
+        $default = $this->value($field);
+        $comment = $this->comment($field);
+
+        $this->text = "\$table->{$type}('{$name}'{$length}){$allowNull}{$default}{$comment};";
+    }
+
+    function allowNull($field)
+    {
+        if (isset($field->allowNull)) {
+            if ($field->allowNull) {
+                return '->nullable()';
             }
         }
+        return '';
+    }
 
-        if (empty($field->nullable)) {
-            $nullable = '';
-        } else {
-            $nullable = '->nullable()';
+    function comment($field)
+    {
+        if (isset($field->comment)) {
+            if ($field->comment) {
+                return "->comment('{$field->comment}')";
+            }
         }
+        return '';
+    }
 
-        $default = '';
+    function length($field)
+    {
+        if (isset($field->length)) {
+            if ($field->length) {
+                return ", {$field->length}";
+            }
+        }
+        return '';
+    }
+
+    function value($field)
+    {
         if (isset($field->value)) {
             if (is_numeric($field->value)) {
-                $default = "->default({$field->value})";
-            } else if ($field->value) {
-                $value = trim($field->value, '\'"');
-                $default = "->default('{$value}')";
+                return "->default({$field->value})";
+            }
+
+            if ($field->value) {
+                $hasQuote = false;
+                if (preg_match('/^".*"$/', $field->value)) {
+                    $hasQuote = true;
+                }
+                if (preg_match("/^'.*'$/", $field->value)) {
+                    $hasQuote = true;
+                }
+
+                if ($hasQuote) {
+                    return "->default({$field->value})";
+                }
+
+                $value = $this->addSlash($field->value);
+                return "->default('{$value}')";
             }
         }
+        return '';
+    }
 
-        if (empty($field->comment)) {
-            $comment = '';
-        } else {
-            $comment = "->comment('{$field->comment}')";
+    /**
+     * convert ' to \'
+     */
+    function addSlash($string)
+    {
+        $stringList = [];
+        $list = explode("\\'", $string);
+        foreach ($list as $item) {
+            $stringList[] = implode("\\'", explode("'", $item));
         }
-
-        $this->text = "\$table->{$type}('{$name}'{$length}){$nullable}{$default}{$comment};";
+        return implode("\\'", $stringList);
     }
 
 }

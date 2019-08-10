@@ -17,7 +17,7 @@ class Migration
     {
         $this->tableName = $table->name;
         $this->className = "Create{$table->model->name}Table";
-        $this->fileName = '0000_00_00_000000_create_' . $table->name . '_table.php';
+        $this->fileName = "0000_00_00_000000_create_{$table->name}_table.php";
         $this->filePath = $path . DIRECTORY_SEPARATOR . $this->fileName;
 
         $this->fieldList = [];
