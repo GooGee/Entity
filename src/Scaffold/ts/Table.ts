@@ -1,6 +1,9 @@
+/// <reference path="./Entity/UniqueItem.ts" />
+/// <reference path="./Entity/UniqueList.ts" />
+/// <reference path="./FieldManager.ts" />
 
 class Table extends Entity.UniqueItem {
-    field = new Entity.UniqueList<Field>(Field)
+    field = new FieldManager(Field)
     index = new Entity.UniqueList<Index>(Index)
     factory = new Factory(this.name, this)
     model = new Model(this.name, this)
