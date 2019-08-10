@@ -82,7 +82,7 @@ class Factory
         $factory = $this;
         $view = view('template::factory', compact('factory'));
 
-        return "<?php \n" . $view->render();
+        return "<?php\n" . $view->render();
     }
 
 }

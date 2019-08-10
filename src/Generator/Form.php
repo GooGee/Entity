@@ -27,7 +27,7 @@ class Form
         $form = $this;
         $view = view('template::form', compact('form'));
 
-        return "<?php \n" . $view->render();
+        return "<?php\n" . $view->render();
     }
 
 }

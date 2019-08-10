@@ -133,7 +133,7 @@ class Model
         $model = $this;
         $view = view('template::model', compact('model'));
 
-        return "<?php \n" . $view->render();
+        return "<?php\n" . $view->render();
     }
 
 }

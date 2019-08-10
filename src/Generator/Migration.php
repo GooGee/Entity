@@ -36,7 +36,7 @@ class Migration
         $migration = $this;
         $view = view('template::migration', compact('migration'));
 
-        return "<?php \n" . $view->render();
+        return "<?php\n" . $view->render();
     }
 
 }

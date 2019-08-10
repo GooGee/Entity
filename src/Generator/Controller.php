@@ -39,7 +39,7 @@ class Controller
         $model = $this->model;
         $view = view('template::controller', compact('controller', 'model'));
 
-        return "<?php \n" . $view->render();
+        return "<?php\n" . $view->render();
     }
 
 }
