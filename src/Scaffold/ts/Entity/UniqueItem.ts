@@ -1,3 +1,6 @@
+/// <reference path="./Item.ts" />
+/// <reference path="../Event/Event.ts" />
+/// <reference path="../Event/NameChange.ts" />
 
 namespace Entity {
 

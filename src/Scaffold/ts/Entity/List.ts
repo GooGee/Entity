@@ -1,3 +1,5 @@
+/// <reference path="./Item.ts" />
+/// <reference path="./Newable.ts" />
 
 namespace Entity {
 
@@ -32,11 +34,11 @@ namespace Entity {
         moveUp(item: Item) {
             moveUp(this.list, item);
         }
-    
+
         moveDown(item: Item) {
             moveDown(this.list, item);
         }
-        
+
         clear() {
             this.list.length = 0
             this.list.splice(0, 0)

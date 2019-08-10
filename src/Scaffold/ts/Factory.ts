@@ -1,3 +1,5 @@
+/// <reference path="./FieldItem.ts" />
+/// <reference path="./Entity/UniqueList.ts" />
 
 class Factory extends FieldItem {
     table: Table

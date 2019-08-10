@@ -1,3 +1,9 @@
+/// <reference path="./Entity/UniqueItem.ts" />
+/// <reference path="./Entity/UniqueList.ts" />
+/// <reference path="./FieldItem.ts" />
+/// <reference path="./Relation.ts" />
+/// <reference path="./Table.ts" />
+/// <reference path="./Validation.ts" />
 
 class Model extends FieldItem {
     table: Table

@@ -1,3 +1,4 @@
+/// <reference path="./Entity/UniqueItem.ts" />
 
 class FormField extends Entity.UniqueItem {
     type: string

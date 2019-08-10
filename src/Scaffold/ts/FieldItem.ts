@@ -1,3 +1,5 @@
+/// <reference path="./Entity/UniqueItem.ts" />
+/// <reference path="./Entity/UniqueList.ts" />
 
 class FieldItem extends Entity.UniqueItem {
     fieldList: Entity.UniqueList<Entity.UniqueItem>

@@ -1,3 +1,4 @@
+/// <reference path="./Listener.ts" />
 
 namespace Entity {
 

@@ -1,3 +1,5 @@
+/// <reference path="./Entity/UniqueItem.ts" />
+/// <reference path="./Entity/UniqueList.ts" />
 
 class Index extends Entity.UniqueItem {
     type: string

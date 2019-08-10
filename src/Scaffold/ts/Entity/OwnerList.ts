@@ -1,3 +1,5 @@
+/// <reference path="./UniqueItem.ts" />
+/// <reference path="./UniqueList.ts" />
 
 namespace Entity {
 

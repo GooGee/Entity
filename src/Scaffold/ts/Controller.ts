@@ -1,3 +1,5 @@
+/// <reference path="./Entity/UniqueItem.ts" />
+/// <reference path="./Entity/UniqueList.ts" />
 
 class Controller extends Entity.UniqueItem {
     blade: string

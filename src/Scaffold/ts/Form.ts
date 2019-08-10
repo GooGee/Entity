@@ -1,3 +1,5 @@
+/// <reference path="./FieldItem.ts" />
+/// <reference path="./Entity/UniqueList.ts" />
 
 class Form extends FieldItem {
     _instance: string
