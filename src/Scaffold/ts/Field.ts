@@ -47,14 +47,13 @@ class IncrementField extends Field {
 class IntegerField extends Field {
     constructor(name: string, type: string) {
         super(name, type, 0)
-        this.length = 9
     }
 }
 
 class RealField extends Field {
     constructor(name: string, type: string) {
         super(name, type, 0)
-        this.length = '11, 2'
+        this.length = '8, 2'
     }
 }
 
