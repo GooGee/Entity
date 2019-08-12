@@ -6,6 +6,11 @@ namespace GooGee\Entity\Generator;
 class Field
 {
     public $text;
+    public $typeHasLengthiii = [
+        'enum',
+        'char', 'string',
+        'decimal', 'double', 'float', 'unsignedDecimal',
+    ];
 
     function __construct($field)
     {
@@ -44,7 +49,9 @@ class Field
     {
         if (isset($field->length)) {
             if ($field->length) {
-                return ", {$field->length}";
+                if (in_array($field->type, $this->typeHasLengthiii)) {
+                    return ", {$field->length}";
+                }
             }
         }
         return '';
