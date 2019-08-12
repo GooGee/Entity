@@ -47,7 +47,7 @@ class @echo($controller->name) extends Controller
      */
     public function store(Request $request)
     {
-        $array = $this->validate($request, @echo($model->name)::$ruleArray);
+        $array = $this->validate($request, @echo($model->name)::$rules);
         $@echo($model->instance) = new @echo($model->name);
         $@echo($model->instance)->fill($array);
         $@echo($model->instance)->save();
@@ -90,7 +90,7 @@ class @echo($controller->name) extends Controller
      */
     public function update(Request $request, $id)
     {
-        $array = $this->validate($request, @echo($model->name)::$ruleArray);
+        $array = $this->validate($request, @echo($model->name)::$rules);
         $@echo($model->instance) = @echo($model->name)::findOrFail($id);
         $@echo($model->instance)->update($array);
         return redirect('/@echo($controller->blade)/' . $id);

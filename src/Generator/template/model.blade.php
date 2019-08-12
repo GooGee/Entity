@@ -48,7 +48,7 @@ class @echo($model->name) extends Model
      */
     public $timestamps = @echo($model->timestamps);
 
-    public static $ruleArray = [
+    public static $rules = [
 @foreach($model->ruleList as $rule)
         @echo($rule->text)
 
