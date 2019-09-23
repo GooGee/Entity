@@ -1,0 +1,27 @@
+{
+    "name": "googee/entity",
+    "description": "laravel code generator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "GooGee",
+            "email": "mou-gj@live.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "laravel/framework": "5.5.*"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GooGee\\Entity\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "GooGee\\Entity\\EntityServiceProvider"
+            ]
+        }
+    }
+}

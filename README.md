@@ -1,0 +1,3 @@
+# Entity
+
+laravel code generator
