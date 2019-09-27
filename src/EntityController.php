@@ -12,6 +12,7 @@ class EntityController extends Controller
     private function send($data, $message = 'OK', $status = 200)
     {
         return response()->json([
+            'version' => '2.1',
             'status' => $status,
             'message' => $message,
             'data' => $data,
