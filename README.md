@@ -1,8 +1,6 @@
 # Entity
 
-This is the PHP package for [Entity-Builder](https://github.com/GooGee/Entity-Builder).
-
-![table](https://github.com/GooGee/Entity-Builder/raw/gh-pages/table.gif)
+This is the PHP package for [Entity-Builder](https://googee.github.io/Entity-Builder/dist)
 
 # Requirement
 
