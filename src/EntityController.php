@@ -4,6 +4,7 @@ namespace GooGee\Entity;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EntityController extends Controller
 {
@@ -55,11 +56,15 @@ class EntityController extends Controller
         $database = config("{$path}.database");
         $prefix = config("{$path}.prefix");
         $tables = [];
-        if ($driver == 'mysql') {
-            $tables = $this->getMySQLTable($database);
-        }
-        if ($driver == 'pgsql') {
-            $tables = $this->getPGSQLTable();
+        try {
+            if ($driver == 'mysql') {
+                $tables = $this->getMySQLTable($database);
+            }
+            if ($driver == 'pgsql') {
+                $tables = $this->getPGSQLTable();
+            }
+        } catch (\Exception $exception) {
+            throw new HttpException(422, $exception->getMessage(), $exception);
         }
         $data = [
             'driver' => $driver,
