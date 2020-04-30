@@ -2,36 +2,49 @@
 
 namespace GooGee\Entity;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EntityController extends Controller
 {
-    const Entity = 'entity.json';
+    const Version = '2.2';
+    const Folder = 'entity';
+    const File = 'entity.json';
 
     private function send($data, $message = 'OK', $status = 200)
     {
         return response()->json([
-            'version' => '2.1',
+            'version' => self::Version,
             'status' => $status,
             'message' => $message,
             'data' => $data,
         ]);
     }
 
-    public function load()
+    private function getJSON()
     {
         $data = '';
-        if (\Storage::exists(self::Entity)) {
-            $data = \Storage::get(self::Entity);
+        if (\Storage::exists(self::File)) {
+            $data = \Storage::get(self::File);
         }
-        return $this->send($data);
+        return $data;
+    }
+
+    public function load()
+    {
+        return $this->send($this->getJSON());
     }
 
     public function save(Request $request)
     {
-        \Storage::put(self::Entity, $request['project']);
+        $data = $this->getJSON();
+        if ($data !== $request['project']) {
+            $path = self::Folder . '/' . Carbon::now() . '.json';
+            \Storage::put($path, $data);
+            \Storage::put(self::File, $request['project']);
+        }
         return $this->send('');
     }
 
