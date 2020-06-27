@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EntityController extends Controller
 {
-    const Version = '2.2';
+    const Version = '2.3';
     const Folder = 'entity';
     const File = 'entity.json';
 
@@ -42,7 +42,8 @@ class EntityController extends Controller
         $data = $this->getJSON();
         if ($data !== $request['project']) {
             $path = self::Folder . '/' . Carbon::now() . '.json';
-            \Storage::put($path, $data);
+            $valid = str_replace(':', '_', $path);
+            \Storage::put($valid, $data);
             \Storage::put(self::File, $request['project']);
         }
         return $this->send('');
