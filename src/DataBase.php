@@ -19,15 +19,11 @@ abstract class DataBase
         $database = config("{$path}.database");
         $prefix = config("{$path}.prefix");
         $tables = [];
-        try {
-            if ($driver == 'mysql') {
-                $tables = $mySQL->getSchema($database);
-            }
-            if ($driver == 'pgsql') {
-                $tables = $postgreSQL->getSchema($database);
-            }
-        } catch (\Exception $exception) {
-            throw new HttpException(422, $exception->getMessage(), $exception);
+        if ($driver == 'mysql') {
+            $tables = $mySQL->getSchema($database);
+        }
+        if ($driver == 'pgsql') {
+            $tables = $postgreSQL->getSchema($database);
         }
         $data = [
             'driver' => $driver,

@@ -2,15 +2,12 @@
 
 namespace GooGee\Entity;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class EntityController extends Controller
 {
     const Version = '2.3';
-    const Folder = 'entity';
-    const File = 'entity.json';
 
     private function send($data, $message = 'OK', $status = 200)
     {
@@ -22,48 +19,38 @@ class EntityController extends Controller
         ]);
     }
 
-    private function getJSON()
-    {
-        $data = '';
-        if (\Storage::exists(self::File)) {
-            $data = \Storage::get(self::File);
-        }
-        return $data;
-    }
-
     public function load()
     {
-        return $this->send($this->getJSON());
+        return FileService::load();
     }
 
     public function save(Request $request)
     {
-        $data = $this->getJSON();
-        if ($data !== $request['project']) {
-            $path = self::Folder . '/' . Carbon::now() . '.json';
-            $valid = str_replace(':', '_', $path);
-            \Storage::put($valid, $data);
-            \Storage::put(self::File, $request['project']);
+        try {
+            FileService::save($request['project']);
+        } catch (\Exception $exception) {
+            return $this->send('', $exception->getMessage(), 422);
         }
         return $this->send('');
     }
 
     public function deploy(Request $request)
     {
-        foreach ($request['files'] as $file => $code) {
-            $path = base_path($file);
-            $info = pathinfo($path);
-            if (!is_dir($info['dirname'])) {
-                mkdir($info['dirname'], 0755, true);
-            }
-            file_put_contents($path, $code);
+        try {
+            FileService::deploy($request['files']);
+        } catch (\Exception $exception) {
+            return $this->send('', $exception->getMessage(), 422);
         }
         return $this->send('');
     }
 
     public function table(MySQL $mySQL, PostgreSQL $postgreSQL)
     {
-        $data = DataBase::getDB($mySQL, $postgreSQL);
+        try {
+            $data = DataBase::getDB($mySQL, $postgreSQL);
+        } catch (\Exception $exception) {
+            return $this->send('', $exception->getMessage(), 422);
+        }
         return $this->send($data);
     }
 
