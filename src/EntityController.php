@@ -5,7 +5,6 @@ namespace GooGee\Entity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EntityController extends Controller
 {
@@ -62,62 +61,10 @@ class EntityController extends Controller
         return $this->send('');
     }
 
-    public function table()
+    public function table(MySQL $mySQL, PostgreSQL $postgreSQL)
     {
-        $connection = config('database.default');
-        $path = "database.connections.{$connection}";
-        $driver = config("{$path}.driver");
-        $database = config("{$path}.database");
-        $prefix = config("{$path}.prefix");
-        $tables = [];
-        try {
-            if ($driver == 'mysql') {
-                $tables = $this->getMySQLTable($database);
-            }
-            if ($driver == 'pgsql') {
-                $tables = $this->getPGSQLTable();
-            }
-        } catch (\Exception $exception) {
-            throw new HttpException(422, $exception->getMessage(), $exception);
-        }
-        $data = [
-            'driver' => $driver,
-            'database' => $database,
-            'prefix' => $prefix,
-            'tables' => $tables,
-        ];
+        $data = DataBase::getDB($mySQL, $postgreSQL);
         return $this->send($data);
-    }
-
-    private function getMySQLTable(string $database)
-    {
-        $tables = [];
-        $column = "Tables_in_{$database}";
-        $list = \DB::select('SHOW TABLES;');
-        foreach ($list as $item) {
-            $name = $item->$column;
-            $tables[] = [
-                'name' => $name,
-                'fields' => \DB::select("SHOW COLUMNS FROM {$name};"),
-                'indexes' => \DB::select("SHOW INDEX FROM {$name};"),
-            ];
-        }
-        return $tables;
-    }
-
-    private function getPGSQLTable()
-    {
-        $tables = [];
-        $list = \DB::select("SELECT * FROM information_schema.tables WHERE table_schema = 'public';");
-        foreach ($list as $item) {
-            $name = $item->table_name;
-            $tables[] = [
-                'name' => $name,
-                'fields' => \DB::select("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{$name}';"),
-                'indexes' => \DB::select("SELECT * FROM pg_indexes WHERE tablename = '{$name}';"),
-            ];
-        }
-        return $tables;
     }
 
 }
