@@ -44,6 +44,17 @@ class EntityController extends Controller
         return $this->send('');
     }
 
+    public function run(Request $request, CommandService $service)
+    {
+        try {
+            $command = $request->input('command');
+            $result = $service->run($command);
+            return $this->send($result);
+        } catch (\Exception $exception) {
+            return $this->send('', $exception->getMessage(), 422);
+        }
+    }
+
     public function table(MySQL $mySQL, PostgreSQL $postgreSQL)
     {
         try {
