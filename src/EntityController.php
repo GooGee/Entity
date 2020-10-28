@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 
 class EntityController extends Controller
 {
-    const Version = '2.3';
+    const Version = '2.4';
 
     private function send($data, $message = 'OK', $status = 200)
     {
@@ -28,20 +28,20 @@ class EntityController extends Controller
     {
         try {
             FileService::save($request['project']);
+            return $this->send('');
         } catch (\Exception $exception) {
             return $this->send('', $exception->getMessage(), 422);
         }
-        return $this->send('');
     }
 
     public function deploy(Request $request)
     {
         try {
             FileService::deploy($request['files']);
+            return $this->send('');
         } catch (\Exception $exception) {
             return $this->send('', $exception->getMessage(), 422);
         }
-        return $this->send('');
     }
 
     public function run(Request $request, CommandService $service)
@@ -59,10 +59,10 @@ class EntityController extends Controller
     {
         try {
             $data = DataBase::getDB($mySQL, $postgreSQL);
+            return $this->send($data);
         } catch (\Exception $exception) {
             return $this->send('', $exception->getMessage(), 422);
         }
-        return $this->send($data);
     }
 
 }
