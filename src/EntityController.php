@@ -21,7 +21,7 @@ class EntityController extends Controller
 
     public function load()
     {
-        return FileService::load();
+        return $this->send(FileService::load());
     }
 
     public function save(Request $request)
