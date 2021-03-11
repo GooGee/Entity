@@ -13,11 +13,9 @@ class EntityServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (app()->environment() !== 'local') {
-            return;
+        if (app()->isLocal()) {
+            $this->loadRoutesFrom(__DIR__ . '/routes.php');
         }
-
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
     }
 
     /**
