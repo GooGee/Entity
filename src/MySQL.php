@@ -20,7 +20,7 @@ class MySQL extends DataBase
     {
         $table = [
             'name' => $name,
-            'fields' => \DB::select("SHOW COLUMNS FROM {$name};"),
+            'fields' => \DB::select("SHOW FULL COLUMNS FROM {$name};"),
             'indexes' => \DB::select("SHOW INDEX FROM {$name};"),
         ];
         return $table;
